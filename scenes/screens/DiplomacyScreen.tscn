@@ -1,0 +1,280 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/DiplomacyScreen.gd" id="1_dip"]
+[ext_resource type="Texture2D" path="res://assets/bg/title.png" id="2_bg"]
+[ext_resource type="Script" path="res://scripts/ui/RouteBar.gd" id="3_route"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="4_pill"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="5_icon"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DelegateCard.tscn" id="6_card"]
+
+[node name="DiplomacyScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_dip")
+
+[node name="Background" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Shade" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.04, 0.03, 0.02, 0.62)
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = -16.0
+theme_override_constants/separation = 12
+
+[node name="Top" type="PanelContainer" parent="Box"]
+layout_mode = 2
+theme_type_variation = &"PanelHud"
+
+[node name="Row" type="HBoxContainer" parent="Box/Top"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Titles" type="VBoxContainer" parent="Box/Top/Row"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = -2
+
+[node name="Caption" type="Label" parent="Box/Top/Row/Titles"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ДИПЛОМАТИЧЕСКАЯ МИССИЯ"
+
+[node name="Title" type="Label" parent="Box/Top/Row/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text_overrun_behavior = 3
+
+[node name="Route" type="Control" parent="Box/Top/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(700, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_route")
+
+[node name="TimePill" parent="Box/Top/Row" instance=ExtResource("4_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+icon_kind = "sun"
+value_width = 54.0
+
+[node name="Favor" parent="Box/Top/Row" instance=ExtResource("4_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+icon_kind = "trust"
+value_width = 30.0
+
+[node name="MenuButton" type="Button" parent="Box/Top/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Меню (Esc)"
+focus_mode = 0
+theme_type_variation = &"ButtonIcon"
+
+[node name="Icon" parent="Box/Top/Row/MenuButton" instance=ExtResource("5_icon")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
+mouse_filter = 2
+kind = "menu"
+
+[node name="Body" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="Delegation" type="PanelContainer" parent="Box/Body"]
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Box/Body/Delegation"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="Box/Body/Delegation/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ДЕЛЕГАЦИЯ"
+
+[node name="Card0" parent="Box/Body/Delegation/Box" instance=ExtResource("6_card")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Card1" parent="Box/Body/Delegation/Box" instance=ExtResource("6_card")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Center" type="CenterContainer" parent="Box/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Dialog" type="PanelContainer" parent="Box/Body/Center"]
+custom_minimum_size = Vector2(860, 0)
+layout_mode = 2
+theme_type_variation = &"PanelDialog"
+
+[node name="Box" type="VBoxContainer" parent="Box/Body/Center/Dialog"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Head" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box"]
+layout_mode = 2
+theme_override_constants/separation = -2
+
+[node name="Place" type="Label" parent="Box/Body/Center/Dialog/Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+
+[node name="Who" type="Label" parent="Box/Body/Center/Dialog/Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text_overrun_behavior = 3
+
+[node name="Sep" type="HSeparator" parent="Box/Body/Center/Dialog/Box"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Box/Body/Center/Dialog/Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+theme_override_constants/line_spacing = 3
+autowrap_mode = 3
+
+[node name="Options" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Result" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Said" type="Label" parent="Box/Body/Center/Dialog/Box/Result"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"QuoteLabel"
+autowrap_mode = 3
+
+[node name="Roll" type="HBoxContainer" parent="Box/Body/Center/Dialog/Box/Result"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Die" type="PanelContainer" parent="Box/Body/Center/Dialog/Box/Result/Roll"]
+custom_minimum_size = Vector2(92, 92)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"PanelInset"
+
+[node name="DieBox" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box/Result/Roll/Die"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = -6
+
+[node name="DieValue" type="Label" parent="Box/Body/Center/Dialog/Box/Result/Roll/Die/DieBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_type_variation = &"BigValueLabel"
+theme_override_font_sizes/font_size = 44
+text = "20"
+horizontal_alignment = 1
+
+[node name="DieCaption" type="Label" parent="Box/Body/Center/Dialog/Box/Result/Roll/Die/DieBox"]
+layout_mode = 2
+theme_type_variation = &"TinyLabel"
+text = "d20"
+horizontal_alignment = 1
+
+[node name="Info" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box/Result/Roll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="Verdict" type="Label" parent="Box/Body/Center/Dialog/Box/Result/Roll/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+
+[node name="Formula" type="Label" parent="Box/Body/Center/Dialog/Box/Result/Roll/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"ValueLabel"
+
+[node name="Outcome" type="Label" parent="Box/Body/Center/Dialog/Box/Result"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+theme_override_constants/line_spacing = 3
+autowrap_mode = 3
+
+[node name="Effects" type="HBoxContainer" parent="Box/Body/Center/Dialog/Box/Result"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Footer" type="HBoxContainer" parent="Box/Body/Center/Dialog/Box/Result"]
+layout_mode = 2
+alignment = 2
+
+[node name="NextButton" type="Button" parent="Box/Body/Center/Dialog/Box/Result/Footer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 46)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonPrimary"
+theme_override_font_sizes/font_size = 17
+text = "Дальше"
+
+[node name="Overlay" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2

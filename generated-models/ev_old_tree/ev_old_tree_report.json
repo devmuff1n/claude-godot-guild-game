@@ -1,0 +1,70 @@
+{
+  "id": "ev_old_tree",
+  "category": "events/common",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/common\\ev_old_tree.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev_old_tree\\ev_old_tree.blend",
+  "target_size_m": [
+    6.0,
+    5.5,
+    7.2
+  ],
+  "glb_size_m": [
+    6.366,
+    6.039,
+    7.256
+  ],
+  "size_deviation": [
+    0.061,
+    0.098,
+    0.008
+  ],
+  "bounds_min": [
+    -3.366,
+    -2.843,
+    -0.192
+  ],
+  "bounds_max": [
+    2.999,
+    3.196,
+    7.065
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 6006,
+  "source_triangles": 6006,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_bark_oak",
+    "env_leaves_oak"
+  ],
+  "collision_nodes": [
+    "ev_old_tree_trunk_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 455,
+  "glb_materials": [
+    [
+      "env_leaves_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark_oak",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "ev_old_tree.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ev_old_tree_crown",
+    "ev_old_tree_trunk_roots"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 00:56"
+}

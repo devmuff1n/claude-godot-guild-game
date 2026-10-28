@@ -1,0 +1,77 @@
+{
+  "id": "wooden_tankard",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\wooden_tankard.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\wooden_tankard\\wooden_tankard.blend",
+  "target_size_m": [
+    0.17,
+    0.13,
+    0.22
+  ],
+  "glb_size_m": [
+    0.195,
+    0.142,
+    0.2
+  ],
+  "size_deviation": [
+    0.147,
+    0.092,
+    -0.091
+  ],
+  "bounds_min": [
+    -0.071,
+    -0.071,
+    0.0
+  ],
+  "bounds_max": [
+    0.124,
+    0.071,
+    0.2
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 744,
+  "source_triangles": 744,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_iron",
+    "env_wood_dark",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "wooden_tankard_tankard_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 311,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "wooden_tankard.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "wooden_tankard_cup_body",
+    "wooden_tankard_handle",
+    "wooden_tankard_rim_bands"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

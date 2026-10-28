@@ -1,0 +1,74 @@
+{
+  "id": "wooden_garden_fence",
+  "category": "road_defense",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\road_defense\\wooden_garden_fence.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\wooden_garden_fence\\wooden_garden_fence.blend",
+  "target_size_m": [
+    3,
+    0.28,
+    1.0
+  ],
+  "glb_size_m": [
+    3.0,
+    0.275,
+    1.016
+  ],
+  "size_deviation": [
+    0.0,
+    -0.018,
+    0.016
+  ],
+  "bounds_min": [
+    -1.5,
+    -0.138,
+    -0.004
+  ],
+  "bounds_max": [
+    1.5,
+    0.138,
+    1.011
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 544,
+  "source_triangles": 544,
+  "visual_mesh_nodes": 4,
+  "unique_meshes": 3,
+  "materials": [
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "wooden_garden_fence_fence_col-convcolonly"
+  ],
+  "glb_nodes": 8,
+  "glb_kb": 245,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "wooden_garden_fence.001",
+    "wooden_garden_fence_snap_east.001",
+    "wooden_garden_fence_snap_west.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "wooden_garden_fence_post_L",
+    "wooden_garden_fence_post_R",
+    "wooden_garden_fence_rail_lower",
+    "wooden_garden_fence_rail_upper"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

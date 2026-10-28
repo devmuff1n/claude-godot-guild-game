@@ -1,0 +1,80 @@
+{
+  "id": "flower_patch",
+  "category": "vegetation",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\vegetation\\flower_patch.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\flower_patch\\flower_patch.blend",
+  "target_size_m": [
+    0.7,
+    0.6,
+    0.5
+  ],
+  "glb_size_m": [
+    0.7,
+    0.6,
+    0.5
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bounds_min": [
+    -0.35,
+    -0.3,
+    0.0
+  ],
+  "bounds_max": [
+    0.35,
+    0.3,
+    0.5
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1566,
+  "source_triangles": 1566,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_flower_leaf",
+    "env_petal_cream",
+    "env_petal_lavender",
+    "env_soil_dark"
+  ],
+  "collision_nodes": [],
+  "glb_nodes": 3,
+  "glb_kb": 241,
+  "glb_materials": [
+    [
+      "env_petal_cream",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_petal_lavender",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_soil_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_flower_leaf",
+      "OPAQUE",
+      true
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "flower_patch.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "flower_patch_flower_heads",
+    "flower_patch_stems_and_leaves"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

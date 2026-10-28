@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/Bar.gd" id="1_bar"]
+
+[node name="CampHeroRow" type="HBoxContainer"]
+size_flags_horizontal = 3
+mouse_filter = 0
+theme_override_constants/separation = 10
+
+[node name="Frame" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"PanelPortrait"
+
+[node name="Portrait" type="TextureRect" parent="Frame"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Info" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="Name" type="Label" parent="Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+theme_override_font_sizes/font_size = 14
+
+[node name="Hp" type="Control" parent="Info"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 7)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_bar")
+color = Color(0.82, 0.27, 0.24, 1)
+
+[node name="Mp" type="Control" parent="Info"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 5)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_bar")
+color = Color(0.3, 0.58, 0.95, 1)

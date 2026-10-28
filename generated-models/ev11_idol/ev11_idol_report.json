@@ -1,0 +1,174 @@
+{
+  "id": "ev11_idol",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev11_idol.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev11_idol\\ev11_idol.blend",
+  "target_size_m": [
+    6.5,
+    6.0,
+    5.0
+  ],
+  "glb_size_m": [
+    6.369,
+    5.628,
+    3.984
+  ],
+  "size_deviation": [
+    -0.02,
+    -0.062,
+    -0.203
+  ],
+  "bounds_min": [
+    -3.007,
+    0.495,
+    -0.176
+  ],
+  "bounds_max": [
+    3.362,
+    6.124,
+    3.809
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 11262,
+  "source_triangles": 11262,
+  "visual_mesh_nodes": 7,
+  "unique_meshes": 7,
+  "materials": [
+    "env_apple",
+    "env_bark",
+    "env_bark_oak",
+    "env_cloth_blue",
+    "env_cloth_red",
+    "env_copper",
+    "env_eye",
+    "env_fern",
+    "env_grass_blade",
+    "env_honey",
+    "env_leaves_oak",
+    "env_moss",
+    "env_petal_cream",
+    "env_petal_lavender",
+    "env_soil",
+    "env_stone",
+    "env_stone_grey",
+    "env_wood_dark"
+  ],
+  "collision_nodes": [
+    "ev11_idol_idol_col-convcolonly"
+  ],
+  "glb_nodes": 10,
+  "glb_kb": 1523,
+  "glb_materials": [
+    [
+      "env_soil",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_copper",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_cloth_red",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_blue",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_apple",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_petal_cream",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_honey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_petal_lavender",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_leaves_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 18,
+  "empties": [
+    "ev11_idol.001",
+    "ev11_idol_cam_focus.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "ev11_idol_idol: 1 degenerate faces"
+  ],
+  "motion_test": [],
+  "parts": [
+    "ev11_idol_ground_details",
+    "ev11_idol_idol",
+    "ev11_idol_moss",
+    "ev11_idol_offerings",
+    "ev11_idol_plants",
+    "ev11_idol_tree_crown",
+    "ev11_idol_tree_trunk"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:54"
+}

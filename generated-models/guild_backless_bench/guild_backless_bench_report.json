@@ -1,0 +1,71 @@
+{
+  "id": "guild_backless_bench",
+  "category": "town/furniture",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/furniture\\guild_backless_bench.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\guild_backless_bench\\guild_backless_bench.blend",
+  "target_size_m": [
+    1.8,
+    0.4,
+    0.42
+  ],
+  "glb_size_m": [
+    1.8,
+    0.38,
+    0.42
+  ],
+  "size_deviation": [
+    0.0,
+    -0.05,
+    0.0
+  ],
+  "bounds_min": [
+    -0.9,
+    -0.19,
+    0.0
+  ],
+  "bounds_max": [
+    0.9,
+    0.19,
+    0.42
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 160,
+  "source_triangles": 160,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "guild_backless_bench_bench_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 227,
+  "glb_materials": [
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "guild_backless_bench.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "guild_backless_bench_seat",
+    "guild_backless_bench_stretcher",
+    "guild_backless_bench_trestle_legs"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

@@ -1,0 +1,108 @@
+{
+  "id": "wooden_planter",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\wooden_planter.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\wooden_planter\\wooden_planter.blend",
+  "target_size_m": [
+    1.1,
+    0.75,
+    0.8
+  ],
+  "glb_size_m": [
+    1.1,
+    0.75,
+    0.874
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.093
+  ],
+  "bounds_min": [
+    -0.55,
+    -0.375,
+    0.0
+  ],
+  "bounds_max": [
+    0.55,
+    0.375,
+    0.874
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 3184,
+  "source_triangles": 3184,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_honey",
+    "env_iron",
+    "env_leaf_broad",
+    "env_leaves_bush",
+    "env_petal_cream",
+    "env_soil_dark",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "wooden_planter_planter_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 764,
+  "glb_materials": [
+    [
+      "env_leaves_bush",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leaf_broad",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_petal_cream",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_honey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_soil_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 8,
+  "empties": [
+    "wooden_planter.001",
+    "wooden_planter_insert_origin.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "wooden_planter_plant_insert",
+    "wooden_planter_soil",
+    "wooden_planter_wooden_box"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:55"
+}

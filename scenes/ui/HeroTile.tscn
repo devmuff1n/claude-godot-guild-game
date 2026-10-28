@@ -1,0 +1,114 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/HeroTile.gd" id="1_tile"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="2_pill"]
+[ext_resource type="Script" path="res://scripts/ui/PipBar.gd" id="3_pips"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="4_icon"]
+
+[node name="HeroTile" type="Button"]
+custom_minimum_size = Vector2(0, 300)
+size_flags_horizontal = 3
+focus_mode = 0
+theme_type_variation = &"ButtonList"
+script = ExtResource("1_tile")
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 12.0
+offset_right = -10.0
+offset_bottom = -10.0
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Frame" type="PanelContainer" parent="Box"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"PanelPortrait"
+
+[node name="Portrait" type="TextureRect" parent="Box/Frame"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PerkBadge" type="Control" parent="Box/Frame"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+mouse_filter = 1
+
+[node name="Star" parent="Box/Frame/PerkBadge" instance=ExtResource("4_icon")]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 0
+offset_left = -24.0
+offset_top = -6.0
+offset_right = 2.0
+offset_bottom = 20.0
+mouse_filter = 2
+kind = "perk"
+
+[node name="Name" type="Label" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Cls" type="Label" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+horizontal_alignment = 1
+
+[node name="Levels" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Level" parent="Box/Levels" instance=ExtResource("2_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Base Level"
+mouse_filter = 1
+icon_kind = "xp"
+value_width = 18.0
+
+[node name="Job" parent="Box/Levels" instance=ExtResource("2_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Job Level"
+mouse_filter = 1
+icon_kind = "job"
+value_width = 18.0
+
+[node name="BurnoutBox" type="HBoxContainer" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Flame" parent="Box/BurnoutBox" instance=ExtResource("4_icon")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+kind = "burnout"
+
+[node name="Burnout" type="Control" parent="Box/BurnoutBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 8)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("3_pips")

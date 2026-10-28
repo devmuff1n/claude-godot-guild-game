@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[node name="DiploOption" type="Button" groups=["diplo_option"]]
+custom_minimum_size = Vector2(0, 62)
+focus_mode = 0
+theme_type_variation = &"ButtonList"
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_right = -16.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Text" type="Label" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+theme_override_font_sizes/font_size = 16
+text_overrun_behavior = 3
+
+[node name="Check" type="Label" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TinyLabel"
+theme_override_colors/font_color = Color(0.85, 0.7, 0.4, 1)
+theme_override_font_sizes/font_size = 13
+text_overrun_behavior = 3

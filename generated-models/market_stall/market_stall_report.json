@@ -1,0 +1,104 @@
+{
+  "id": "market_stall",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\market_stall.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\market_stall\\market_stall.blend",
+  "target_size_m": [
+    2.8,
+    2,
+    2.5
+  ],
+  "glb_size_m": [
+    2.703,
+    2.104,
+    2.448
+  ],
+  "size_deviation": [
+    -0.035,
+    0.052,
+    -0.021
+  ],
+  "bounds_min": [
+    -1.352,
+    -1.081,
+    0.0
+  ],
+  "bounds_max": [
+    1.352,
+    1.024,
+    2.448
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1180,
+  "source_triangles": 1180,
+  "visual_mesh_nodes": 4,
+  "unique_meshes": 4,
+  "materials": [
+    "env_canopy_cream",
+    "env_canvas_green",
+    "env_iron",
+    "env_rope",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "market_stall_counter_col-convcolonly",
+    "market_stall_posts_0_col-convcolonly",
+    "market_stall_posts_1_col-convcolonly"
+  ],
+  "glb_nodes": 8,
+  "glb_kb": 546,
+  "glb_materials": [
+    [
+      "env_canopy_cream",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_canvas_green",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 7,
+  "empties": [
+    "market_stall.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "market_stall_canvas_canopy",
+    "market_stall_counter",
+    "market_stall_frame",
+    "market_stall_produce_trays"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

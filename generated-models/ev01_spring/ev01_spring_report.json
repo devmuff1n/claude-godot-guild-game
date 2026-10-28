@@ -1,0 +1,154 @@
+{
+  "id": "ev01_spring",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev01_spring.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev01_spring\\ev01_spring.blend",
+  "target_size_m": [
+    6.5,
+    8.0,
+    7.5
+  ],
+  "glb_size_m": [
+    6.691,
+    10.348,
+    7.233
+  ],
+  "size_deviation": [
+    0.029,
+    0.294,
+    -0.036
+  ],
+  "bounds_min": [
+    -3.229,
+    -0.586,
+    -0.36
+  ],
+  "bounds_max": [
+    3.462,
+    9.762,
+    6.873
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 10540,
+  "source_triangles": 10540,
+  "visual_mesh_nodes": 6,
+  "unique_meshes": 6,
+  "materials": [
+    "env_bark_oak",
+    "env_bone",
+    "env_dirt",
+    "env_fern",
+    "env_grass_blade",
+    "env_leaves_oak",
+    "env_moss",
+    "env_mud_dark",
+    "env_smoke",
+    "env_soil",
+    "env_stone_grey",
+    "env_streambed",
+    "env_water",
+    "env_water_fall",
+    "env_wood_dark"
+  ],
+  "collision_nodes": [
+    "ev01_spring_basin_col-convcolonly",
+    "ev01_spring_tree_col-convcolonly"
+  ],
+  "glb_nodes": 10,
+  "glb_kb": 1582,
+  "glb_materials": [
+    [
+      "env_dirt",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_soil",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_mud_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bone",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_streambed",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_water",
+      "BLEND",
+      true
+    ],
+    [
+      "env_water_fall",
+      "BLEND",
+      true
+    ],
+    [
+      "env_smoke",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leaves_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark_oak",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 14,
+  "empties": [
+    "ev01_spring.001",
+    "ev01_spring_cam_focus.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ev01_spring_ground_details",
+    "ev01_spring_plants",
+    "ev01_spring_spring_stones",
+    "ev01_spring_spring_water",
+    "ev01_spring_tree_crown",
+    "ev01_spring_tree_trunk"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 00:56"
+}

@@ -1,0 +1,84 @@
+{
+  "id": "forge_hearth",
+  "category": "town/crafts",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/crafts\\forge_hearth.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\forge_hearth\\forge_hearth.blend",
+  "target_size_m": [
+    1.5,
+    1,
+    1
+  ],
+  "glb_size_m": [
+    1.555,
+    1.058,
+    0.82
+  ],
+  "size_deviation": [
+    0.037,
+    0.058,
+    -0.18
+  ],
+  "bounds_min": [
+    -0.777,
+    -0.53,
+    0.0
+  ],
+  "bounds_max": [
+    0.778,
+    0.528,
+    0.82
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 2444,
+  "source_triangles": 2444,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_coal",
+    "env_coal_glow",
+    "env_eye",
+    "env_stone_grey"
+  ],
+  "collision_nodes": [
+    "forge_hearth_hearth_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 366,
+  "glb_materials": [
+    [
+      "env_coal",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_coal_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "forge_hearth.001",
+    "forge_hearth_vfx_fire_anchor.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "forge_hearth_coal_bed",
+    "forge_hearth_ember_glow",
+    "forge_hearth_masonry_body"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

@@ -1,0 +1,74 @@
+{
+  "id": "low_stone_wall",
+  "category": "road_defense",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\road_defense\\low_stone_wall.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\low_stone_wall\\low_stone_wall.blend",
+  "target_size_m": [
+    3,
+    0.55,
+    1.2
+  ],
+  "glb_size_m": [
+    3.024,
+    0.55,
+    1.198
+  ],
+  "size_deviation": [
+    0.008,
+    0.0,
+    -0.002
+  ],
+  "bounds_min": [
+    -1.499,
+    -0.275,
+    0.002
+  ],
+  "bounds_max": [
+    1.525,
+    0.275,
+    1.2
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1156,
+  "source_triangles": 1156,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_moss",
+    "env_stone"
+  ],
+  "collision_nodes": [
+    "low_stone_wall_pillar_col-convcolonly",
+    "low_stone_wall_wall_col-convcolonly"
+  ],
+  "glb_nodes": 8,
+  "glb_kb": 289,
+  "glb_materials": [
+    [
+      "env_stone",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "low_stone_wall.001",
+    "low_stone_wall_snap_east.001",
+    "low_stone_wall_snap_west.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "low_stone_wall_cap_stones",
+    "low_stone_wall_end_pillar",
+    "low_stone_wall_wall_section"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

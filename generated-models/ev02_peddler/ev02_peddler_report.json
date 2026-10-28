@@ -1,0 +1,258 @@
+{
+  "id": "ev02_peddler",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev02_peddler.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev02_peddler\\ev02_peddler.blend",
+  "target_size_m": [
+    6.5,
+    6.5,
+    7.5
+  ],
+  "glb_size_m": [
+    8.394,
+    6.24,
+    7.147
+  ],
+  "size_deviation": [
+    0.291,
+    -0.04,
+    -0.047
+  ],
+  "bounds_min": [
+    -3.211,
+    0.248,
+    -0.195
+  ],
+  "bounds_max": [
+    5.183,
+    6.488,
+    6.952
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 11033,
+  "source_triangles": 11033,
+  "visual_mesh_nodes": 8,
+  "unique_meshes": 8,
+  "materials": [
+    "env_bandage",
+    "env_bark_oak",
+    "env_brass",
+    "env_bread",
+    "env_burlap",
+    "env_cloth_blue",
+    "env_cloth_brown",
+    "env_cloth_cream",
+    "env_cloth_purple",
+    "env_cloth_red",
+    "env_cork",
+    "env_eye",
+    "env_eye_white",
+    "env_fern",
+    "env_glass_blue",
+    "env_glass_green",
+    "env_glass_red",
+    "env_grass_blade",
+    "env_hair_blond",
+    "env_iron",
+    "env_leather",
+    "env_leather_dark",
+    "env_leaves_oak",
+    "env_moss",
+    "env_rope",
+    "env_skin",
+    "env_soil",
+    "env_stone_grey",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid",
+    "env_wound"
+  ],
+  "collision_nodes": [
+    "ev02_peddler_post_col-convcolonly",
+    "ev02_peddler_tree_col-convcolonly"
+  ],
+  "glb_nodes": 12,
+  "glb_kb": 2149,
+  "glb_materials": [
+    [
+      "env_bread",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_glass_blue",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cork",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_glass_red",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_glass_green",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_burlap",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_purple",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_red",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_blue",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_soil",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bandage",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_cream",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_skin",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_blond",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leaves_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wound",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 32,
+  "empties": [
+    "ev02_peddler.001",
+    "ev02_peddler_cam_focus.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ev02_peddler_goods",
+    "ev02_peddler_ground_details",
+    "ev02_peddler_pack",
+    "ev02_peddler_peddler",
+    "ev02_peddler_plants",
+    "ev02_peddler_signpost",
+    "ev02_peddler_tree_crown",
+    "ev02_peddler_tree_trunk"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 00:56"
+}

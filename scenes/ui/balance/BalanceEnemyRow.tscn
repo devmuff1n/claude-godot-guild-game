@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ui/balance/BalanceStepper.tscn" id="1_step"]
+
+[node name="BalanceEnemyRow" type="PanelContainer"]
+theme_type_variation = &"PanelInset"
+
+[node name="Row" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Type" type="OptionButton" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(210, 30)
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Тип врага"
+
+[node name="Level" parent="Row" instance=ExtResource("1_step")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Уровень врага (как у героев). «авто» — уровень поручения. Shift+клик — шаг 5."
+max_value = 15.0
+fmt = "ур. %d"
+zero_text = "авто"
+
+[node name="Stats" type="Label" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_type_variation = &"MutedLabel"
+clip_text = true
+
+[node name="Copy" type="Button" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Добавить такого же врага"
+theme_type_variation = &"ButtonSmall"
+text = "⧉"
+
+[node name="Remove" type="Button" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Убрать врага"
+theme_type_variation = &"ButtonSmall"
+text = "✕"

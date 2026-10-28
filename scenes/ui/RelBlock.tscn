@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/RelBlock.gd" id="1_quw32"]
+[ext_resource type="Script" path="res://scripts/ui/Bar.gd" id="2_s7pkr"]
+
+[node name="RelBlock" type="VBoxContainer" unique_id=145347455]
+theme_override_constants/separation = 3
+script = ExtResource("1_quw32")
+
+[node name="Title" type="Label" parent="." unique_id=561777112]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+theme_override_font_sizes/font_size = 15
+
+[node name="FriendRow" type="HBoxContainer" parent="." unique_id=736388647]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="FriendRow" unique_id=1887895424]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_type_variation = &"TinyLabel"
+text = "Дружба"
+
+[node name="Friend" type="Control" parent="FriendRow" unique_id=1269195041]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 14)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("2_s7pkr")
+color = Color(0.5, 0.78, 0.45, 1)
+
+[node name="RomanceRow" type="HBoxContainer" parent="." unique_id=657314854]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="RomanceRow" unique_id=2003979956]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+tooltip_text = "Отдельно от дружбы: растёт только от романтических ответов."
+mouse_filter = 1
+theme_type_variation = &"TinyLabel"
+text = "Симпатия"
+
+[node name="Romance" type="Control" parent="RomanceRow" unique_id=1546012143]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 14)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("2_s7pkr")
+color = Color(0.9, 0.45, 0.6, 1)
+
+[node name="History" type="VBoxContainer" parent="." unique_id=1717101100]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2

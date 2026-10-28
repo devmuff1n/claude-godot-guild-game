@@ -1,0 +1,127 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/PaperDoll.gd" id="1_doll"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ItemSlot.tscn" id="2_slot"]
+
+[node name="PaperDoll" type="Control"]
+custom_minimum_size = Vector2(420, 352)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_doll")
+
+[node name="PortraitFrame" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 0.0
+offset_right = 340.0
+offset_bottom = 352.0
+mouse_filter = 2
+theme_type_variation = &"PanelPortrait"
+
+[node name="Portrait" type="TextureRect" parent="PortraitFrame"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Slot_head" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 64.0
+offset_bottom = 64.0
+placeholder = "Голова"
+
+[node name="Slot_chest" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 0.0
+offset_top = 72.0
+offset_right = 64.0
+offset_bottom = 136.0
+placeholder = "Грудь"
+
+[node name="Slot_hands" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 0.0
+offset_top = 144.0
+offset_right = 64.0
+offset_bottom = 208.0
+placeholder = "Перчатки"
+
+[node name="Slot_waist" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 0.0
+offset_top = 216.0
+offset_right = 64.0
+offset_bottom = 280.0
+placeholder = "Пояс"
+
+[node name="Slot_feet" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 0.0
+offset_top = 288.0
+offset_right = 64.0
+offset_bottom = 352.0
+placeholder = "Обувь"
+
+[node name="Slot_neck" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 356.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 64.0
+placeholder = "Амулет"
+
+[node name="Slot_ring1" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 356.0
+offset_top = 72.0
+offset_right = 420.0
+offset_bottom = 136.0
+placeholder = "Кольцо I"
+
+[node name="Slot_ring2" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 356.0
+offset_top = 144.0
+offset_right = 420.0
+offset_bottom = 208.0
+placeholder = "Кольцо II"
+
+[node name="Slot_main" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 356.0
+offset_top = 216.0
+offset_right = 420.0
+offset_bottom = 280.0
+placeholder = "Правая рука"
+
+[node name="Slot_off" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 356.0
+offset_top = 288.0
+offset_right = 420.0
+offset_bottom = 352.0
+placeholder = "Левая рука"

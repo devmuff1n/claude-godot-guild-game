@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[node name="CommandButton" type="Button" unique_id=910846226]
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+alignment = 0

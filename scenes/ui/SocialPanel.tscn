@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/SocialPanel.gd" id="1_social"]
+
+[node name="SocialPanel" type="VBoxContainer"]
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+script = ExtResource("1_social")
+
+[node name="Header" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "ЧЕРТЫ ХАРАКТЕРА"
+
+[node name="Rows" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Footer" type="HBoxContainer" parent="."]
+layout_mode = 2
+alignment = 2
+
+[node name="ResetButton" type="Button" parent="Footer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Сбросить"

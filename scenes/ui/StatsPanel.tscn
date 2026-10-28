@@ -1,0 +1,63 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/StatsPanel.gd" id="1_stats"]
+[ext_resource type="PackedScene" path="res://scenes/ui/StatTile.tscn" id="2_tile"]
+[ext_resource type="PackedScene" path="res://scenes/ui/StatRow.tscn" id="3_row"]
+
+[node name="StatsPanel" type="VBoxContainer"]
+custom_minimum_size = Vector2(380, 0)
+theme_override_constants/separation = 8
+script = ExtResource("1_stats")
+
+[node name="Tiles" type="GridContainer" parent="."]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="TileHp" parent="Tiles" instance=ExtResource("2_tile")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TileMp" parent="Tiles" instance=ExtResource("2_tile")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TileAtk" parent="Tiles" instance=ExtResource("2_tile")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TileArmor" parent="Tiles" instance=ExtResource("2_tile")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AttrHeader" type="Label" parent="."]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "АТРИБУТЫ"
+
+[node name="Attrs" type="GridContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="CombatHeader" type="Label" parent="."]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "В БОЮ"
+
+[node name="Combat" type="GridContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="Resists" parent="." instance=ExtResource("3_row")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Name" parent="Resists" index="0"]
+text = "Сопротивления (огонь · тьма · природа)"

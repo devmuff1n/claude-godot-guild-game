@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/expedition/CommandMenu.gd" id="1_cmd"]
+[ext_resource type="Script" path="res://scripts/ui/Bar.gd" id="2_bar"]
+
+[node name="CommandMenu" type="PanelContainer"]
+custom_minimum_size = Vector2(390, 0)
+offset_right = 390.0
+theme_type_variation = &"PanelModal"
+script = ExtResource("1_cmd")
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Head" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeroName" type="Label" parent="Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_type_variation = &"Title2Label"
+theme_override_font_sizes/font_size = 19
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Atb" type="Control" parent="Box/Head"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 10)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Заряды ATB"
+mouse_filter = 1
+script = ExtResource("2_bar")
+color = Color(0.95, 0.72, 0.25, 1)
+segments = 2
+
+[node name="Mp" type="Label" parent="Box/Head"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"SmallLabel"
+theme_override_colors/font_color = Color(0.55, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 13
+horizontal_alignment = 2
+
+[node name="Close" type="Button" parent="Box/Head"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Закрыть (ПКМ / Esc)"
+focus_mode = 0
+theme_type_variation = &"ButtonGhost"
+text = "✕"
+
+[node name="Sep" type="HSeparator" parent="Box"]
+layout_mode = 2
+
+[node name="List" type="VBoxContainer" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ModeButton" type="Button" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+theme_type_variation = &"ButtonGhost"
+text = "Зелья ▸"

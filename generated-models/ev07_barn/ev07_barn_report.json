@@ -1,0 +1,225 @@
+{
+  "id": "ev07_barn",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev07_barn.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev07_barn\\ev07_barn.blend",
+  "target_size_m": [
+    7.0,
+    7.0,
+    6.0
+  ],
+  "glb_size_m": [
+    8.205,
+    5.654,
+    5.693
+  ],
+  "size_deviation": [
+    0.172,
+    -0.192,
+    -0.051
+  ],
+  "bounds_min": [
+    -4.36,
+    0.648,
+    -0.165
+  ],
+  "bounds_max": [
+    3.845,
+    6.302,
+    5.528
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 11027,
+  "source_triangles": 11027,
+  "visual_mesh_nodes": 7,
+  "unique_meshes": 7,
+  "materials": [
+    "env_cloth_brown",
+    "env_cloth_green",
+    "env_cloth_white",
+    "env_cow_hide",
+    "env_eye",
+    "env_fire",
+    "env_fur_dark",
+    "env_fur_white",
+    "env_grass_blade",
+    "env_hair_brown",
+    "env_horn",
+    "env_iron",
+    "env_leather_dark",
+    "env_moss",
+    "env_pink",
+    "env_rope",
+    "env_skin",
+    "env_smoke",
+    "env_soil",
+    "env_stone_grey",
+    "env_thatch",
+    "env_water",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid",
+    "env_wound"
+  ],
+  "collision_nodes": [
+    "ev07_barn_barn_col-convcolonly",
+    "ev07_barn_well_col-convcolonly"
+  ],
+  "glb_nodes": 12,
+  "glb_kb": 1930,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fire",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_smoke",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_soil",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_green",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_skin",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wound",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_cow_hide",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fur_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fur_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_pink",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_horn",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_thatch",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_water",
+      "BLEND",
+      true
+    ]
+  ],
+  "glb_images": 26,
+  "empties": [
+    "ev07_barn.001",
+    "ev07_barn_cam_focus.001",
+    "ev07_barn_light_fire.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "ev07_barn_props: 3 degenerate faces",
+    "ev07_barn_people: 1 degenerate faces"
+  ],
+  "motion_test": [],
+  "parts": [
+    "ev07_barn_barn",
+    "ev07_barn_fire",
+    "ev07_barn_ground_details",
+    "ev07_barn_people",
+    "ev07_barn_plants",
+    "ev07_barn_props",
+    "ev07_barn_roof"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:57"
+}

@@ -1,0 +1,78 @@
+{
+  "id": "potted_plant",
+  "category": "vegetation",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\vegetation\\potted_plant.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\potted_plant\\potted_plant.blend",
+  "target_size_m": [
+    0.45,
+    0.4,
+    0.75
+  ],
+  "glb_size_m": [
+    0.44,
+    0.43,
+    0.75
+  ],
+  "size_deviation": [
+    -0.022,
+    0.075,
+    0.0
+  ],
+  "bounds_min": [
+    -0.225,
+    -0.215,
+    0.0
+  ],
+  "bounds_max": [
+    0.215,
+    0.215,
+    0.75
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 850,
+  "source_triangles": 850,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_leaf_broad",
+    "env_soil_dark",
+    "env_terracotta"
+  ],
+  "collision_nodes": [
+    "potted_plant_pot_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 227,
+  "glb_materials": [
+    [
+      "env_leaf_broad",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_terracotta",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_soil_dark",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "potted_plant.001",
+    "potted_plant_plant_insert.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "potted_plant_plant",
+    "potted_plant_pot",
+    "potted_plant_soil"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:18"
+}

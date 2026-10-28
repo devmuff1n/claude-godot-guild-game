@@ -1,0 +1,257 @@
+{
+  "id": "ev14_dice",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev14_dice.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev14_dice\\ev14_dice.blend",
+  "target_size_m": [
+    6.5,
+    6.0,
+    5.0
+  ],
+  "glb_size_m": [
+    7.027,
+    3.89,
+    2.278
+  ],
+  "size_deviation": [
+    0.081,
+    -0.352,
+    -0.544
+  ],
+  "bounds_min": [
+    -3.442,
+    0.571,
+    -0.166
+  ],
+  "bounds_max": [
+    3.585,
+    4.461,
+    2.112
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 15715,
+  "source_triangles": 15715,
+  "visual_mesh_nodes": 5,
+  "unique_meshes": 5,
+  "materials": [
+    "env_bark",
+    "env_bone",
+    "env_brass",
+    "env_burlap",
+    "env_cloth_brown",
+    "env_cloth_green",
+    "env_cloth_white",
+    "env_coal_glow",
+    "env_dirt",
+    "env_eye",
+    "env_eye_white",
+    "env_fern",
+    "env_fire",
+    "env_gold",
+    "env_grass_blade",
+    "env_hair_blond",
+    "env_hair_brown",
+    "env_hair_dark",
+    "env_iron",
+    "env_leather",
+    "env_leather_dark",
+    "env_moss",
+    "env_rope",
+    "env_skin",
+    "env_skin_dark",
+    "env_steel",
+    "env_stone_grey",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid",
+    "env_wood_raw",
+    "env_wound"
+  ],
+  "collision_nodes": [
+    "ev14_dice_camp_col-convcolonly"
+  ],
+  "glb_nodes": 9,
+  "glb_kb": 2488,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bone",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_steel",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_gold",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_coal_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fire",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_burlap",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_dirt",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_green",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_skin",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wound",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_blond",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_skin_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ]
+  ],
+  "glb_images": 32,
+  "empties": [
+    "ev14_dice.001",
+    "ev14_dice_cam_focus.001",
+    "ev14_dice_light_fire.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "ev14_dice_guards: 1 degenerate faces"
+  ],
+  "motion_test": [],
+  "parts": [
+    "ev14_dice_camp",
+    "ev14_dice_cart",
+    "ev14_dice_ground_details",
+    "ev14_dice_guards",
+    "ev14_dice_plants"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:57"
+}

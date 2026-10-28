@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://tests/env_kit_test.gd" id="1_envkit"]
+
+[sub_resource type="Environment" id="Environment_envkit"]
+background_mode = 1
+background_color = Color(0.62, 0.74, 0.86, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.86, 0.88, 0.95, 1)
+ambient_light_energy = 0.7
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_west"]
+size = Vector2(20.5, 30)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_east"]
+size = Vector2(19.5, 30)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_creek_end"]
+size = Vector2(4, 6)
+
+[sub_resource type="StandardMaterial3D" id="Mat_ground"]
+albedo_color = Color(0.33, 0.42, 0.21, 1)
+roughness = 1.0
+
+[node name="EnvKitTest" type="Node3D"]
+script = ExtResource("1_envkit")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_envkit")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-50, -35, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Ground" type="Node3D" parent="."]
+
+[node name="West" type="MeshInstance3D" parent="Ground"]
+position = Vector3(-10.25, -0.08, 0)
+mesh = SubResource("PlaneMesh_west")
+surface_material_override/0 = SubResource("Mat_ground")
+
+[node name="East" type="MeshInstance3D" parent="Ground"]
+position = Vector3(13.75, -0.08, 0)
+mesh = SubResource("PlaneMesh_east")
+surface_material_override/0 = SubResource("Mat_ground")
+
+[node name="CreekNorth" type="MeshInstance3D" parent="Ground"]
+position = Vector3(2, -0.08, -12)
+mesh = SubResource("PlaneMesh_creek_end")
+surface_material_override/0 = SubResource("Mat_ground")
+
+[node name="CreekSouth" type="MeshInstance3D" parent="Ground"]
+position = Vector3(2, -0.08, 12)
+mesh = SubResource("PlaneMesh_creek_end")
+surface_material_override/0 = SubResource("Mat_ground")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(-4.5, 15, 20.5)
+fov = 42.0
+current = true
+
+[node name="Kit" type="Node3D" parent="."]

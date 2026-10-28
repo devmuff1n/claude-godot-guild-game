@@ -1,0 +1,160 @@
+{
+  "id": "guild_hall_exterior",
+  "category": "town/buildings",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/buildings\\guild_hall_exterior.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\guild_hall_exterior\\guild_hall_exterior.blend",
+  "target_size_m": [
+    7.2,
+    6,
+    8.1
+  ],
+  "glb_size_m": [
+    7.16,
+    6.528,
+    8.32
+  ],
+  "size_deviation": [
+    -0.006,
+    0.088,
+    0.027
+  ],
+  "bounds_min": [
+    -3.58,
+    -3.23,
+    0.0
+  ],
+  "bounds_max": [
+    3.58,
+    3.298,
+    8.32
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 13942,
+  "source_triangles": 13942,
+  "visual_mesh_nodes": 5,
+  "unique_meshes": 5,
+  "materials": [
+    "env_brass",
+    "env_cloth_navy",
+    "env_iron",
+    "env_lantern_glow",
+    "env_leather",
+    "env_paint_cream",
+    "env_plaster",
+    "env_roof_red",
+    "env_steel",
+    "env_stone_block",
+    "env_timber",
+    "env_window_glow",
+    "env_wood_dark",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "guild_hall_exterior_body_col-convcolonly",
+    "guild_hall_exterior_entrance_col-convcolonly",
+    "guild_hall_exterior_steps_col-convcolonly"
+  ],
+  "glb_nodes": 9,
+  "glb_kb": 1921,
+  "glb_materials": [
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_navy",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_paint_cream",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_steel",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_roof_red",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_timber",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_block",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_plaster",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_window_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_lantern_glow",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 13,
+  "empties": [
+    "guild_hall_exterior.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [
+    {
+      "part": "guild_hall_exterior_door_leaf",
+      "axis": "local Z (hinge)",
+      "pivot": [
+        -0.575,
+        -2.135,
+        0.6
+      ],
+      "moves": true,
+      "max_z_before": 2.7,
+      "max_z_after": 2.7
+    }
+  ],
+  "parts": [
+    "guild_hall_exterior_banners",
+    "guild_hall_exterior_crest",
+    "guild_hall_exterior_door_leaf",
+    "guild_hall_exterior_roof",
+    "guild_hall_exterior_walls"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

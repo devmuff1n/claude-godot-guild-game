@@ -1,0 +1,204 @@
+{
+ "deformation": {
+  "_ROM": {
+   "stretch": 14.73,
+   "shrink": 0.26,
+   "bad_tris": 215,
+   "frame": 60,
+   "p99_stretch": 4.84,
+   "min_z": -0.0,
+   "long_edges": 150
+  },
+  "Idle": {
+   "stretch": 2.18,
+   "shrink": 0.24,
+   "bad_tris": 10,
+   "frame": 52,
+   "p99_stretch": 1.12,
+   "min_z": -0.0,
+   "long_edges": 0
+  },
+  "Walk": {
+   "stretch": 5.2,
+   "shrink": 0.12,
+   "bad_tris": 60,
+   "frame": 18,
+   "p99_stretch": 2.78,
+   "min_z": -0.004,
+   "long_edges": 43
+  },
+  "Cast": {
+   "stretch": 7.72,
+   "shrink": 0.11,
+   "bad_tris": 78,
+   "frame": 12,
+   "p99_stretch": 3.55,
+   "min_z": 0.004,
+   "long_edges": 67
+  },
+  "Cast_Release": {
+   "stretch": 10.85,
+   "shrink": 0.21,
+   "bad_tris": 154,
+   "frame": 6,
+   "p99_stretch": 5.28,
+   "min_z": 0.0,
+   "long_edges": 104
+  },
+  "Attack": {
+   "stretch": 5.47,
+   "shrink": 0.25,
+   "bad_tris": 26,
+   "frame": 14,
+   "p99_stretch": 1.58,
+   "min_z": -0.0,
+   "long_edges": 12
+  },
+  "Hit": {
+   "stretch": 2.33,
+   "shrink": 0.16,
+   "bad_tris": 11,
+   "frame": 12,
+   "p99_stretch": 1.16,
+   "min_z": -0.003,
+   "long_edges": 0
+  },
+  "Dodge": {
+   "stretch": 7.33,
+   "shrink": 0.13,
+   "bad_tris": 62,
+   "frame": 10,
+   "p99_stretch": 2.51,
+   "min_z": -0.027,
+   "long_edges": 36
+  },
+  "Death": {
+   "stretch": 8.43,
+   "shrink": 0.18,
+   "bad_tris": 198,
+   "frame": 38,
+   "p99_stretch": 4.98,
+   "min_z": -0.05,
+   "long_edges": 114
+  }
+ },
+ "clips": {
+  "Idle": {
+   "frames": 60,
+   "loop": true
+  },
+  "Walk": {
+   "frames": 24,
+   "loop": true
+  },
+  "Cast": {
+   "frames": 30,
+   "loop": true
+  },
+  "Cast_Release": {
+   "frames": 18,
+   "loop": false
+  },
+  "Attack": {
+   "frames": 26,
+   "loop": false
+  },
+  "Hit": {
+   "frames": 15,
+   "loop": false
+  },
+  "Dodge": {
+   "frames": 18,
+   "loop": false
+  },
+  "Death": {
+   "frames": 45,
+   "loop": false
+  }
+ },
+ "glb_bytes": 6475336,
+ "reimport": {
+  "armatures": 1,
+  "meshes": 2,
+  "bones": 63,
+  "root_bones": [
+   "mixamorig:Hips"
+  ],
+  "tris": 56669,
+  "bounds": [
+   [
+    -0.5151,
+    -0.2558,
+    0.0
+   ],
+   [
+    0.5473,
+    0.4549,
+    1.4996
+   ]
+  ],
+  "materials": [
+   "M_Neris"
+  ],
+  "vgroups": 63,
+  "max_influences": 4,
+  "images": [
+   [
+    "neris_basecolor",
+    [
+     2048,
+     2048
+    ]
+   ],
+   [
+    "neris_normal",
+    [
+     1024,
+     1024
+    ]
+   ],
+   [
+    "neris_orm",
+    [
+     1024,
+     1024
+    ]
+   ]
+  ],
+  "actions": {
+   "Attack": [
+    0,
+    21
+   ],
+   "Cast": [
+    0,
+    24
+   ],
+   "Cast_Release": [
+    0,
+    14
+   ],
+   "Death": [
+    0,
+    36
+   ],
+   "Dodge": [
+    0,
+    14
+   ],
+   "Hit": [
+    0,
+    12
+   ],
+   "Idle": [
+    0,
+    48
+   ],
+   "Walk": [
+    0,
+    19
+   ]
+  }
+ },
+ "t_total": 3.2
+}

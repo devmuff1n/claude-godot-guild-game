@@ -1,0 +1,223 @@
+{
+  "id": "ev13_chapel",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev13_chapel.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev13_chapel\\ev13_chapel.blend",
+  "target_size_m": [
+    6.5,
+    6.5,
+    6.0
+  ],
+  "glb_size_m": [
+    6.773,
+    3.493,
+    4.121
+  ],
+  "size_deviation": [
+    0.042,
+    -0.463,
+    -0.313
+  ],
+  "bounds_min": [
+    -3.277,
+    0.545,
+    -0.173
+  ],
+  "bounds_max": [
+    3.496,
+    4.039,
+    3.948
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 7007,
+  "source_triangles": 7007,
+  "visual_mesh_nodes": 6,
+  "unique_meshes": 6,
+  "materials": [
+    "env_brass",
+    "env_cloth_brown",
+    "env_cloth_tent",
+    "env_cloth_white",
+    "env_eye",
+    "env_fern",
+    "env_fur_white",
+    "env_gold",
+    "env_grass_blade",
+    "env_honey",
+    "env_lantern_glow",
+    "env_leather_dark",
+    "env_leaves_oak",
+    "env_moss",
+    "env_petal_cream",
+    "env_roof_slate",
+    "env_skin",
+    "env_stone",
+    "env_stone_grey",
+    "env_stone_plates",
+    "env_terracotta",
+    "env_thatch",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid",
+    "env_wound"
+  ],
+  "collision_nodes": [
+    "ev13_chapel_chapel_col-convcolonly"
+  ],
+  "glb_nodes": 10,
+  "glb_kb": 1862,
+  "glb_materials": [
+    [
+      "env_cloth_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_tent",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_skin",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wound",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fur_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_thatch",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leaves_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_plates",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_lantern_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_gold",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_terracotta",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_petal_cream",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_honey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_roof_slate",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 26,
+  "empties": [
+    "ev13_chapel.001",
+    "ev13_chapel_cam_focus.001",
+    "ev13_chapel_light_lamp.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "ev13_chapel_props: 2 degenerate faces",
+    "ev13_chapel_caretaker: 1 degenerate faces"
+  ],
+  "motion_test": [],
+  "parts": [
+    "ev13_chapel_caretaker",
+    "ev13_chapel_chapel",
+    "ev13_chapel_ground_details",
+    "ev13_chapel_plants",
+    "ev13_chapel_props",
+    "ev13_chapel_roof"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:54"
+}

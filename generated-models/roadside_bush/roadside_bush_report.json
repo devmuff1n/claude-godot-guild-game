@@ -1,0 +1,75 @@
+{
+  "id": "roadside_bush",
+  "category": "vegetation",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\vegetation\\roadside_bush.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\roadside_bush\\roadside_bush.blend",
+  "target_size_m": [
+    1.4,
+    1.2,
+    1.0
+  ],
+  "glb_size_m": [
+    1.4,
+    1.2,
+    1.0
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bounds_min": [
+    -0.7,
+    -0.6,
+    0.0
+  ],
+  "bounds_max": [
+    0.7,
+    0.6,
+    1.0
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 2682,
+  "source_triangles": 2682,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_bark",
+    "env_leaf_bush",
+    "env_leaves_bush"
+  ],
+  "collision_nodes": [],
+  "glb_nodes": 4,
+  "glb_kb": 419,
+  "glb_materials": [
+    [
+      "env_leaf_bush",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_leaves_bush",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "roadside_bush.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "roadside_bush_leaf_cards",
+    "roadside_bush_leaf_masses",
+    "roadside_bush_woody_stems"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

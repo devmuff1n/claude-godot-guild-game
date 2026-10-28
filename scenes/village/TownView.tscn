@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/village/TownView.gd" id="1_town"]
+[ext_resource type="PackedScene" path="res://scenes/village/Town3D.tscn" id="2_town3d"]
+
+[node name="TownView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_town")
+
+[node name="TownView" type="SubViewportContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -78.0
+offset_right = 16.0
+offset_bottom = 16.0
+stretch = true
+
+[node name="TownViewport" type="SubViewport" parent="TownView"]
+unique_name_in_owner = true
+handle_input_locally = false
+msaa_3d = 1
+size = Vector2i(1600, 900)
+render_target_update_mode = 4
+
+[node name="Town3D" parent="TownView/TownViewport" instance=ExtResource("2_town3d")]
+
+[node name="Hover" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 30.0
+mouse_filter = 2
+theme_type_variation = &"PanelNamePlate"
+
+[node name="HoverLabel" type="Label" parent="Hover"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TooltipTitle"
+text = "Дом гильдии"

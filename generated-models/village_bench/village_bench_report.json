@@ -1,0 +1,78 @@
+{
+  "id": "village_bench",
+  "category": "town/furniture",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/furniture\\village_bench.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\village_bench\\village_bench.blend",
+  "target_size_m": [
+    1.8,
+    0.65,
+    1.1
+  ],
+  "glb_size_m": [
+    1.8,
+    0.64,
+    1.003
+  ],
+  "size_deviation": [
+    0.0,
+    -0.015,
+    -0.088
+  ],
+  "bounds_min": [
+    -0.9,
+    -0.32,
+    -0.002
+  ],
+  "bounds_max": [
+    0.9,
+    0.32,
+    1.001
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 828,
+  "source_triangles": 828,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_brass",
+    "env_iron",
+    "env_wood_light"
+  ],
+  "collision_nodes": [
+    "village_bench_back_col-convcolonly",
+    "village_bench_seat_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 365,
+  "glb_materials": [
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "village_bench.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "village_bench_back_slats",
+    "village_bench_metal_legs",
+    "village_bench_seat_slats"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

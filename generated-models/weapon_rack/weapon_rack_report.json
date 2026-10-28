@@ -1,0 +1,77 @@
+{
+  "id": "weapon_rack",
+  "category": "town/crafts",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/crafts\\weapon_rack.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\weapon_rack\\weapon_rack.blend",
+  "target_size_m": [
+    1.5,
+    0.6,
+    1.6
+  ],
+  "glb_size_m": [
+    1.43,
+    0.64,
+    1.63
+  ],
+  "size_deviation": [
+    -0.047,
+    0.067,
+    0.019
+  ],
+  "bounds_min": [
+    -0.715,
+    -0.32,
+    0.0
+  ],
+  "bounds_max": [
+    0.715,
+    0.32,
+    1.63
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 616,
+  "source_triangles": 616,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_brass",
+    "env_iron",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "weapon_rack_rack_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 337,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "weapon_rack.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "weapon_rack_crossbar",
+    "weapon_rack_feet",
+    "weapon_rack_posts"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:55"
+}

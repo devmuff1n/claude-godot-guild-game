@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="1_icon"]
+
+[node name="SkillCard" type="PanelContainer"]
+theme_type_variation = &"PanelInset"
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Head" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Name" type="Label" parent="Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+text = "Умение"
+text_overrun_behavior = 3
+
+[node name="Lock" type="HBoxContainer" parent="Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Icon" parent="Box/Head/Lock" instance=ExtResource("1_icon")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+kind = "lock"
+
+[node name="LockLevel" type="Label" parent="Box/Head/Lock"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TinyLabel"
+
+[node name="Cost" type="Label" parent="Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TinyLabel"
+theme_override_colors/font_color = Color(0.95, 0.72, 0.25, 1)
+
+[node name="Meta" type="Label" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TinyLabel"
+
+[node name="Desc" type="Label" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+autowrap_mode = 3

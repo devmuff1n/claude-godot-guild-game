@@ -1,0 +1,105 @@
+{
+  "id": "forest_defense_gate",
+  "category": "road_defense",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\road_defense\\forest_defense_gate.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\forest_defense_gate\\forest_defense_gate.blend",
+  "target_size_m": [
+    2.3,
+    0.45,
+    2.8
+  ],
+  "glb_size_m": [
+    2.28,
+    0.448,
+    2.805
+  ],
+  "size_deviation": [
+    -0.009,
+    -0.004,
+    0.002
+  ],
+  "bounds_min": [
+    -1.14,
+    -0.228,
+    -0.005
+  ],
+  "bounds_max": [
+    1.14,
+    0.22,
+    2.8
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 872,
+  "source_triangles": 872,
+  "visual_mesh_nodes": 5,
+  "unique_meshes": 5,
+  "materials": [
+    "env_iron",
+    "env_plaque",
+    "env_wood_dark",
+    "env_wood_light"
+  ],
+  "collision_nodes": [
+    "forest_defense_gate_gate_leaf_col-convcolonly",
+    "forest_defense_gate_post_L_col-convcolonly",
+    "forest_defense_gate_post_R_col-convcolonly"
+  ],
+  "glb_nodes": 14,
+  "glb_kb": 359,
+  "glb_materials": [
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_plaque",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "forest_defense_gate.001",
+    "forest_defense_gate_vfx_damage_0.001",
+    "forest_defense_gate_vfx_damage_1.001",
+    "forest_defense_gate_vfx_damage_2.001",
+    "forest_defense_gate_vfx_fire_0.001",
+    "forest_defense_gate_vfx_fire_1.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [
+    {
+      "part": "forest_defense_gate_gate_leaf",
+      "axis": "local Z (hinge on left stile)",
+      "pivot": [
+        -0.7,
+        0.0,
+        0.0
+      ],
+      "moves": true,
+      "max_z_before": 2.8,
+      "max_z_after": 2.8
+    }
+  ],
+  "parts": [
+    "forest_defense_gate_cross_braces",
+    "forest_defense_gate_gate_leaf",
+    "forest_defense_gate_metal_fittings",
+    "forest_defense_gate_shield_plaque",
+    "forest_defense_gate_side_posts"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

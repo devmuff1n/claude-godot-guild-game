@@ -1,0 +1,136 @@
+{
+  "id": "guild_hall_interior_shell",
+  "category": "town/buildings",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/buildings\\guild_hall_interior_shell.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\guild_hall_interior_shell\\guild_hall_interior_shell.blend",
+  "target_size_m": [
+    10.5,
+    8,
+    6
+  ],
+  "glb_size_m": [
+    10.52,
+    8.125,
+    6.116
+  ],
+  "size_deviation": [
+    0.002,
+    0.016,
+    0.019
+  ],
+  "bounds_min": [
+    -5.26,
+    -4.07,
+    -0.116
+  ],
+  "bounds_max": [
+    5.26,
+    4.055,
+    6.0
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 7940,
+  "source_triangles": 7940,
+  "visual_mesh_nodes": 8,
+  "unique_meshes": 8,
+  "materials": [
+    "env_floor_planks",
+    "env_iron",
+    "env_plaster",
+    "env_timber",
+    "env_window_glow",
+    "env_wood_dark",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "guild_hall_interior_shell_floor_col-convcolonly",
+    "guild_hall_interior_shell_gallery_col-convcolonly",
+    "guild_hall_interior_shell_staircase_col-convcolonly",
+    "guild_hall_interior_shell_wall_back_col-convcolonly",
+    "guild_hall_interior_shell_wall_left_col-convcolonly",
+    "guild_hall_interior_shell_wall_right_col-convcolonly"
+  ],
+  "glb_nodes": 15,
+  "glb_kb": 1166,
+  "glb_materials": [
+    [
+      "env_timber",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_floor_planks",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_plaster",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_window_glow",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 7,
+  "empties": [
+    "guild_hall_interior_shell.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [
+    {
+      "part": "guild_hall_interior_shell_side_door_left",
+      "axis": "local Z (hinge)",
+      "pivot": [
+        -4.995,
+        2.4,
+        0.12
+      ],
+      "moves": true,
+      "max_z_before": 2.22,
+      "max_z_after": 2.22
+    },
+    {
+      "part": "guild_hall_interior_shell_side_door_back",
+      "axis": "local Z (hinge)",
+      "pivot": [
+        -3.5,
+        3.745,
+        0.12
+      ],
+      "moves": true,
+      "max_z_before": 2.22,
+      "max_z_after": 2.22
+    }
+  ],
+  "parts": [
+    "guild_hall_interior_shell_ceiling_beams",
+    "guild_hall_interior_shell_floor_panels",
+    "guild_hall_interior_shell_gallery",
+    "guild_hall_interior_shell_side_door_back",
+    "guild_hall_interior_shell_side_door_left",
+    "guild_hall_interior_shell_staircase",
+    "guild_hall_interior_shell_wall_panels",
+    "guild_hall_interior_shell_windows"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

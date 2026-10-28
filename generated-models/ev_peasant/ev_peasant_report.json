@@ -1,0 +1,99 @@
+{
+  "id": "ev_peasant",
+  "category": "events/common",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/common\\ev_peasant.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev_peasant\\ev_peasant.blend",
+  "target_size_m": [
+    0.62,
+    0.55,
+    1.3
+  ],
+  "glb_size_m": [
+    0.646,
+    0.634,
+    1.39
+  ],
+  "size_deviation": [
+    0.042,
+    0.153,
+    0.069
+  ],
+  "bounds_min": [
+    -0.323,
+    -0.281,
+    0.01
+  ],
+  "bounds_max": [
+    0.323,
+    0.353,
+    1.4
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1949,
+  "source_triangles": 1949,
+  "visual_mesh_nodes": 1,
+  "unique_meshes": 1,
+  "materials": [
+    "env_cloth_brown",
+    "env_cloth_cream",
+    "env_eye",
+    "env_eye_white",
+    "env_hair_blond",
+    "env_leather_dark",
+    "env_skin"
+  ],
+  "collision_nodes": [
+    "ev_peasant_body_col-convcolonly"
+  ],
+  "glb_nodes": 3,
+  "glb_kb": 262,
+  "glb_materials": [
+    [
+      "env_cloth_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_cream",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_skin",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_blond",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 7,
+  "empties": [
+    "ev_peasant.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ev_peasant_peasant"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 00:56"
+}

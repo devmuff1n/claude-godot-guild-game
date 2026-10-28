@@ -1,0 +1,82 @@
+{
+  "id": "hanging_herb_bundle",
+  "category": "town/crafts",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/crafts\\hanging_herb_bundle.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\hanging_herb_bundle\\hanging_herb_bundle.blend",
+  "target_size_m": [
+    0.35,
+    0.28,
+    0.6
+  ],
+  "glb_size_m": [
+    0.272,
+    0.261,
+    0.632
+  ],
+  "size_deviation": [
+    -0.223,
+    -0.068,
+    0.053
+  ],
+  "bounds_min": [
+    -0.102,
+    -0.148,
+    0.004
+  ],
+  "bounds_max": [
+    0.17,
+    0.113,
+    0.635
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1376,
+  "source_triangles": 1376,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_flower_leaf",
+    "env_leaf_broad",
+    "env_petal_lavender",
+    "env_rope"
+  ],
+  "collision_nodes": [],
+  "glb_nodes": 5,
+  "glb_kb": 146,
+  "glb_materials": [
+    [
+      "env_leaf_broad",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_petal_lavender",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_flower_leaf",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "hanging_herb_bundle.001",
+    "hanging_herb_bundle_hang_point.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "hanging_herb_bundle_leaves",
+    "hanging_herb_bundle_stems",
+    "hanging_herb_bundle_twine_loop"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:55"
+}

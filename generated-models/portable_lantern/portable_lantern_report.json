@@ -1,0 +1,86 @@
+{
+  "id": "portable_lantern",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\portable_lantern.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\portable_lantern\\portable_lantern.blend",
+  "target_size_m": [
+    0.3,
+    0.3,
+    0.46
+  ],
+  "glb_size_m": [
+    0.3,
+    0.3,
+    0.552
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.2
+  ],
+  "bounds_min": [
+    -0.15,
+    -0.15,
+    0.0
+  ],
+  "bounds_max": [
+    0.15,
+    0.15,
+    0.552
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 318,
+  "source_triangles": 318,
+  "visual_mesh_nodes": 4,
+  "unique_meshes": 4,
+  "materials": [
+    "env_iron",
+    "env_lantern_glow"
+  ],
+  "collision_nodes": [
+    "portable_lantern_lantern_col-convcolonly"
+  ],
+  "glb_nodes": 7,
+  "glb_kb": 135,
+  "glb_materials": [
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_lantern_glow",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "portable_lantern.001",
+    "portable_lantern_light_anchor.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [
+    {
+      "part": "portable_lantern_handle_ring",
+      "axis": "local X (handle swing)",
+      "pivot": [
+        0.0,
+        0.0,
+        0.46
+      ],
+      "moves": true,
+      "max_z_before": 0.552,
+      "max_z_after": 0.512
+    }
+  ],
+  "parts": [
+    "portable_lantern_cap",
+    "portable_lantern_frame",
+    "portable_lantern_glass_insert",
+    "portable_lantern_handle_ring"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

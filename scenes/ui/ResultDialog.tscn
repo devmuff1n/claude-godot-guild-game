@@ -1,0 +1,213 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/ResultDialog.gd" id="1_res"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="2_icon"]
+
+[node name="ResultDialog" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_res")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.6)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(940, 0)
+layout_mode = 2
+theme_type_variation = &"PanelModal"
+
+[node name="Box" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Head" type="VBoxContainer" parent="Center/Panel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Kind" type="Label" parent="Center/Panel/Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ПОРУЧЕНИЕ ВЫПОЛНЕНО"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="Center/Panel/Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+theme_override_font_sizes/font_size = 30
+text = "Поручение"
+horizontal_alignment = 1
+
+[node name="Outro" type="Label" parent="Center/Panel/Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"QuoteLabel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sep" type="HSeparator" parent="Center/Panel/Box"]
+layout_mode = 2
+
+[node name="Columns" type="HBoxContainer" parent="Center/Panel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Ledger" type="VBoxContainer" parent="Center/Panel/Box/Columns"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="MoneyBox" type="PanelContainer" parent="Center/Panel/Box/Columns"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"PanelSection"
+
+[node name="Box" type="VBoxContainer" parent="Center/Panel/Box/Columns/MoneyBox"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Caption" type="Label" parent="Center/Panel/Box/Columns/MoneyBox/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "В КАЗНУ"
+horizontal_alignment = 1
+
+[node name="Row" type="HBoxContainer" parent="Center/Panel/Box/Columns/MoneyBox/Box"]
+layout_mode = 2
+alignment = 1
+
+[node name="Coin" parent="Center/Panel/Box/Columns/MoneyBox/Box/Row" instance=ExtResource("2_icon")]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Total" type="Label" parent="Center/Panel/Box/Columns/MoneyBox/Box/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BigValueLabel"
+theme_override_font_sizes/font_size = 30
+text = "+0"
+
+[node name="TotalNote" type="Label" parent="Center/Panel/Box/Columns/MoneyBox/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TinyLabel"
+horizontal_alignment = 1
+
+[node name="LootBox" type="VBoxContainer" parent="Center/Panel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Caption" type="Label" parent="Center/Panel/Box/LootBox"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ДОБЫЧА"
+
+[node name="Loot" type="HFlowContainer" parent="Center/Panel/Box/LootBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 8
+
+[node name="ChoiceNote" type="HBoxContainer" parent="Center/Panel/Box/LootBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Icon" parent="Center/Panel/Box/LootBox/ChoiceNote" instance=ExtResource("2_icon")]
+layout_mode = 2
+size_flags_vertical = 4
+kind = "gift"
+
+[node name="Text" type="Label" parent="Center/Panel/Box/LootBox/ChoiceNote"]
+layout_mode = 2
+theme_type_variation = &"GoodLabel"
+text = "В доме гильдии ждёт награда на выбор"
+
+[node name="GrowthBox" type="VBoxContainer" parent="Center/Panel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Caption" type="Label" parent="Center/Panel/Box/GrowthBox"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "РОСТ ОТРЯДА"
+
+[node name="Growth" type="HFlowContainer" parent="Center/Panel/Box/GrowthBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 8
+
+[node name="NewsBox" type="VBoxContainer" parent="Center/Panel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="UnlockRow" type="HBoxContainer" parent="Center/Panel/Box/NewsBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="Center/Panel/Box/NewsBox/UnlockRow"]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"CaptionLabel"
+text = "ОТКРЫТО"
+
+[node name="Unlocks" type="HFlowContainer" parent="Center/Panel/Box/NewsBox/UnlockRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+
+[node name="NextRow" type="HBoxContainer" parent="Center/Panel/Box/NewsBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="Center/Panel/Box/NewsBox/NextRow"]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"CaptionLabel"
+text = "ДАЛЬШЕ"
+
+[node name="Next" type="HFlowContainer" parent="Center/Panel/Box/NewsBox/NextRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+
+[node name="Footer" type="HBoxContainer" parent="Center/Panel/Box"]
+layout_mode = 2
+alignment = 1
+
+[node name="ContinueButton" type="Button" parent="Center/Panel/Box/Footer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonPrimary"
+text = "Продолжить"

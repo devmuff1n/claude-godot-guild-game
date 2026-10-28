@@ -1,0 +1,198 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/village/HomeView.gd" id="1_ive4m"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="2_icon"]
+
+[node name="HomeView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_ive4m")
+
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/separation = 16
+
+[node name="Left" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ChroniclePanel" type="PanelContainer" parent="Columns/Left"]
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Columns/Left/ChroniclePanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ChronicleCaption" type="Label" parent="Columns/Left/ChroniclePanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ХРОНИКА"
+
+[node name="Title" type="Label" parent="Columns/Left/ChroniclePanel/Box"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Дом гильдии"
+
+[node name="Sep" type="HSeparator" parent="Columns/Left/ChroniclePanel/Box"]
+layout_mode = 2
+
+[node name="Chronicle" type="Label" parent="Columns/Left/ChroniclePanel/Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+theme_override_constants/line_spacing = 4
+autowrap_mode = 3
+
+[node name="ChapterDone" type="Label" parent="Columns/Left/ChroniclePanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"GoodLabel"
+text = "Глава завершена"
+
+[node name="NextPanel" type="PanelContainer" parent="Columns/Left"]
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Columns/Left/NextPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="NextCaption" type="Label" parent="Columns/Left/NextPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "СЛЕДУЮЩЕЕ ПОРУЧЕНИЕ"
+
+[node name="Row" type="HBoxContainer" parent="Columns/Left/NextPanel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Icon" parent="Columns/Left/NextPanel/Box/Row" instance=ExtResource("2_icon")]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+kind = "board"
+
+[node name="Info" type="VBoxContainer" parent="Columns/Left/NextPanel/Box/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NextName" type="Label" parent="Columns/Left/NextPanel/Box/Row/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Title2Label"
+text_overrun_behavior = 3
+
+[node name="NextInfo" type="Label" parent="Columns/Left/NextPanel/Box/Row/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+
+[node name="BoardButton" type="Button" parent="Columns/Left/NextPanel/Box/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_type_variation = &"ButtonPrimary"
+theme_override_font_sizes/font_size = 16
+text = "К доске"
+
+[node name="Right" type="VBoxContainer" parent="Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="SquadPanel" type="PanelContainer" parent="Columns/Right"]
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Columns/Right/SquadPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="Columns/Right/SquadPanel/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ОТРЯД"
+
+[node name="Squad" type="HBoxContainer" parent="Columns/Right/SquadPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="RewardPanel" type="PanelContainer" parent="Columns/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Columns/Right/RewardPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Head" type="HBoxContainer" parent="Columns/Right/RewardPanel/Box"]
+layout_mode = 2
+
+[node name="Icon" parent="Columns/Right/RewardPanel/Box/Head" instance=ExtResource("2_icon")]
+layout_mode = 2
+size_flags_vertical = 4
+kind = "gift"
+
+[node name="Caption" type="Label" parent="Columns/Right/RewardPanel/Box/Head"]
+layout_mode = 2
+tooltip_text = "Награда за первое выполнение поручения"
+mouse_filter = 1
+theme_type_variation = &"GoldLabel"
+text = "Награда — выберите одну вещь"
+
+[node name="PendingCards" type="HBoxContainer" parent="Columns/Right/RewardPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SuppliesPanel" type="PanelContainer" parent="Columns/Right"]
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Columns/Right/SuppliesPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="Columns/Right/SuppliesPanel/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ЗАПАСЫ"
+
+[node name="Supplies" type="HFlowContainer" parent="Columns/Right/SuppliesPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 8
+
+[node name="QueueBox" type="HBoxContainer" parent="Columns/Right/SuppliesPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="QueueLabel" type="Label" parent="Columns/Right/SuppliesPanel/Box/QueueBox"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Кладовая была заполнена — вещи ждут свободных ячеек"
+mouse_filter = 1
+theme_type_variation = &"GoldLabel"
+
+[node name="TakeQueueButton" type="Button" parent="Columns/Right/SuppliesPanel/Box/QueueBox"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Забрать"

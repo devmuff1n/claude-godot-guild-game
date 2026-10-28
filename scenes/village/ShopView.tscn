@@ -1,0 +1,190 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/village/ShopView.gd" id="1_pl2s1"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="2_icon"]
+
+[node name="ShopView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_pl2s1")
+
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/separation = 16
+
+[node name="BuyPanel" type="PanelContainer" parent="Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelDark"
+
+[node name="Scroll" type="ScrollContainer" parent="Columns/BuyPanel"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Box" type="VBoxContainer" parent="Columns/BuyPanel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Head" type="HBoxContainer" parent="Columns/BuyPanel/Scroll/Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Icon" parent="Columns/BuyPanel/Scroll/Box/Head" instance=ExtResource("2_icon")]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+kind = "shop"
+
+[node name="Titles" type="VBoxContainer" parent="Columns/BuyPanel/Scroll/Box/Head"]
+layout_mode = 2
+theme_override_constants/separation = -2
+
+[node name="Caption" type="Label" parent="Columns/BuyPanel/Scroll/Box/Head/Titles"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ЛАВКА"
+
+[node name="ShopTitle" type="Label" parent="Columns/BuyPanel/Scroll/Box/Head/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"TitleLabel"
+text = "Лавка Ольги"
+
+[node name="Sep" type="HSeparator" parent="Columns/BuyPanel/Scroll/Box"]
+layout_mode = 2
+
+[node name="GearHeader" type="Label" parent="Columns/BuyPanel/Scroll/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "СНАРЯЖЕНИЕ"
+
+[node name="StockGrid" type="GridContainer" parent="Columns/BuyPanel/Scroll/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="SoldOut" type="Label" parent="Columns/BuyPanel/Scroll/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Всё раскуплено"
+
+[node name="Gap" type="Control" parent="Columns/BuyPanel/Scroll/Box"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="ConsHeader" type="Label" parent="Columns/BuyPanel/Scroll/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ПРИПАСЫ И ПОДАРКИ"
+
+[node name="ConsGrid" type="GridContainer" parent="Columns/BuyPanel/Scroll/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="SellPanel" type="PanelContainer" parent="Columns"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Columns/SellPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Head" type="HBoxContainer" parent="Columns/SellPanel/Box"]
+layout_mode = 2
+
+[node name="SellTitle" type="Label" parent="Columns/SellPanel/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Title2Label"
+text = "Продажа"
+
+[node name="SellNote" type="Label" parent="Columns/SellPanel/Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"CaptionLabel"
+
+[node name="SellScroll" type="ScrollContainer" parent="Columns/SellPanel/Box"]
+custom_minimum_size = Vector2(0, 330)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="SellGrid" type="GridContainer" parent="Columns/SellPanel/Box/SellScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 3
+columns = 10
+
+[node name="SellBar" type="PanelContainer" parent="Columns/SellPanel/Box"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_type_variation = &"PanelSection"
+
+[node name="Row" type="HBoxContainer" parent="Columns/SellPanel/Box/SellBar"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SellName" type="Label" parent="Columns/SellPanel/Box/SellBar/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_type_variation = &"SmallLabel"
+text_overrun_behavior = 3
+
+[node name="SellButton" type="Button" parent="Columns/SellPanel/Box/SellBar/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+text = "Продать"
+
+[node name="ConsSellHeader" type="Label" parent="Columns/SellPanel/Box"]
+layout_mode = 2
+tooltip_text = "40% цены"
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "ПРОДАТЬ ПРИПАСЫ"
+
+[node name="ConsSell" type="HFlowContainer" parent="Columns/SellPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="BuybackHeader" type="Label" parent="Columns/SellPanel/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ВЫКУП ПРОДАННОГО"
+
+[node name="BuybackEmpty" type="Label" parent="Columns/SellPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "—"
+
+[node name="BuybackScroll" type="ScrollContainer" parent="Columns/SellPanel/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="BuybackList" type="VBoxContainer" parent="Columns/SellPanel/Box/BuybackScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4

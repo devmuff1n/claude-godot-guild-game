@@ -1,0 +1,10 @@
+# Godot
+.godot/
+*.tmp
+
+# Blender work files and backups (huge)
+*.blend1
+generated-models/*/_work/
+generated-models/neris/neris_bake_source.blend
+generated-models/_demo/levels/
+generated-models/_demo/events/

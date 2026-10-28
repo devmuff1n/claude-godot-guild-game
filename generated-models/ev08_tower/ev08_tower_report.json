@@ -1,0 +1,146 @@
+{
+  "id": "ev08_tower",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev08_tower.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev08_tower\\ev08_tower.blend",
+  "target_size_m": [
+    6.5,
+    6.0,
+    8.0
+  ],
+  "glb_size_m": [
+    5.984,
+    4.88,
+    4.964
+  ],
+  "size_deviation": [
+    -0.079,
+    -0.187,
+    -0.379
+  ],
+  "bounds_min": [
+    -3.011,
+    0.185,
+    -0.245
+  ],
+  "bounds_max": [
+    2.973,
+    5.065,
+    4.719
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 5344,
+  "source_triangles": 5344,
+  "visual_mesh_nodes": 5,
+  "unique_meshes": 5,
+  "materials": [
+    "env_cloth_green",
+    "env_cloth_white",
+    "env_fern",
+    "env_grass_blade",
+    "env_leather",
+    "env_leather_dark",
+    "env_leaves_bush",
+    "env_moss",
+    "env_mud_dark",
+    "env_soil",
+    "env_steel",
+    "env_stone_grey",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "ev08_tower_tower_col-convcolonly"
+  ],
+  "glb_nodes": 8,
+  "glb_kb": 1220,
+  "glb_materials": [
+    [
+      "env_leaves_bush",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_steel",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_green",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_soil",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_mud_dark",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 14,
+  "empties": [
+    "ev08_tower.001",
+    "ev08_tower_cam_focus.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ev08_tower_bushes",
+    "ev08_tower_gear",
+    "ev08_tower_ground_details",
+    "ev08_tower_plants",
+    "ev08_tower_tower"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:54"
+}

@@ -1,0 +1,203 @@
+{
+  "id": "ev12_corpse",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev12_corpse.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev12_corpse\\ev12_corpse.blend",
+  "target_size_m": [
+    6.5,
+    6.0,
+    7.0
+  ],
+  "glb_size_m": [
+    8.288,
+    7.287,
+    4.993
+  ],
+  "size_deviation": [
+    0.275,
+    0.214,
+    -0.287
+  ],
+  "bounds_min": [
+    -3.22,
+    -0.45,
+    -0.189
+  ],
+  "bounds_max": [
+    5.068,
+    6.838,
+    4.803
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 11120,
+  "source_triangles": 11120,
+  "visual_mesh_nodes": 8,
+  "unique_meshes": 8,
+  "materials": [
+    "env_bark",
+    "env_bark_oak",
+    "env_burlap",
+    "env_chainmail",
+    "env_cloth_blue",
+    "env_cloth_brown",
+    "env_dirt",
+    "env_eye",
+    "env_eye_white",
+    "env_feather",
+    "env_fern",
+    "env_grass_blade",
+    "env_iron",
+    "env_leather",
+    "env_leather_dark",
+    "env_leaves_oak",
+    "env_moss",
+    "env_mud_dark",
+    "env_shield_planks",
+    "env_skin",
+    "env_steel",
+    "env_stone_grey",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "ev12_corpse_log_col-convcolonly"
+  ],
+  "glb_nodes": 11,
+  "glb_kb": 1880,
+  "glb_materials": [
+    [
+      "env_feather",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_dirt",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_mud_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_chainmail",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_blue",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_skin",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_steel",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_shield_planks",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_burlap",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leaves_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark_oak",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 23,
+  "empties": [
+    "ev12_corpse.001",
+    "ev12_corpse_cam_focus.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ev12_corpse_crow",
+    "ev12_corpse_fallen_log",
+    "ev12_corpse_ground_details",
+    "ev12_corpse_mercenary",
+    "ev12_corpse_plants",
+    "ev12_corpse_props",
+    "ev12_corpse_tree_crown",
+    "ev12_corpse_tree_trunk"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:54"
+}

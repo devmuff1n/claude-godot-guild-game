@@ -1,0 +1,245 @@
+{
+  "id": "ev06_cage",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev06_cage.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev06_cage\\ev06_cage.blend",
+  "target_size_m": [
+    6.5,
+    6.0,
+    5.0
+  ],
+  "glb_size_m": [
+    8.542,
+    3.963,
+    2.214
+  ],
+  "size_deviation": [
+    0.314,
+    -0.34,
+    -0.557
+  ],
+  "bounds_min": [
+    -3.909,
+    0.336,
+    -0.149
+  ],
+  "bounds_max": [
+    4.632,
+    4.298,
+    2.066
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 16935,
+  "source_triangles": 16935,
+  "visual_mesh_nodes": 5,
+  "unique_meshes": 5,
+  "materials": [
+    "env_bark",
+    "env_cloth_brown",
+    "env_cloth_cream",
+    "env_cloth_grey",
+    "env_cloth_red",
+    "env_cloth_tent",
+    "env_cloth_white",
+    "env_coal_glow",
+    "env_dirt",
+    "env_eye",
+    "env_eye_white",
+    "env_fern",
+    "env_fire",
+    "env_gold",
+    "env_grass_blade",
+    "env_hair_blond",
+    "env_hair_brown",
+    "env_hair_dark",
+    "env_iron",
+    "env_lantern_glow",
+    "env_leather_dark",
+    "env_moss",
+    "env_rope",
+    "env_skin",
+    "env_steel",
+    "env_stone_grey",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "ev06_cage_cart_col-convcolonly"
+  ],
+  "glb_nodes": 9,
+  "glb_kb": 2423,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_coal_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fire",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_gold",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_tent",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_lantern_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_dirt",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_cream",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_skin",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_blond",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_red",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_steel",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ]
+  ],
+  "glb_images": 30,
+  "empties": [
+    "ev06_cage.001",
+    "ev06_cage_cam_focus.001",
+    "ev06_cage_light_fire.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "ev06_cage_camp: 1 degenerate faces"
+  ],
+  "motion_test": [],
+  "parts": [
+    "ev06_cage_cage_cart",
+    "ev06_cage_camp",
+    "ev06_cage_ground_details",
+    "ev06_cage_people",
+    "ev06_cage_plants"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:57"
+}

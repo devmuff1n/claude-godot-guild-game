@@ -1,0 +1,109 @@
+{
+  "id": "toll_sign",
+  "category": "road_defense",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\road_defense\\toll_sign.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\toll_sign\\toll_sign.blend",
+  "target_size_m": [
+    0.7,
+    0.3,
+    2.1
+  ],
+  "glb_size_m": [
+    0.725,
+    0.224,
+    2.1
+  ],
+  "size_deviation": [
+    0.036,
+    -0.253,
+    0.0
+  ],
+  "bounds_min": [
+    -0.115,
+    -0.115,
+    -0.0
+  ],
+  "bounds_max": [
+    0.61,
+    0.109,
+    2.1
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1410,
+  "source_triangles": 1410,
+  "visual_mesh_nodes": 4,
+  "unique_meshes": 4,
+  "materials": [
+    "env_brass",
+    "env_iron",
+    "env_rope",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "toll_sign_post_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 582,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 6,
+  "empties": [
+    "toll_sign.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [
+    {
+      "part": "toll_sign_round_sign",
+      "axis": "local X (swing)",
+      "pivot": [
+        0.37,
+        0.0,
+        1.815
+      ],
+      "moves": true,
+      "max_z_before": 1.807,
+      "max_z_after": 1.828
+    }
+  ],
+  "parts": [
+    "toll_sign_bracket",
+    "toll_sign_coin_emblem",
+    "toll_sign_post",
+    "toll_sign_round_sign"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

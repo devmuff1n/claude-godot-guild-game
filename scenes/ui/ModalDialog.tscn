@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/ModalDialog.gd" id="1_q1bho"]
+
+[node name="ModalDialog" type="Control" unique_id=478190199]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_q1bho")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1748534722]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.45)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=2100385598]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="Center" unique_id=1200384944]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_type_variation = &"PanelModal"
+
+[node name="Box" type="VBoxContainer" parent="Center/Panel" unique_id=440757398]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Center/Panel/Box" unique_id=82226152]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Заголовок"
+
+[node name="Sep" type="HSeparator" parent="Center/Panel/Box" unique_id=1266575518]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Box" unique_id=411566477]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+
+[node name="Body" type="VBoxContainer" parent="Center/Panel/Box/Scroll" unique_id=2049717446]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Footer" type="HBoxContainer" parent="Center/Panel/Box" unique_id=611519993]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8

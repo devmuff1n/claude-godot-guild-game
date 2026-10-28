@@ -1,0 +1,136 @@
+{
+  "id": "market_handcart",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\market_handcart.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\market_handcart\\market_handcart.blend",
+  "target_size_m": [
+    2.5,
+    1,
+    0.8
+  ],
+  "glb_size_m": [
+    2.539,
+    1.24,
+    0.796
+  ],
+  "size_deviation": [
+    0.016,
+    0.24,
+    -0.005
+  ],
+  "bounds_min": [
+    -1.524,
+    -0.62,
+    -0.016
+  ],
+  "bounds_max": [
+    1.015,
+    0.62,
+    0.78
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 3048,
+  "source_triangles": 3048,
+  "visual_mesh_nodes": 7,
+  "unique_meshes": 7,
+  "materials": [
+    "env_iron",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "market_handcart_tray_col-convcolonly"
+  ],
+  "glb_nodes": 9,
+  "glb_kb": 543,
+  "glb_materials": [
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "market_handcart.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [
+    {
+      "part": "market_handcart_wheel_front_R",
+      "axis": "local Y (axle)",
+      "pivot": [
+        -0.15,
+        -0.55,
+        0.2
+      ],
+      "moves": false,
+      "max_z_before": 0.416,
+      "max_z_after": 0.415
+    },
+    {
+      "part": "market_handcart_wheel_front_L",
+      "axis": "local Y (axle)",
+      "pivot": [
+        -0.15,
+        0.55,
+        0.2
+      ],
+      "moves": false,
+      "max_z_before": 0.416,
+      "max_z_after": 0.415
+    },
+    {
+      "part": "market_handcart_wheel_rear_R",
+      "axis": "local Y (axle)",
+      "pivot": [
+        0.75,
+        -0.55,
+        0.2
+      ],
+      "moves": false,
+      "max_z_before": 0.416,
+      "max_z_after": 0.415
+    },
+    {
+      "part": "market_handcart_wheel_rear_L",
+      "axis": "local Y (axle)",
+      "pivot": [
+        0.75,
+        0.55,
+        0.2
+      ],
+      "moves": false,
+      "max_z_before": 0.416,
+      "max_z_after": 0.415
+    }
+  ],
+  "parts": [
+    "market_handcart_axles",
+    "market_handcart_cargo_tray",
+    "market_handcart_pulling_shafts",
+    "market_handcart_wheel_front_L",
+    "market_handcart_wheel_front_R",
+    "market_handcart_wheel_rear_L",
+    "market_handcart_wheel_rear_R"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

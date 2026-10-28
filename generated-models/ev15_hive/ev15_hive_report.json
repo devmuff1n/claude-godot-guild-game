@@ -1,0 +1,159 @@
+{
+  "id": "ev15_hive",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev15_hive.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev15_hive\\ev15_hive.blend",
+  "target_size_m": [
+    6.5,
+    6.0,
+    7.0
+  ],
+  "glb_size_m": [
+    7.435,
+    8.054,
+    7.276
+  ],
+  "size_deviation": [
+    0.144,
+    0.342,
+    0.039
+  ],
+  "bounds_min": [
+    -3.108,
+    -0.461,
+    -0.192
+  ],
+  "bounds_max": [
+    4.327,
+    7.593,
+    7.084
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 11140,
+  "source_triangles": 11140,
+  "visual_mesh_nodes": 6,
+  "unique_meshes": 6,
+  "materials": [
+    "env_bark_oak",
+    "env_dirt",
+    "env_eye",
+    "env_eye_white",
+    "env_fern",
+    "env_fur_dark",
+    "env_fur_white",
+    "env_grass_blade",
+    "env_honey",
+    "env_honeycomb",
+    "env_leaves_oak",
+    "env_moss",
+    "env_petal_cream",
+    "env_petal_lavender",
+    "env_pink",
+    "env_stone_grey"
+  ],
+  "collision_nodes": [
+    "ev15_hive_tree_col-convcolonly"
+  ],
+  "glb_nodes": 9,
+  "glb_kb": 1302,
+  "glb_materials": [
+    [
+      "env_fur_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fur_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_pink",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_honey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_dirt",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_honeycomb",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_petal_cream",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_petal_lavender",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_leaves_oak",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 16,
+  "empties": [
+    "ev15_hive.001",
+    "ev15_hive_cam_focus.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ev15_hive_animals",
+    "ev15_hive_ground_details",
+    "ev15_hive_hive",
+    "ev15_hive_plants",
+    "ev15_hive_tree_crown",
+    "ev15_hive_tree_trunk"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:54"
+}

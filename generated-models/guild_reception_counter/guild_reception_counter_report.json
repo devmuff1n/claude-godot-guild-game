@@ -1,0 +1,96 @@
+{
+  "id": "guild_reception_counter",
+  "category": "town/furniture",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/furniture\\guild_reception_counter.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\guild_reception_counter\\guild_reception_counter.blend",
+  "target_size_m": [
+    3.4,
+    0.9,
+    1
+  ],
+  "glb_size_m": [
+    3.42,
+    0.98,
+    0.965
+  ],
+  "size_deviation": [
+    0.006,
+    0.089,
+    -0.035
+  ],
+  "bounds_min": [
+    -1.71,
+    -0.51,
+    0.0
+  ],
+  "bounds_max": [
+    1.71,
+    0.47,
+    0.965
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 740,
+  "source_triangles": 740,
+  "visual_mesh_nodes": 4,
+  "unique_meshes": 4,
+  "materials": [
+    "env_brass",
+    "env_cloth_teal",
+    "env_timber",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "guild_reception_counter_counter_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 566,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_timber",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_teal",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 6,
+  "empties": [
+    "guild_reception_counter.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "guild_reception_counter_counter_shell",
+    "guild_reception_counter_countertop",
+    "guild_reception_counter_front_panels",
+    "guild_reception_counter_guild_cloth"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

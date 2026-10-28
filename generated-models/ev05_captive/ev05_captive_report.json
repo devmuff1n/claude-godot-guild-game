@@ -1,0 +1,208 @@
+{
+  "id": "ev05_captive",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev05_captive.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev05_captive\\ev05_captive.blend",
+  "target_size_m": [
+    6.5,
+    6.0,
+    7.0
+  ],
+  "glb_size_m": [
+    7.831,
+    8.497,
+    8.132
+  ],
+  "size_deviation": [
+    0.205,
+    0.416,
+    0.162
+  ],
+  "bounds_min": [
+    -3.977,
+    -0.521,
+    -0.448
+  ],
+  "bounds_max": [
+    3.854,
+    7.976,
+    7.684
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 9657,
+  "source_triangles": 9657,
+  "visual_mesh_nodes": 7,
+  "unique_meshes": 7,
+  "materials": [
+    "env_bark",
+    "env_burlap",
+    "env_cloth_brown",
+    "env_cloth_cream",
+    "env_cloth_white",
+    "env_dirt",
+    "env_eye",
+    "env_eye_white",
+    "env_fern",
+    "env_grass_blade",
+    "env_grass_ground",
+    "env_hair_blond",
+    "env_iron",
+    "env_leather_dark",
+    "env_leaves_bush",
+    "env_leaves_pine",
+    "env_moss",
+    "env_rope",
+    "env_skin",
+    "env_steel",
+    "env_stone_grey",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "ev05_captive_pine_col-convcolonly"
+  ],
+  "glb_nodes": 10,
+  "glb_kb": 1969,
+  "glb_materials": [
+    [
+      "env_leaves_bush",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_steel",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_cream",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_skin",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_blond",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_dirt",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_grass_ground",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leaves_pine",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_burlap",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 24,
+  "empties": [
+    "ev05_captive.001",
+    "ev05_captive_cam_focus.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ev05_captive_bushes",
+    "ev05_captive_captive",
+    "ev05_captive_ground_details",
+    "ev05_captive_pine_needles",
+    "ev05_captive_pine_trunk",
+    "ev05_captive_plants",
+    "ev05_captive_props"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:54"
+}

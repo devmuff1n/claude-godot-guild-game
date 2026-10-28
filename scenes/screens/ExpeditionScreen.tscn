@@ -1,0 +1,197 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/ExpeditionScreen.gd" id="1_g0r50"]
+[ext_resource type="Script" path="res://scripts/ui/BattleView.gd" id="2_8o1qk"]
+[ext_resource type="PackedScene" path="res://scenes/expedition/ExpeditionTopBar.tscn" id="3_top"]
+[ext_resource type="PackedScene" path="res://scenes/expedition/GoalsTracker.tscn" id="4_goals"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HeroCard.tscn" id="5_card"]
+[ext_resource type="PackedScene" path="res://scenes/expedition/ObjectivePanel.tscn" id="6_obj"]
+[ext_resource type="PackedScene" path="res://scenes/expedition/OutpostPrepPanel.tscn" id="7_prep"]
+[ext_resource type="PackedScene" path="res://scenes/expedition/CommandMenu.tscn" id="8_cmd"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="9_pill"]
+
+[node name="ExpeditionScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_g0r50")
+
+[node name="LevelView" type="SubViewportContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+stretch = true
+
+[node name="LevelViewport" type="SubViewport" parent="LevelView"]
+unique_name_in_owner = true
+handle_input_locally = false
+msaa_3d = 1
+size = Vector2i(1600, 900)
+render_target_update_mode = 4
+
+[node name="View" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("2_8o1qk")
+
+[node name="TopBar" parent="." instance=ExtResource("3_top")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="Goals" parent="." instance=ExtResource("4_goals")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 98.0
+offset_right = 316.0
+offset_bottom = 98.0
+
+[node name="ObjPanel" parent="." instance=ExtResource("6_obj")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -346.0
+offset_top = 98.0
+offset_right = -16.0
+offset_bottom = 98.0
+grow_horizontal = 0
+
+[node name="PrepPanel" parent="." instance=ExtResource("7_prep")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -280.0
+offset_top = 110.0
+offset_right = 280.0
+offset_bottom = 110.0
+grow_horizontal = 2
+
+[node name="WavePill" parent="." instance=ExtResource("9_pill")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_top = 96.0
+offset_right = 50.0
+offset_bottom = 128.0
+grow_horizontal = 2
+icon_kind = "sword"
+value_width = 44.0
+
+[node name="StatusPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 136.0
+offset_right = 200.0
+offset_bottom = 172.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_type_variation = &"PanelHud"
+
+[node name="StatusLabel" type="Label" parent="StatusPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HudLabel"
+theme_override_colors/font_color = Color(1, 0.86, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="LogLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = -228.0
+offset_right = 560.0
+offset_bottom = -142.0
+grow_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"LogLabel"
+vertical_alignment = 2
+clip_text = true
+
+[node name="Banner" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 290.0
+offset_bottom = 380.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_type_variation = &"BannerLabel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -122.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Card_elira" parent="Cards" instance=ExtResource("5_card")]
+unique_name_in_owner = true
+layout_mode = 2
+hero_id = "elira"
+
+[node name="Card_neris" parent="Cards" instance=ExtResource("5_card")]
+unique_name_in_owner = true
+layout_mode = 2
+hero_id = "neris"
+
+[node name="Card_aiden" parent="Cards" instance=ExtResource("5_card")]
+unique_name_in_owner = true
+layout_mode = 2
+hero_id = "aiden"
+
+[node name="Card_marek" parent="Cards" instance=ExtResource("5_card")]
+unique_name_in_owner = true
+layout_mode = 2
+hero_id = "marek"
+
+[node name="CmdMenu" parent="." instance=ExtResource("8_cmd")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+
+[node name="Overlay" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2

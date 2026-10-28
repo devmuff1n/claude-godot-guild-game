@@ -1,0 +1,306 @@
+{
+  "version": 1, "_как_читать": "Удобнее править в игре: F10. Враг — [\"тип\", уровень], уровень 0 — уровень поручения. hp_pct / dmg_pct — здоровье и урон врагов точки в процентах (100 — без изменений). Одна строка в groups — одна волна: на дороге волны идут по очереди, следующая — когда перебита предыдущая (у заставы строки волны выходят разом). Засада (ambush) бьёт в спину во время второй волны.",
+  "all_enemies": {"hp_pct": 100, "dmg_pct": 100},
+  "enemy_types": {
+    "wolf": {"name": "Волк", "hp_k": 0.9, "dmg_k": 1.0, "armor_k": 0.8, "interval": 1.6, "xp": 6, "coins": 2},
+    "wolf_alpha": {"name": "Вожак стаи", "hp_k": 1.0, "dmg_k": 1.2, "armor_k": 1.2, "interval": 1.7, "xp": 24, "coins": 8},
+    "bandit": {"name": "Разбойник", "hp_k": 1.0, "dmg_k": 1.0, "armor_k": 1.8, "interval": 2.0, "xp": 8, "coins": 4},
+    "raider": {"name": "Налётчик", "hp_k": 0.9, "dmg_k": 1.0, "armor_k": 1.4, "interval": 1.8, "xp": 8, "coins": 4},
+    "archer": {"name": "Лучник-разбойник", "hp_k": 0.85, "dmg_k": 0.9, "armor_k": 1.0, "interval": 2.4, "xp": 9, "coins": 4},
+    "brute": {"name": "Громила", "hp_k": 1.0, "dmg_k": 1.0, "armor_k": 2.4, "interval": 2.6, "xp": 18, "coins": 8},
+    "healer": {"name": "Знахарь банды", "hp_k": 0.85, "dmg_k": 0.6, "armor_k": 0.9, "interval": 2.6, "xp": 11, "coins": 5},
+    "arsonist": {"name": "Поджигатель", "hp_k": 0.9, "dmg_k": 0.8, "armor_k": 1.2, "interval": 2.0, "xp": 11, "coins": 5},
+    "captain": {"name": "Ганс Рыжий", "hp_k": 1.0, "dmg_k": 1.0, "armor_k": 2.4, "interval": 2.0, "xp": 90, "coins": 45}
+  },
+  "contracts": {
+    "c1": {
+      "name": "Первый лесной тракт", "level": 1,
+      "points": [
+        {
+          "node": 0, "name": "Опушка", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["wolf", 1], ["wolf", 1]],
+            [["wolf", 1], ["wolf", 1], ["wolf", 1]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 2, "name": "Бурелом", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["wolf", 1], ["wolf", 1], ["wolf", 1]],
+            [["wolf", 1], ["wolf", 1]],
+            [["wolf", 2], ["wolf", 2]]
+          ],
+          "ambush": [["wolf", 2], ["wolf", 2], ["wolf", 1]]
+        },
+        {
+          "node": 5, "name": "Логово", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["wolf", 1], ["wolf", 1], ["wolf", 1]],
+            [["wolf", 2], ["wolf", 1], ["wolf", 2]],
+            [["wolf", 2], ["wolf_alpha", 2], ["wolf", 2]]
+          ],
+          "ambush": []
+        }
+      ]
+    },
+    "c2": {
+      "name": "Запасы для Ольховки", "level": 2,
+      "points": [
+        {
+          "node": 0, "name": "Мост", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 2], ["bandit", 2], ["archer", 2]],
+            [["bandit", 2], ["bandit", 2]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 3, "name": "Овраг", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 2], ["archer", 2], ["bandit", 2]],
+            [["bandit", 2], ["archer", 2], ["bandit", 2]]
+          ],
+          "ambush": [["wolf", 2], ["wolf", 2]]
+        },
+        {
+          "node": 5, "name": "Ольховка", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 2], ["archer", 2], ["bandit", 2]],
+            [["brute", 2], ["bandit", 2], ["archer", 2]]
+          ],
+          "ambush": []
+        }
+      ]
+    },
+    "c3": {
+      "name": "Последний обоз", "level": 3,
+      "points": [
+        {
+          "node": 0, "name": "Лес", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["raider", 3], ["wolf", 3], ["raider", 3]],
+            [["wolf", 3], ["wolf", 3]]
+          ],
+          "ambush": [["wolf", 3], ["wolf", 3]]
+        },
+        {
+          "node": 2, "name": "Развилка", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["raider", 3], ["raider", 3], ["archer", 3]],
+            [["raider", 3], ["bandit", 3], ["archer", 3]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 5, "name": "Ущелье", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["raider", 3], ["arsonist", 3], ["raider", 3]],
+            [["brute", 3], ["archer", 3], ["raider", 3]]
+          ],
+          "ambush": []
+        }
+      ]
+    },
+    "c4": {
+      "name": "Спасение возчиков", "level": 4,
+      "points": [
+        {
+          "node": 0, "name": "Брод", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 4], ["archer", 4], ["healer", 4]],
+            [["bandit", 4], ["bandit", 4], ["archer", 4]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 2, "name": "Посты", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 4], ["bandit", 4], ["archer", 4]],
+            [["archer", 4], ["bandit", 4]]
+          ],
+          "ambush": [["wolf", 4], ["wolf", 4], ["wolf", 4]]
+        },
+        {
+          "node": 5, "name": "Клетки", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 4], ["archer", 4], ["bandit", 4]],
+            [["brute", 4], ["healer", 4], ["bandit", 4], ["archer", 4]]
+          ],
+          "ambush": []
+        }
+      ]
+    },
+    "c5": {
+      "name": "Ночной дозор", "level": 5,
+      "points": [
+        {
+          "node": 0, "name": "Окраина", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["arsonist", 5], ["bandit", 5], ["bandit", 5]],
+            [["arsonist", 5], ["archer", 5]]
+          ],
+          "ambush": [["wolf", 5], ["wolf", 5]]
+        },
+        {
+          "node": 2, "name": "Мельница", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["wolf", 5], ["wolf", 5], ["wolf", 5]],
+            [["wolf", 5], ["wolf_alpha", 5], ["wolf", 5]]
+          ],
+          "ambush": [["wolf", 5]]
+        },
+        {
+          "node": 4, "name": "Овчарня", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["arsonist", 5], ["archer", 5], ["bandit", 5]],
+            [["brute", 5], ["archer", 5], ["bandit", 5]]
+          ],
+          "ambush": [["wolf", 5], ["wolf", 5]]
+        }
+      ]
+    },
+    "c6": {
+      "name": "След сборщика", "level": 6,
+      "points": [
+        {
+          "node": 1, "name": "Чаща", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["raider", 6], ["archer", 6], ["healer", 6]],
+            [["raider", 6], ["raider", 6], ["bandit", 6]]
+          ],
+          "ambush": [["wolf", 6], ["wolf", 6]]
+        },
+        {
+          "node": 3, "name": "Старый тракт", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 6], ["arsonist", 6], ["archer", 6]],
+            [["brute", 6], ["bandit", 6], ["archer", 6], ["bandit", 6]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 6, "name": "Ущелье Ганса", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["raider", 6], ["archer", 6], ["raider", 6]],
+            [["brute", 6], ["healer", 6], ["raider", 6], ["archer", 6]]
+          ],
+          "ambush": []
+        }
+      ]
+    },
+    "c7": {
+      "name": "Долговая книга", "level": 7,
+      "points": [
+        {
+          "node": 0, "name": "Частокол", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 7], ["archer", 7], ["arsonist", 7]],
+            [["bandit", 7], ["bandit", 7], ["archer", 7]]
+          ],
+          "ambush": [["wolf", 7], ["wolf", 7]]
+        },
+        {
+          "node": 2, "name": "Двор логова", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 7], ["raider", 7], ["archer", 7]],
+            [["brute", 7], ["healer", 7], ["bandit", 7], ["raider", 7]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 4, "name": "Шатёр главаря", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 7], ["archer", 7], ["arsonist", 7]],
+            [["captain", 7], ["healer", 7], ["bandit", 7]]
+          ],
+          "ambush": []
+        }
+      ]
+    },
+    "c8": {"name": "Слово в столице", "level": 7, "points": []},
+    "s1": {
+      "name": "Оборона лесной заставы", "level": 4,
+      "points": [
+        {
+          "wave": 1, "name": "Волна 1", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["raider", 4], ["raider", 4], ["raider", 4]]
+          ]
+        },
+        {
+          "wave": 2, "name": "Волна 2", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["wolf", 4], ["wolf", 4], ["wolf", 4], ["arsonist", 4]]
+          ]
+        },
+        {
+          "wave": 3, "name": "Волна 3", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 4], ["archer", 4], ["arsonist", 4]],
+            [["raider", 4], ["raider", 4]]
+          ]
+        },
+        {
+          "wave": 4, "name": "Волна 4", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["brute", 4], ["raider", 4], ["raider", 4]],
+            [["archer", 4], ["bandit", 4]]
+          ]
+        },
+        {
+          "wave": 5, "name": "Волна 5", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["healer", 4], ["bandit", 4], ["arsonist", 4], ["archer", 4]],
+            [["raider", 4], ["raider", 4]]
+          ]
+        },
+        {
+          "wave": 6, "name": "Волна 6", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["brute", 4], ["arsonist", 4], ["wolf_alpha", 4], ["raider", 4]],
+            [["archer", 4], ["healer", 4], ["raider", 4]]
+          ]
+        }
+      ]
+    }
+  },
+  "events": {
+    "spring/1": {
+      "name": "Лесной родник: Пойти по следам (бой, добыча)",
+      "groups": [
+        [["wolf", 0], ["wolf", 0], ["wolf", 0]]
+      ]
+    },
+    "bridge/2": {
+      "name": "Сломанный мост: Искать брод (бой, монеты)",
+      "groups": [
+        [["bandit", 0], ["archer", 0], ["bandit", 0]]
+      ]
+    },
+    "captive_one/1": {
+      "name": "Пленник у дороги: Ворваться в засаду (бой)",
+      "groups": [
+        [["archer", 0], ["archer", 0], ["bandit", 0], ["bandit", 0]]
+      ]
+    },
+    "captive_camp/2": {
+      "name": "Лагерь банды: Отбить силой (бой)",
+      "groups": [
+        [["bandit", 0], ["bandit", 0], ["healer", 0], ["bandit", 0]]
+      ]
+    },
+    "barn_fire/1": {
+      "name": "Сарай в огне: Догнать поджигателя (бой)",
+      "groups": [
+        [["arsonist", 0], ["bandit", 0], ["bandit", 0]]
+      ]
+    },
+    "tracks/1": {
+      "name": "Следы сапог: Срезать путь через бурелом (бой)",
+      "groups": [
+        [["wolf", 0], ["wolf", 0], ["wolf", 0], ["wolf", 0]]
+      ]
+    }
+  }
+}

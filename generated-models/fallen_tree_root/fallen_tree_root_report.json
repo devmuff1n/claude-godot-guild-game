@@ -1,0 +1,84 @@
+{
+  "id": "fallen_tree_root",
+  "category": "landscape",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\landscape\\fallen_tree_root.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\fallen_tree_root\\fallen_tree_root.blend",
+  "target_size_m": [
+    3,
+    1.3,
+    1.0
+  ],
+  "glb_size_m": [
+    3.0,
+    1.3,
+    1.0
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bounds_min": [
+    -1.5,
+    -0.65,
+    0.0
+  ],
+  "bounds_max": [
+    1.5,
+    0.65,
+    1.0
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1234,
+  "source_triangles": 1234,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_bark_oak",
+    "env_leaf_broad",
+    "env_moss",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "fallen_tree_root_log_col-convcolonly",
+    "fallen_tree_root_roots_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 427,
+  "glb_materials": [
+    [
+      "env_bark_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leaf_broad",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "fallen_tree_root.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "fallen_tree_root_branch_stubs",
+    "fallen_tree_root_root_mass",
+    "fallen_tree_root_trunk"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

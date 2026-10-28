@@ -1,0 +1,131 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/village/ArenaView.gd" id="1_exysc"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="2_icon"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="3_pill"]
+
+[node name="ArenaView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_exysc")
+
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/separation = 16
+
+[node name="EnemyPanel" type="PanelContainer" parent="Columns"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Columns/EnemyPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Head" type="HBoxContainer" parent="Columns/EnemyPanel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Icon" parent="Columns/EnemyPanel/Box/Head" instance=ExtResource("2_icon")]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+kind = "arena"
+
+[node name="Titles" type="VBoxContainer" parent="Columns/EnemyPanel/Box/Head"]
+layout_mode = 2
+theme_override_constants/separation = -2
+
+[node name="Caption" type="Label" parent="Columns/EnemyPanel/Box/Head/Titles"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ТРЕНИРОВКА"
+
+[node name="Title" type="Label" parent="Columns/EnemyPanel/Box/Head/Titles"]
+layout_mode = 2
+tooltip_text = "Тренировочный бой текущим снаряжением. Опыт, деньги, зелья и отношения не меняются."
+mouse_filter = 1
+theme_type_variation = &"TitleLabel"
+text = "Испытательная арена"
+
+[node name="Sep" type="HSeparator" parent="Columns/EnemyPanel/Box"]
+layout_mode = 2
+
+[node name="EnemiesHeader" type="Label" parent="Columns/EnemyPanel/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ПРОТИВНИКИ"
+
+[node name="PresetRow" type="VBoxContainer" parent="Columns/EnemyPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Gap" type="Control" parent="Columns/EnemyPanel/Box"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="LevelHeader" type="Label" parent="Columns/EnemyPanel/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "УРОВЕНЬ ВРАГОВ"
+
+[node name="LevelRow" type="HBoxContainer" parent="Columns/EnemyPanel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LevelSlider" type="HSlider" parent="Columns/EnemyPanel/Box/LevelRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+
+[node name="Level" parent="Columns/EnemyPanel/Box/LevelRow" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+icon_kind = "sword"
+value_width = 22.0
+
+[node name="Spacer" type="Control" parent="Columns/EnemyPanel/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StartButton" type="Button" parent="Columns/EnemyPanel/Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonPrimary"
+text = "Начать испытание"
+
+[node name="PerkPanel" type="PanelContainer" parent="Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Columns/PerkPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PerksHeader" type="Label" parent="Columns/PerkPanel/Box"]
+layout_mode = 2
+tooltip_text = "Перки только для этого испытания: выбор героев не меняется."
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "ПРОБНЫЕ ПЕРКИ"
+
+[node name="PerkRows" type="VBoxContainer" parent="Columns/PerkPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10

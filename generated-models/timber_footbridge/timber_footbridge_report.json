@@ -1,0 +1,83 @@
+{
+  "id": "timber_footbridge",
+  "category": "road_defense",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\road_defense\\timber_footbridge.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\timber_footbridge\\timber_footbridge.blend",
+  "target_size_m": [
+    4.2,
+    2.2,
+    1.25
+  ],
+  "glb_size_m": [
+    4.208,
+    2.21,
+    1.255
+  ],
+  "size_deviation": [
+    0.002,
+    0.005,
+    0.004
+  ],
+  "bounds_min": [
+    -2.104,
+    -1.105,
+    -0.005
+  ],
+  "bounds_max": [
+    2.103,
+    1.105,
+    1.25
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 2684,
+  "source_triangles": 2684,
+  "visual_mesh_nodes": 5,
+  "unique_meshes": 5,
+  "materials": [
+    "env_rope",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "timber_footbridge_deck_col-convcolonly",
+    "timber_footbridge_rail_L_col-convcolonly",
+    "timber_footbridge_rail_R_col-convcolonly"
+  ],
+  "glb_nodes": 11,
+  "glb_kb": 412,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "timber_footbridge.001",
+    "timber_footbridge_deck_end.001",
+    "timber_footbridge_deck_start.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "timber_footbridge_beams",
+    "timber_footbridge_deck_boards",
+    "timber_footbridge_posts",
+    "timber_footbridge_rails",
+    "timber_footbridge_rope_lashings"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

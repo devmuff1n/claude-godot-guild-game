@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://tests/town_kit_test.gd" id="1_townkit"]
+
+[sub_resource type="Environment" id="Environment_townkit"]
+background_mode = 1
+background_color = Color(0.62, 0.74, 0.86, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.86, 0.88, 0.95, 1)
+ambient_light_energy = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_square"]
+size = Vector2(40, 34)
+
+[sub_resource type="StandardMaterial3D" id="Mat_square"]
+albedo_color = Color(0.56, 0.5, 0.42, 1)
+roughness = 1.0
+
+[node name="TownKitTest" type="Node3D"]
+script = ExtResource("1_townkit")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_townkit")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-50, -35, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Square" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.02, 0)
+mesh = SubResource("PlaneMesh_square")
+surface_material_override/0 = SubResource("Mat_square")
+
+[node name="HallFloorUnder" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.02, 40)
+mesh = SubResource("PlaneMesh_square")
+surface_material_override/0 = SubResource("Mat_square")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(0, 15, 24)
+fov = 45.0
+current = true
+
+[node name="Kit" type="Node3D" parent="."]

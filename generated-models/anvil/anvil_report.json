@@ -1,0 +1,88 @@
+{
+  "id": "anvil",
+  "category": "town/crafts",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/crafts\\anvil.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\anvil\\anvil.blend",
+  "target_size_m": [
+    1,
+    0.5,
+    0.9
+  ],
+  "glb_size_m": [
+    0.881,
+    0.636,
+    0.874
+  ],
+  "size_deviation": [
+    -0.119,
+    0.272,
+    -0.029
+  ],
+  "bounds_min": [
+    -0.38,
+    -0.318,
+    0.0
+  ],
+  "bounds_max": [
+    0.501,
+    0.318,
+    0.874
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 704,
+  "source_triangles": 704,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_eye",
+    "env_iron",
+    "env_steel",
+    "env_wood_mid",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "anvil_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 424,
+  "glb_materials": [
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_steel",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 5,
+  "empties": [
+    "anvil.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "anvil_iron_anvil",
+    "anvil_wooden_stump"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

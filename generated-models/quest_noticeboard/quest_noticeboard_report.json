@@ -1,0 +1,96 @@
+{
+  "id": "quest_noticeboard",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\quest_noticeboard.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\quest_noticeboard\\quest_noticeboard.blend",
+  "target_size_m": [
+    2.3,
+    0.16,
+    1.8
+  ],
+  "glb_size_m": [
+    2.34,
+    0.16,
+    1.88
+  ],
+  "size_deviation": [
+    0.017,
+    0.0,
+    0.044
+  ],
+  "bounds_min": [
+    -1.17,
+    -0.08,
+    0.0
+  ],
+  "bounds_max": [
+    1.17,
+    0.08,
+    1.88
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 792,
+  "source_triangles": 792,
+  "visual_mesh_nodes": 4,
+  "unique_meshes": 4,
+  "materials": [
+    "env_iron",
+    "env_parchment",
+    "env_wax_red",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "quest_noticeboard_board_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 491,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_parchment",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_wax_red",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 6,
+  "empties": [
+    "quest_noticeboard.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "quest_noticeboard_frame",
+    "quest_noticeboard_loose_notices",
+    "quest_noticeboard_pins_seals",
+    "quest_noticeboard_wooden_backing"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

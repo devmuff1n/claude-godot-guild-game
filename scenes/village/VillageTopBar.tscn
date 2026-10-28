@@ -1,0 +1,179 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/village/VillageTopBar.gd" id="1_bar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="2_icon"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="3_pill"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_nav"]
+
+[node name="VillageTopBar" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 64)
+anchor_right = 1.0
+offset_bottom = 64.0
+theme_type_variation = &"PanelTop"
+script = ExtResource("1_bar")
+
+[node name="Box" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Crest" parent="Box" instance=ExtResource("2_icon")]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+kind = "shield"
+
+[node name="Guild" type="VBoxContainer" parent="Box"]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = -2
+
+[node name="GuildName" type="Label" parent="Box/Guild"]
+layout_mode = 2
+theme_type_variation = &"Title2Label"
+text = "«Последний грош»"
+
+[node name="Place" type="Label" parent="Box/Guild"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ОЛЬХОВЫЙ БРОД"
+
+[node name="Gap" type="Control" parent="Box"]
+custom_minimum_size = Vector2(18, 0)
+layout_mode = 2
+
+[node name="Nav" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="NavTown" type="Button" parent="Box/Nav"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_nav")
+text = "Поселение"
+
+[node name="NavHome" type="Button" parent="Box/Nav"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_nav")
+text = "Дом гильдии"
+
+[node name="HomeBadge" parent="Box/Nav/NavHome" instance=ExtResource("2_icon")]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -16.0
+offset_top = 6.0
+offset_right = -2.0
+offset_bottom = 20.0
+mouse_filter = 2
+kind = "badge"
+
+[node name="NavBoard" type="Button" parent="Box/Nav"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_nav")
+text = "Поручения"
+
+[node name="NavParty" type="Button" parent="Box/Nav"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_nav")
+text = "Отряд"
+
+[node name="PartyBadge" parent="Box/Nav/NavParty" instance=ExtResource("2_icon")]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -16.0
+offset_top = 6.0
+offset_right = -2.0
+offset_bottom = 20.0
+mouse_filter = 2
+kind = "badge"
+
+[node name="NavShop" type="Button" parent="Box/Nav"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_nav")
+text = "Лавка"
+
+[node name="NavArena" type="Button" parent="Box/Nav"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_nav")
+text = "Арена"
+
+[node name="Spacer" type="Control" parent="Box"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Treasury" parent="Box" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Казна гильдии"
+value_width = 48.0
+
+[node name="Trust" parent="Box" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Доверие деревни"
+icon_kind = "trust"
+value_width = 26.0
+
+[node name="Chapter" parent="Box" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Сюжетная глава: выполнено поручений"
+icon_kind = "chapter"
+value_width = 30.0
+
+[node name="MenuButton" type="Button" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 36)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Меню (Esc)"
+focus_mode = 0
+theme_type_variation = &"ButtonIcon"
+
+[node name="Icon" parent="Box/MenuButton" instance=ExtResource("2_icon")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = -9.0
+offset_bottom = -7.0
+mouse_filter = 2
+kind = "menu"

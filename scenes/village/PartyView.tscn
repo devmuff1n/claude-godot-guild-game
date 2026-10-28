@@ -1,0 +1,308 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/village/PartyView.gd" id="1_party"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PaperDoll.tscn" id="2_doll"]
+[ext_resource type="PackedScene" path="res://scenes/ui/StatsPanel.tscn" id="3_stats"]
+[ext_resource type="Script" path="res://scripts/ui/Bar.gd" id="4_bar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/JournalView.tscn" id="5_journal"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="6_icon"]
+[ext_resource type="Script" path="res://scripts/ui/PipBar.gd" id="7_pips"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="8_pill"]
+[ext_resource type="PackedScene" path="res://scenes/ui/SocialPanel.tscn" id="9_social"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_page"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_side"]
+
+[node name="PartyView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_party")
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/separation = 10
+
+[node name="Tabs" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TabHeroes" type="Button" parent="Box/Tabs"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_page")
+text = "Герои и снаряжение"
+
+[node name="TabJournal" type="Button" parent="Box/Tabs"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_page")
+text = "Отношения и журнал"
+
+[node name="HeroesPage" type="HBoxContainer" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="RosterPanel" type="PanelContainer" parent="Box/HeroesPage"]
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Box/HeroesPage/RosterPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Caption" type="Label" parent="Box/HeroesPage/RosterPanel/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ОТРЯД"
+
+[node name="HeroList" type="VBoxContainer" parent="Box/HeroesPage/RosterPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CenterPanel" type="PanelContainer" parent="Box/HeroesPage"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Box/HeroesPage/CenterPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Box/HeroesPage/CenterPanel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Titles" type="VBoxContainer" parent="Box/HeroesPage/CenterPanel/Box/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Role" type="Label" parent="Box/HeroesPage/CenterPanel/Box/Header/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+
+[node name="HeroName" type="Label" parent="Box/HeroesPage/CenterPanel/Box/Header/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"TitleLabel"
+
+[node name="Burnout" type="HBoxContainer" parent="Box/HeroesPage/CenterPanel/Box/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 0
+theme_override_constants/separation = 6
+
+[node name="Flame" parent="Box/HeroesPage/CenterPanel/Box/Header/Burnout" instance=ExtResource("6_icon")]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+kind = "burnout"
+
+[node name="Pips" type="Control" parent="Box/HeroesPage/CenterPanel/Box/Header/Burnout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 9)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("7_pips")
+
+[node name="Progress" type="HBoxContainer" parent="Box/HeroesPage/CenterPanel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="XpBar" type="Control" parent="Box/HeroesPage/CenterPanel/Box/Progress"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Base Level: опыт за врагов. Повышает характеристики и открывает умения."
+mouse_filter = 1
+script = ExtResource("4_bar")
+color = Color(0.86, 0.66, 0.24, 1)
+text_size = 12
+
+[node name="JobBar" type="Control" parent="Box/HeroesPage/CenterPanel/Box/Progress"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Job Level: освоение поручений и доп. целей. Даёт очки перков."
+mouse_filter = 1
+script = ExtResource("4_bar")
+color = Color(0.35, 0.58, 0.9, 1)
+text_size = 12
+
+[node name="Body" type="HBoxContainer" parent="Box/HeroesPage/CenterPanel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Doll" parent="Box/HeroesPage/CenterPanel/Box/Body" instance=ExtResource("2_doll")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Stats" parent="Box/HeroesPage/CenterPanel/Box/Body" instance=ExtResource("3_stats")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StorageHeader" type="HBoxContainer" parent="Box/HeroesPage/CenterPanel/Box"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StorageTitle" type="Label" parent="Box/HeroesPage/CenterPanel/Box/StorageHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "ПКМ по вещи — надеть, ПКМ по слоту — снять. Вещи можно перетаскивать."
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "КЛАДОВАЯ"
+
+[node name="QueueButton" type="Button" parent="Box/HeroesPage/CenterPanel/Box/StorageHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Очередь выдачи"
+
+[node name="Spacer" type="Control" parent="Box/HeroesPage/CenterPanel/Box/StorageHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SelName" type="Label" parent="Box/HeroesPage/CenterPanel/Box/StorageHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"SmallLabel"
+text_overrun_behavior = 3
+
+[node name="EquipButton" type="Button" parent="Box/HeroesPage/CenterPanel/Box/StorageHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Надеть"
+
+[node name="SellButton" type="Button" parent="Box/HeroesPage/CenterPanel/Box/StorageHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Продать"
+
+[node name="StorageScroll" type="ScrollContainer" parent="Box/HeroesPage/CenterPanel/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="StorageGrid" type="GridContainer" parent="Box/HeroesPage/CenterPanel/Box/StorageScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 3
+columns = 15
+
+[node name="SidePanel" type="PanelContainer" parent="Box/HeroesPage"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Box/HeroesPage/SidePanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Tabs" type="HBoxContainer" parent="Box/HeroesPage/SidePanel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TabSkills" type="Button" parent="Box/HeroesPage/SidePanel/Box/Tabs"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_side")
+text = "Умения"
+
+[node name="TabPerks" type="Button" parent="Box/HeroesPage/SidePanel/Box/Tabs"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_side")
+text = "Перки"
+
+[node name="TabSocial" type="Button" parent="Box/HeroesPage/SidePanel/Box/Tabs"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_side")
+text = "Черты"
+
+[node name="Spacer" type="Control" parent="Box/HeroesPage/SidePanel/Box/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Points" parent="Box/HeroesPage/SidePanel/Box/Tabs" instance=ExtResource("8_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Свободные очки перков (Job Level)"
+icon_kind = "perk"
+value_width = 14.0
+
+[node name="SideScroll" type="ScrollContainer" parent="Box/HeroesPage/SidePanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SideBody" type="VBoxContainer" parent="Box/HeroesPage/SidePanel/Box/SideScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Social" parent="Box/HeroesPage/SidePanel/Box" instance=ExtResource("9_social")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="JournalPage" type="PanelContainer" parent="Box"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"PanelDark"
+
+[node name="Journal" parent="Box/JournalPage" instance=ExtResource("5_journal")]
+unique_name_in_owner = true
+layout_mode = 2

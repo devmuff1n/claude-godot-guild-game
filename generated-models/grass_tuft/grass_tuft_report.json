@@ -1,0 +1,61 @@
+{
+  "id": "grass_tuft",
+  "category": "vegetation",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\vegetation\\grass_tuft.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\grass_tuft\\grass_tuft.blend",
+  "target_size_m": [
+    0.55,
+    0.5,
+    0.65
+  ],
+  "glb_size_m": [
+    0.55,
+    0.5,
+    0.65
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bounds_min": [
+    -0.275,
+    -0.25,
+    0.0
+  ],
+  "bounds_max": [
+    0.275,
+    0.25,
+    0.65
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 396,
+  "source_triangles": 396,
+  "visual_mesh_nodes": 1,
+  "unique_meshes": 1,
+  "materials": [
+    "env_grass_blade"
+  ],
+  "collision_nodes": [],
+  "glb_nodes": 2,
+  "glb_kb": 55,
+  "glb_materials": [
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ]
+  ],
+  "glb_images": 1,
+  "empties": [
+    "grass_tuft.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "grass_tuft_blade_clumps"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

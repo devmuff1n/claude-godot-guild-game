@@ -1,0 +1,95 @@
+{
+  "id": "stream_channel",
+  "category": "landscape",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\landscape\\stream_channel.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\stream_channel\\stream_channel.blend",
+  "target_size_m": [
+    6,
+    4,
+    0.8
+  ],
+  "glb_size_m": [
+    6.0,
+    4.0,
+    1.165
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.456
+  ],
+  "bounds_min": [
+    -3.0,
+    -2.0,
+    -0.8
+  ],
+  "bounds_max": [
+    3.0,
+    2.0,
+    0.365
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 9308,
+  "source_triangles": 9308,
+  "visual_mesh_nodes": 5,
+  "unique_meshes": 5,
+  "materials": [
+    "env_grass_blade",
+    "env_grass_ground",
+    "env_soil",
+    "env_streambed",
+    "env_water"
+  ],
+  "collision_nodes": [
+    "stream_channel_bank_L_col-convcolonly",
+    "stream_channel_bank_R_col-convcolonly",
+    "stream_channel_streambed_col-convcolonly"
+  ],
+  "glb_nodes": 11,
+  "glb_kb": 1121,
+  "glb_materials": [
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_grass_ground",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_soil",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_streambed",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_water",
+      "BLEND",
+      true
+    ]
+  ],
+  "glb_images": 5,
+  "empties": [
+    "stream_channel.001",
+    "stream_channel_snap_east.001",
+    "stream_channel_snap_west.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "stream_channel_bank_vegetation",
+    "stream_channel_left_bank",
+    "stream_channel_right_bank",
+    "stream_channel_streambed",
+    "stream_channel_water_plane"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

@@ -1,0 +1,81 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ui/balance/BalanceStepper.tscn" id="1_step"]
+
+[node name="BalanceTypeRow" type="PanelContainer"]
+theme_type_variation = &"PanelInset"
+
+[node name="Row" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Name" type="Label" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"HeaderLabel"
+clip_text = true
+
+[node name="Hp" parent="Row" instance=ExtResource("1_step")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "ОЗ ×: Здоровье относительно обычного моба Classic того же уровня"
+step = 0.05
+min_value = 0.1
+max_value = 10.0
+fmt = "×%.2f"
+
+[node name="Dmg" parent="Row" instance=ExtResource("1_step")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Урон ×: Урон удара относительно обычного моба Classic"
+step = 0.05
+min_value = 0.0
+max_value = 10.0
+fmt = "×%.2f"
+
+[node name="Armor" parent="Row" instance=ExtResource("1_step")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Броня ×: Броня относительно обычного моба"
+step = 0.1
+min_value = 0.0
+max_value = 10.0
+fmt = "×%.1f"
+
+[node name="Interval" parent="Row" instance=ExtResource("1_step")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Удар, с: Секунд между ударами (меньше — чаще бьёт; урон в секунду не меняется)"
+step = 0.1
+min_value = 0.5
+max_value = 6.0
+fmt = "%.1f с"
+
+[node name="Xp" parent="Row" instance=ExtResource("1_step")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Опыт: Опыт за врага на уровне 1 (растёт с уровнем)"
+step = 1
+min_value = 0
+max_value = 500
+fmt = "%d"
+
+[node name="Coins" parent="Row" instance=ExtResource("1_step")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Монеты: Монеты за врага на уровне 1 (растут с уровнем)"
+step = 1
+min_value = 0
+max_value = 500
+fmt = "%d"
+
+[node name="Sample" type="Label" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_type_variation = &"MutedLabel"
+clip_text = true

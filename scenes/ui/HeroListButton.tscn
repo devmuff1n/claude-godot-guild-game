@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[node name="HeroListButton" type="Button" unique_id=1235023803]
+custom_minimum_size = Vector2(260, 96)
+focus_mode = 0
+alignment = 0
+expand_icon = true

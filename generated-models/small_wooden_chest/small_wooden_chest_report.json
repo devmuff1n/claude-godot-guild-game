@@ -1,0 +1,96 @@
+{
+  "id": "small_wooden_chest",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\small_wooden_chest.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\small_wooden_chest\\small_wooden_chest.blend",
+  "target_size_m": [
+    0.65,
+    0.42,
+    0.4
+  ],
+  "glb_size_m": [
+    0.641,
+    0.471,
+    0.419
+  ],
+  "size_deviation": [
+    -0.014,
+    0.121,
+    0.047
+  ],
+  "bounds_min": [
+    -0.321,
+    -0.237,
+    -0.005
+  ],
+  "bounds_max": [
+    0.321,
+    0.234,
+    0.414
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 400,
+  "source_triangles": 400,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_brass",
+    "env_iron",
+    "env_wood_dark",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "small_wooden_chest_chest_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 400,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "small_wooden_chest.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [
+    {
+      "part": "small_wooden_chest_hinged_lid",
+      "axis": "local X (hinge)",
+      "pivot": [
+        0.0,
+        0.2,
+        0.25
+      ],
+      "moves": true,
+      "max_z_before": 0.414,
+      "max_z_after": 0.295
+    }
+  ],
+  "parts": [
+    "small_wooden_chest_body",
+    "small_wooden_chest_hinged_lid",
+    "small_wooden_chest_straps"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

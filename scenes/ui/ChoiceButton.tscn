@@ -1,0 +1,4 @@
+[gd_scene format=3]
+
+[node name="ChoiceButton" type="Button" unique_id=1603641273]
+focus_mode = 0

@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[node name="TextLine" type="Label" unique_id=570347299]
+custom_minimum_size = Vector2(50, 0)
+theme_type_variation = &"BodyLabel"
+autowrap_mode = 3

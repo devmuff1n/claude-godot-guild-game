@@ -1,0 +1,77 @@
+{
+  "id": "vegetable_garden_bed",
+  "category": "landscape",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\landscape\\vegetable_garden_bed.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\vegetable_garden_bed\\vegetable_garden_bed.blend",
+  "target_size_m": [
+    3.6,
+    2.7,
+    0.35
+  ],
+  "glb_size_m": [
+    3.639,
+    2.748,
+    0.334
+  ],
+  "size_deviation": [
+    0.011,
+    0.018,
+    -0.046
+  ],
+  "bounds_min": [
+    -1.821,
+    -1.373,
+    0.0
+  ],
+  "bounds_max": [
+    1.819,
+    1.375,
+    0.334
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 2080,
+  "source_triangles": 2080,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_seedling_leaf",
+    "env_soil",
+    "env_soil_dark"
+  ],
+  "collision_nodes": [
+    "vegetable_garden_bed_bed_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 329,
+  "glb_materials": [
+    [
+      "env_soil",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_soil_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_seedling_leaf",
+      "OPAQUE",
+      true
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "vegetable_garden_bed.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "vegetable_garden_bed_furrows",
+    "vegetable_garden_bed_soil_bed",
+    "vegetable_garden_bed_vegetable_clumps"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

@@ -1,0 +1,168 @@
+{
+  "id": "leather_workshop_exterior",
+  "category": "town/buildings",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/buildings\\leather_workshop_exterior.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\leather_workshop_exterior\\leather_workshop_exterior.blend",
+  "target_size_m": [
+    6,
+    4.8,
+    4.8
+  ],
+  "glb_size_m": [
+    6.748,
+    5.058,
+    4.99
+  ],
+  "size_deviation": [
+    0.125,
+    0.054,
+    0.04
+  ],
+  "bounds_min": [
+    -3.41,
+    -2.47,
+    0.0
+  ],
+  "bounds_max": [
+    3.338,
+    2.588,
+    4.99
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 8292,
+  "source_triangles": 8292,
+  "visual_mesh_nodes": 6,
+  "unique_meshes": 6,
+  "materials": [
+    "env_brass",
+    "env_hide_pale",
+    "env_iron",
+    "env_lantern_glow",
+    "env_leather_red",
+    "env_plaster",
+    "env_roof_brown",
+    "env_stone_block",
+    "env_stone_grey",
+    "env_timber",
+    "env_window_glow",
+    "env_wood_dark",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "leather_workshop_exterior_body_col-convcolonly",
+    "leather_workshop_exterior_entrance_col-convcolonly",
+    "leather_workshop_exterior_shed_post_0_col-convcolonly",
+    "leather_workshop_exterior_shed_post_1_col-convcolonly"
+  ],
+  "glb_nodes": 11,
+  "glb_kb": 1410,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_timber",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_block",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_red",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hide_pale",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_roof_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_plaster",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_window_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_lantern_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 12,
+  "empties": [
+    "leather_workshop_exterior.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [
+    {
+      "part": "leather_workshop_exterior_door_leaf",
+      "axis": "local Z (hinge)",
+      "pivot": [
+        -1.775,
+        -1.785,
+        0.45
+      ],
+      "moves": true,
+      "max_z_before": 2.15,
+      "max_z_after": 2.15
+    },
+    {
+      "part": "leather_workshop_exterior_hide_sign",
+      "axis": "local X (swing)",
+      "pivot": [
+        -2.89,
+        -0.9,
+        2.15
+      ],
+      "moves": true,
+      "max_z_before": 2.151,
+      "max_z_after": 2.155
+    }
+  ],
+  "parts": [
+    "leather_workshop_exterior_door_leaf",
+    "leather_workshop_exterior_drying_shed",
+    "leather_workshop_exterior_hide_sign",
+    "leather_workshop_exterior_roof",
+    "leather_workshop_exterior_sign_bracket",
+    "leather_workshop_exterior_walls"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

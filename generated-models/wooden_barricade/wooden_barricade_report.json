@@ -1,0 +1,78 @@
+{
+  "id": "wooden_barricade",
+  "category": "road_defense",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\road_defense\\wooden_barricade.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\wooden_barricade\\wooden_barricade.blend",
+  "target_size_m": [
+    1.7,
+    0.65,
+    0.9
+  ],
+  "glb_size_m": [
+    1.673,
+    0.688,
+    0.905
+  ],
+  "size_deviation": [
+    -0.016,
+    0.058,
+    0.006
+  ],
+  "bounds_min": [
+    -0.838,
+    -0.169,
+    -0.005
+  ],
+  "bounds_max": [
+    0.836,
+    0.52,
+    0.9
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 412,
+  "source_triangles": 412,
+  "visual_mesh_nodes": 4,
+  "unique_meshes": 4,
+  "materials": [
+    "env_iron",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "wooden_barricade_barricade_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 331,
+  "glb_materials": [
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "wooden_barricade.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "wooden_barricade_crossbeams",
+    "wooden_barricade_iron_bands",
+    "wooden_barricade_posts",
+    "wooden_barricade_rear_braces"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

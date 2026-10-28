@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[node name="ArenaPerkRow" type="PanelContainer"]
+theme_type_variation = &"PanelInset"
+
+[node name="Box" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Frame" type="PanelContainer" parent="Box"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"PanelPortrait"
+
+[node name="Portrait" type="TextureRect" parent="Box/Frame"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Name" type="Label" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"HeaderLabel"
+
+[node name="Stages" type="VBoxContainer" parent="Box"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="Row1" type="HBoxContainer" parent="Box/Stages"]
+layout_mode = 2
+
+[node name="StageI" type="Label" parent="Box/Stages/Row1"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"CaptionLabel"
+text = "ЭТАП I"
+
+[node name="Stage1" type="HBoxContainer" parent="Box/Stages/Row1"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Row2" type="HBoxContainer" parent="Box/Stages"]
+layout_mode = 2
+
+[node name="StageII" type="Label" parent="Box/Stages/Row2"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"CaptionLabel"
+text = "ЭТАП II"
+
+[node name="Stage2" type="HBoxContainer" parent="Box/Stages/Row2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Row3" type="HBoxContainer" parent="Box/Stages"]
+layout_mode = 2
+
+[node name="StageIII" type="Label" parent="Box/Stages/Row3"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"CaptionLabel"
+text = "ЭТАП III"
+
+[node name="Stage3" type="HBoxContainer" parent="Box/Stages/Row3"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6

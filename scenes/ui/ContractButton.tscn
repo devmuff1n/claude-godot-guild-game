@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[node name="ContractButton" type="Button" unique_id=719085134]
+custom_minimum_size = Vector2(390, 54)
+focus_mode = 0
+alignment = 0

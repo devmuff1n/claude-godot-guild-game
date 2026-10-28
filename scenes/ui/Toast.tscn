@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[node name="Toast" type="PanelContainer" unique_id=1120805035]
+mouse_filter = 2
+theme_type_variation = &"PanelToast"
+
+[node name="Text" type="Label" parent="." unique_id=1581263511]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+horizontal_alignment = 1
+autowrap_mode = 3

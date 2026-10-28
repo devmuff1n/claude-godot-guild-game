@@ -1,0 +1,216 @@
+{
+  "id": "ev04_smithy",
+  "category": "events/dioramas",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/dioramas\\ev04_smithy.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev04_smithy\\ev04_smithy.blend",
+  "target_size_m": [
+    6.5,
+    6.0,
+    5.0
+  ],
+  "glb_size_m": [
+    8.62,
+    3.95,
+    3.201
+  ],
+  "size_deviation": [
+    0.326,
+    -0.342,
+    -0.36
+  ],
+  "bounds_min": [
+    -4.26,
+    -0.011,
+    -0.201
+  ],
+  "bounds_max": [
+    4.36,
+    3.939,
+    3.0
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 12907,
+  "source_triangles": 12907,
+  "visual_mesh_nodes": 6,
+  "unique_meshes": 6,
+  "materials": [
+    "env_bark",
+    "env_burlap",
+    "env_cloth_brown",
+    "env_cloth_cream",
+    "env_coal_glow",
+    "env_dirt",
+    "env_eye",
+    "env_eye_white",
+    "env_fern",
+    "env_fire",
+    "env_grass_blade",
+    "env_hair_dark",
+    "env_iron",
+    "env_leather",
+    "env_leather_dark",
+    "env_moss",
+    "env_mud_dark",
+    "env_skin",
+    "env_steel",
+    "env_stone_grey",
+    "env_water",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "ev04_smithy_shed_col-convcolonly"
+  ],
+  "glb_nodes": 10,
+  "glb_kb": 2276,
+  "glb_materials": [
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_mud_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_coal_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fire",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_dirt",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fern",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_grass_blade",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_brown",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_cream",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_skin",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye_white",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_hair_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_steel",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_water",
+      "BLEND",
+      true
+    ],
+    [
+      "env_burlap",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 25,
+  "empties": [
+    "ev04_smithy.001",
+    "ev04_smithy_cam_focus.001",
+    "ev04_smithy_light_forge.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "ev04_smithy_tools: 2 degenerate faces"
+  ],
+  "motion_test": [],
+  "parts": [
+    "ev04_smithy_forge",
+    "ev04_smithy_ground_details",
+    "ev04_smithy_plants",
+    "ev04_smithy_shed",
+    "ev04_smithy_smith",
+    "ev04_smithy_tools"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:57"
+}

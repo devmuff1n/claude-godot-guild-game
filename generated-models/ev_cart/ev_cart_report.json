@@ -1,0 +1,81 @@
+{
+  "id": "ev_cart",
+  "category": "events/common",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/common\\ev_cart.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev_cart\\ev_cart.blend",
+  "target_size_m": [
+    1.3,
+    3.2,
+    1.3
+  ],
+  "glb_size_m": [
+    1.42,
+    2.87,
+    0.966
+  ],
+  "size_deviation": [
+    0.092,
+    -0.103,
+    -0.257
+  ],
+  "bounds_min": [
+    -0.71,
+    -1.98,
+    -0.016
+  ],
+  "bounds_max": [
+    0.71,
+    0.89,
+    0.95
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1976,
+  "source_triangles": 1976,
+  "visual_mesh_nodes": 1,
+  "unique_meshes": 1,
+  "materials": [
+    "env_iron",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "ev_cart_cart_col-convcolonly"
+  ],
+  "glb_nodes": 3,
+  "glb_kb": 495,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "ev_cart.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ev_cart_cart"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 08:53"
+}

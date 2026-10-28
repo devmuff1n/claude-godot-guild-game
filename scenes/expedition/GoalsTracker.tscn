@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/expedition/GoalsTracker.gd" id="1_goals"]
+
+[node name="GoalsTracker" type="PanelContainer"]
+custom_minimum_size = Vector2(300, 0)
+offset_right = 300.0
+mouse_filter = 2
+theme_type_variation = &"PanelTracker"
+script = ExtResource("1_goals")
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Caption" type="Label" parent="Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ЦЕЛИ"
+
+[node name="Rows" type="VBoxContainer" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0

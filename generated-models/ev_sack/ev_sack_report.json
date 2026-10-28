@@ -1,0 +1,67 @@
+{
+  "id": "ev_sack",
+  "category": "events/common",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\events/common\\ev_sack.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ev_sack\\ev_sack.blend",
+  "target_size_m": [
+    0.5,
+    0.45,
+    0.6
+  ],
+  "glb_size_m": [
+    0.469,
+    0.435,
+    0.558
+  ],
+  "size_deviation": [
+    -0.062,
+    -0.033,
+    -0.07
+  ],
+  "bounds_min": [
+    -0.237,
+    -0.218,
+    0.026
+  ],
+  "bounds_max": [
+    0.233,
+    0.218,
+    0.583
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 180,
+  "source_triangles": 180,
+  "visual_mesh_nodes": 1,
+  "unique_meshes": 1,
+  "materials": [
+    "env_burlap",
+    "env_rope"
+  ],
+  "collision_nodes": [],
+  "glb_nodes": 2,
+  "glb_kb": 54,
+  "glb_materials": [
+    [
+      "env_burlap",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "ev_sack.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ev_sack_sack"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 00:56"
+}

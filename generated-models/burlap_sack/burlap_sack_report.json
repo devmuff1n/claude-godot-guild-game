@@ -1,0 +1,70 @@
+{
+  "id": "burlap_sack",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\burlap_sack.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\burlap_sack\\burlap_sack.blend",
+  "target_size_m": [
+    0.45,
+    0.4,
+    0.6
+  ],
+  "glb_size_m": [
+    0.405,
+    0.377,
+    0.575
+  ],
+  "size_deviation": [
+    -0.1,
+    -0.057,
+    -0.042
+  ],
+  "bounds_min": [
+    -0.202,
+    -0.185,
+    0.026
+  ],
+  "bounds_max": [
+    0.203,
+    0.192,
+    0.601
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 332,
+  "source_triangles": 332,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_burlap",
+    "env_rope"
+  ],
+  "collision_nodes": [
+    "burlap_sack_sack_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 64,
+  "glb_materials": [
+    [
+      "env_burlap",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "burlap_sack.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "burlap_sack_sack_body",
+    "burlap_sack_tie_rope"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/FormationRow.gd" id="1_3tsu0"]
+
+[node name="FormationRow" type="VBoxContainer"]
+script = ExtResource("1_3tsu0")
+
+[node name="Row" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Back" type="Label" parent="Row"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"CaptionLabel"
+text = "ТЫЛ  ◂"
+
+[node name="Slot0" type="Button" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonList"
+text = "Герой"
+expand_icon = true
+
+[node name="Slot1" type="Button" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonList"
+text = "Герой"
+expand_icon = true
+
+[node name="Slot2" type="Button" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonList"
+text = "Герой"
+expand_icon = true
+
+[node name="Slot3" type="Button" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonList"
+text = "Герой"
+expand_icon = true
+
+[node name="Front" type="Label" parent="Row"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"CaptionLabel"
+text = "▸  ФРОНТ"

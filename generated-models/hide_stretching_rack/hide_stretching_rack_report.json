@@ -1,0 +1,89 @@
+{
+  "id": "hide_stretching_rack",
+  "category": "town/crafts",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/crafts\\hide_stretching_rack.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\hide_stretching_rack\\hide_stretching_rack.blend",
+  "target_size_m": [
+    1.8,
+    0.25,
+    2.4
+  ],
+  "glb_size_m": [
+    1.64,
+    0.406,
+    2.446
+  ],
+  "size_deviation": [
+    -0.089,
+    0.624,
+    0.019
+  ],
+  "bounds_min": [
+    -0.82,
+    -0.203,
+    -0.026
+  ],
+  "bounds_max": [
+    0.82,
+    0.203,
+    2.42
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 988,
+  "source_triangles": 988,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_hide_pale",
+    "env_iron",
+    "env_rope",
+    "env_wood_dark",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "hide_stretching_rack_rack_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 363,
+  "glb_materials": [
+    [
+      "env_hide_pale",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 5,
+  "empties": [
+    "hide_stretching_rack.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "hide_stretching_rack_hide_sheet",
+    "hide_stretching_rack_rope_ties",
+    "hide_stretching_rack_wooden_frame"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:55"
+}

@@ -1,0 +1,70 @@
+{
+  "id": "pine_tree",
+  "category": "vegetation",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\vegetation\\pine_tree.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\pine_tree\\pine_tree.blend",
+  "target_size_m": [
+    2.9,
+    2.8,
+    6.5
+  ],
+  "glb_size_m": [
+    2.9,
+    2.8,
+    6.5
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bounds_min": [
+    -1.45,
+    -1.4,
+    0.0
+  ],
+  "bounds_max": [
+    1.45,
+    1.4,
+    6.5
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 2692,
+  "source_triangles": 2692,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_bark_dark",
+    "env_leaves_pine"
+  ],
+  "collision_nodes": [
+    "pine_tree_trunk_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 422,
+  "glb_materials": [
+    [
+      "env_leaves_pine",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark_dark",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "pine_tree.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "pine_tree_branch_tiers",
+    "pine_tree_trunk"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

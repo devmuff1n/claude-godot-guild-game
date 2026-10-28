@@ -1,0 +1,428 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/balance/BalanceEditor.gd" id="1_ed"]
+[ext_resource type="PackedScene" path="res://scenes/ui/balance/BalanceStepper.tscn" id="2_step"]
+
+[node name="BalanceEditor" type="Control"]
+process_mode = 3
+z_index = 200
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_ed")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.6)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
+
+[node name="Panel" type="PanelContainer" parent="Margin"]
+layout_mode = 2
+theme_type_variation = &"PanelModal"
+
+[node name="Box" type="VBoxContainer" parent="Margin/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Head" type="HBoxContainer" parent="Margin/Panel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Margin/Panel/Box/Head"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Баланс"
+
+[node name="Gap" type="Control" parent="Margin/Panel/Box/Head"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TabWaves" type="Button" parent="Margin/Panel/Box/Head"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 38)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+text = "Волны"
+
+[node name="TabTypes" type="Button" parent="Margin/Panel/Box/Head"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 38)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+text = "Типы врагов"
+
+[node name="Spacer" type="Control" parent="Margin/Panel/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FileLabel" type="Label" parent="Margin/Panel/Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"MutedLabel"
+
+[node name="Close" type="Button" parent="Margin/Panel/Box/Head"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Закрыть (F10 / Esc)"
+theme_type_variation = &"ButtonIcon"
+text = "✕"
+
+[node name="Sep" type="HSeparator" parent="Margin/Panel/Box"]
+layout_mode = 2
+
+[node name="Waves" type="HBoxContainer" parent="Margin/Panel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="Left" type="VBoxContainer" parent="Margin/Panel/Box/Waves"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Contract" type="OptionButton" parent="Margin/Panel/Box/Waves/Left"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+focus_mode = 0
+fit_to_longest_item = false
+
+[node name="CLevelRow" type="HBoxContainer" parent="Margin/Panel/Box/Waves/Left"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CLevelLabel" type="Label" parent="Margin/Panel/Box/Waves/Left/CLevelRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+tooltip_text = "Уровень поручения. При изменении все враги поручения сдвигаются на столько же уровней."
+theme_type_variation = &"CaptionLabel"
+text = "Уровень поручения"
+
+[node name="CLevel" parent="Margin/Panel/Box/Waves/Left/CLevelRow" instance=ExtResource("2_step")]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 15.0
+fmt = "%d"
+
+[node name="Sep" type="HSeparator" parent="Margin/Panel/Box/Waves/Left"]
+layout_mode = 2
+
+[node name="PointsScroll" type="ScrollContainer" parent="Margin/Panel/Box/Waves/Left"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Points" type="VBoxContainer" parent="Margin/Panel/Box/Waves/Left/PointsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Right" type="VBoxContainer" parent="Margin/Panel/Box/Waves"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="PointHead" type="HBoxContainer" parent="Margin/Panel/Box/Waves/Right"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PointName" type="Label" parent="Margin/Panel/Box/Waves/Right/PointHead"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Title2Label"
+clip_text = true
+
+[node name="HpLabel" type="Label" parent="Margin/Panel/Box/Waves/Right/PointHead"]
+layout_mode = 2
+mouse_filter = 1
+tooltip_text = "Здоровье всех врагов этой точки, %"
+theme_type_variation = &"CaptionLabel"
+text = "ОЗ"
+
+[node name="HpPct" parent="Margin/Panel/Box/Waves/Right/PointHead" instance=ExtResource("2_step")]
+unique_name_in_owner = true
+layout_mode = 2
+step = 5.0
+min_value = 10.0
+max_value = 500.0
+fmt = "%d%%"
+
+[node name="DmgLabel" type="Label" parent="Margin/Panel/Box/Waves/Right/PointHead"]
+layout_mode = 2
+mouse_filter = 1
+tooltip_text = "Урон всех врагов этой точки, %"
+theme_type_variation = &"CaptionLabel"
+text = "Урон"
+
+[node name="DmgPct" parent="Margin/Panel/Box/Waves/Right/PointHead" instance=ExtResource("2_step")]
+unique_name_in_owner = true
+layout_mode = 2
+step = 5.0
+min_value = 10.0
+max_value = 500.0
+fmt = "%d%%"
+
+[node name="SummaryRow" type="HBoxContainer" parent="Margin/Panel/Box/Waves/Right"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Summary" type="Label" parent="Margin/Panel/Box/Waves/Right/SummaryRow"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"ValueLabel"
+
+[node name="Party" type="Label" parent="Margin/Panel/Box/Waves/Right/SummaryRow"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+tooltip_text = "Ваш отряд из текущего сохранения: суммарное здоровье и урон в секунду автоатаками"
+theme_type_variation = &"MutedLabel"
+
+[node name="Spacer" type="Control" parent="Margin/Panel/Box/Waves/Right/SummaryRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Rating" type="Label" parent="Margin/Panel/Box/Waves/Right/SummaryRow"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+tooltip_text = "Грубая оценка сложности: (время, чтобы отряд убил всех врагов) ÷ (время, за которое враги убьют отряд).
+Не учитывает броню, лечение, умения и строй, поэтому само число условное:
+сравнивайте точки между собой — чем больше, тем тяжелее бой."
+theme_type_variation = &"HeaderLabel"
+
+[node name="GroupsScroll" type="ScrollContainer" parent="Margin/Panel/Box/Waves/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Groups" type="VBoxContainer" parent="Margin/Panel/Box/Waves/Right/GroupsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="AddRow" type="HBoxContainer" parent="Margin/Panel/Box/Waves/Right"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AddGroup" type="Button" parent="Margin/Panel/Box/Waves/Right/AddRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 34)
+layout_mode = 2
+focus_mode = 0
+text = "+ группа"
+
+[node name="AddAmbush" type="Button" parent="Margin/Panel/Box/Waves/Right/AddRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 34)
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Враги, которые выскакивают из кустов позади отряда через несколько секунд после начала боя"
+text = "+ засада сзади"
+
+[node name="Types" type="VBoxContainer" parent="Margin/Panel/Box"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="AllRow" type="HBoxContainer" parent="Margin/Panel/Box/Types"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AllLabel" type="Label" parent="Margin/Panel/Box/Types/AllRow"]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "Все враги"
+
+[node name="AllHpLabel" type="Label" parent="Margin/Panel/Box/Types/AllRow"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ОЗ"
+
+[node name="AllHp" parent="Margin/Panel/Box/Types/AllRow" instance=ExtResource("2_step")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Здоровье всех врагов игры, %"
+step = 5.0
+min_value = 10.0
+max_value = 500.0
+fmt = "%d%%"
+
+[node name="AllDmgLabel" type="Label" parent="Margin/Panel/Box/Types/AllRow"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "Урон"
+
+[node name="AllDmg" parent="Margin/Panel/Box/Types/AllRow" instance=ExtResource("2_step")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Урон всех врагов игры, %"
+step = 5.0
+min_value = 10.0
+max_value = 500.0
+fmt = "%d%%"
+
+[node name="Spacer" type="Control" parent="Margin/Panel/Box/Types/AllRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SampleLvlLabel" type="Label" parent="Margin/Panel/Box/Types/AllRow"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "Пример на уровне"
+
+[node name="SampleLvl" parent="Margin/Panel/Box/Types/AllRow" instance=ExtResource("2_step")]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 15.0
+
+[node name="Header" type="PanelContainer" parent="Margin/Panel/Box/Types"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_type_variation = &"PanelInset"
+
+[node name="Row" type="HBoxContainer" parent="Margin/Panel/Box/Types/Header"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Name" type="Label" parent="Margin/Panel/Box/Types/Header/Row"]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "Тип"
+
+[node name="Hp" type="Label" parent="Margin/Panel/Box/Types/Header/Row"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ОЗ ×"
+horizontal_alignment = 1
+
+[node name="Dmg" type="Label" parent="Margin/Panel/Box/Types/Header/Row"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "Урон ×"
+horizontal_alignment = 1
+
+[node name="Armor" type="Label" parent="Margin/Panel/Box/Types/Header/Row"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "Броня ×"
+horizontal_alignment = 1
+
+[node name="Interval" type="Label" parent="Margin/Panel/Box/Types/Header/Row"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "Удар раз в"
+horizontal_alignment = 1
+
+[node name="Xp" type="Label" parent="Margin/Panel/Box/Types/Header/Row"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "Опыт"
+horizontal_alignment = 1
+
+[node name="Coins" type="Label" parent="Margin/Panel/Box/Types/Header/Row"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "Монеты"
+horizontal_alignment = 1
+
+[node name="Sample" type="Label" parent="Margin/Panel/Box/Types/Header/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "Итог на уровне"
+
+[node name="TypesScroll" type="ScrollContainer" parent="Margin/Panel/Box/Types"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="TypeRows" type="VBoxContainer" parent="Margin/Panel/Box/Types/TypesScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Sep2" type="HSeparator" parent="Margin/Panel/Box"]
+layout_mode = 2
+
+[node name="Foot" type="HBoxContainer" parent="Margin/Panel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Status" type="Label" parent="Margin/Panel/Box/Foot"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"MutedLabel"
+clip_text = true
+
+[node name="Defaults" type="Button" parent="Margin/Panel/Box/Foot"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Вернуть этой точке (или типам врагов) значения из кода игры"
+text = "Исходные значения"
+
+[node name="Revert" type="Button" parent="Margin/Panel/Box/Foot"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Отменить все несохранённые правки (вернуть то, что записано в файле)"
+text = "Отменить правки"
+
+[node name="Save" type="Button" parent="Margin/Panel/Box/Foot"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonPrimary"
+text = "Сохранить"
+
+[node name="Play" type="Button" parent="Margin/Panel/Box/Foot"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Сразиться с этой точкой прямо сейчас: отряд из текущего сохранения, полное здоровье, без последствий"
+theme_type_variation = &"ButtonPrimary"
+text = "▶ Сыграть этот бой"

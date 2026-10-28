@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[node name="TalkButton" type="Button"]
+custom_minimum_size = Vector2(0, 44)
+focus_mode = 0
+theme_type_variation = &"ButtonList"
+theme_override_constants/icon_max_width = 30
+text_overrun_behavior = 3
+alignment = 0
+expand_icon = true

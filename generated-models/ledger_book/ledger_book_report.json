@@ -1,0 +1,83 @@
+{
+  "id": "ledger_book",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\ledger_book.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\ledger_book\\ledger_book.blend",
+  "target_size_m": [
+    0.32,
+    0.24,
+    0.08
+  ],
+  "glb_size_m": [
+    0.343,
+    0.235,
+    0.081
+  ],
+  "size_deviation": [
+    0.072,
+    -0.021,
+    0.012
+  ],
+  "bounds_min": [
+    -0.178,
+    -0.117,
+    -0.003
+  ],
+  "bounds_max": [
+    0.165,
+    0.117,
+    0.078
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 252,
+  "source_triangles": 252,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_brass",
+    "env_leather_dark",
+    "env_leather_red",
+    "env_parchment"
+  ],
+  "collision_nodes": [
+    "ledger_book_book_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 182,
+  "glb_materials": [
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_red",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_parchment",
+      "OPAQUE",
+      true
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "ledger_book.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "ledger_book_clasps",
+    "ledger_book_covers_spine",
+    "ledger_book_page_block"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

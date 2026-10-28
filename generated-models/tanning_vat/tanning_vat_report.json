@@ -1,0 +1,83 @@
+{
+  "id": "tanning_vat",
+  "category": "town/crafts",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/crafts\\tanning_vat.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\tanning_vat\\tanning_vat.blend",
+  "target_size_m": [
+    1,
+    1,
+    0.7
+  ],
+  "glb_size_m": [
+    1.001,
+    0.999,
+    0.66
+  ],
+  "size_deviation": [
+    0.001,
+    -0.001,
+    -0.057
+  ],
+  "bounds_min": [
+    -0.5,
+    -0.5,
+    0.0
+  ],
+  "bounds_max": [
+    0.5,
+    0.5,
+    0.66
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1116,
+  "source_triangles": 1116,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_iron",
+    "env_liquid_tan",
+    "env_wood_dark",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "tanning_vat_vat_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 358,
+  "glb_materials": [
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_liquid_tan",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "tanning_vat.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "tanning_vat_hoops",
+    "tanning_vat_liquid_surface",
+    "tanning_vat_vat_body"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:55"
+}

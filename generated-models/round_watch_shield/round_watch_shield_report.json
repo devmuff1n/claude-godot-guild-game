@@ -1,0 +1,84 @@
+{
+  "id": "round_watch_shield",
+  "category": "road_defense",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\road_defense\\round_watch_shield.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\round_watch_shield\\round_watch_shield.blend",
+  "target_size_m": [
+    0.6,
+    0.1,
+    0.6
+  ],
+  "glb_size_m": [
+    0.6,
+    0.109,
+    0.6
+  ],
+  "size_deviation": [
+    0.0,
+    0.09,
+    0.0
+  ],
+  "bounds_min": [
+    -0.3,
+    -0.057,
+    -0.3
+  ],
+  "bounds_max": [
+    0.3,
+    0.051,
+    0.3
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1032,
+  "source_triangles": 1032,
+  "visual_mesh_nodes": 4,
+  "unique_meshes": 4,
+  "materials": [
+    "env_iron",
+    "env_leather",
+    "env_shield_planks",
+    "env_steel"
+  ],
+  "collision_nodes": [],
+  "glb_nodes": 7,
+  "glb_kb": 415,
+  "glb_materials": [
+    [
+      "env_steel",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leather",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_shield_planks",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "round_watch_shield.001",
+    "round_watch_shield_arm_strap_socket.001",
+    "round_watch_shield_grip_socket.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "round_watch_shield_central_boss",
+    "round_watch_shield_metal_rim",
+    "round_watch_shield_rear_grip_and_straps",
+    "round_watch_shield_wooden_shield_disk"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

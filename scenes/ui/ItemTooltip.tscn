@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/ItemTooltip.gd" id="1_itt"]
+
+[node name="ItemTooltip" type="PanelContainer"]
+theme_type_variation = &"PanelItemTooltip"
+script = ExtResource("1_itt")
+
+[node name="Lines" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(290, 0)
+layout_mode = 2
+theme_override_constants/separation = 1

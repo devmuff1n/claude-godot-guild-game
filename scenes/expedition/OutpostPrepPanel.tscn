@@ -1,0 +1,96 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/expedition/OutpostPrepPanel.gd" id="1_prep"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="2_pill"]
+
+[node name="OutpostPrepPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(560, 0)
+offset_right = 560.0
+theme_type_variation = &"PanelModal"
+script = ExtResource("1_prep")
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ПЕРЕДЫШКА"
+horizontal_alignment = 1
+
+[node name="PrepTitle" type="Label" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+horizontal_alignment = 1
+
+[node name="Info" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Gate" parent="Box/Info" instance=ExtResource("2_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+icon_kind = "shield"
+value_width = 44.0
+
+[node name="Materials" parent="Box/Info" instance=ExtResource("2_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Материалы для ремонта ворот"
+icon_kind = "material"
+value_width = 16.0
+
+[node name="ScoutHeader" type="Label" parent="Box"]
+layout_mode = 2
+tooltip_text = "Разведка: кто придёт в следующей волне"
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "РАЗВЕДКА"
+
+[node name="PrepScout" type="Label" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PrepRepair" type="Button" parent="Box/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "−1 материал, +20%"
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Чинить ворота"
+
+[node name="PrepExtinguish" type="Button" parent="Box/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Тушить"
+
+[node name="PrepSave" type="Button" parent="Box/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Сохранить"
+
+[node name="Spacer" type="Control" parent="Box/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PrepNext" type="Button" parent="Box/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonPrimary"
+theme_override_font_sizes/font_size = 16
+text = "Следующая волна!"

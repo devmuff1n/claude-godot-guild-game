@@ -1,0 +1,70 @@
+{
+  "id": "oak_tree",
+  "category": "vegetation",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\vegetation\\oak_tree.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\oak_tree\\oak_tree.blend",
+  "target_size_m": [
+    4,
+    3.6,
+    5.4
+  ],
+  "glb_size_m": [
+    4.0,
+    3.6,
+    5.4
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bounds_min": [
+    -2.0,
+    -1.8,
+    0.0
+  ],
+  "bounds_max": [
+    2.0,
+    1.8,
+    5.4
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 12902,
+  "source_triangles": 12902,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_bark_oak",
+    "env_leaves_oak"
+  ],
+  "collision_nodes": [
+    "oak_tree_trunk_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 703,
+  "glb_materials": [
+    [
+      "env_leaves_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark_oak",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "oak_tree.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "oak_tree_leaf_clusters",
+    "oak_tree_trunk_branches"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

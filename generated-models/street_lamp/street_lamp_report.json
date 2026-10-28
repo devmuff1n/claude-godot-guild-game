@@ -1,0 +1,87 @@
+{
+  "id": "street_lamp",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\street_lamp.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\street_lamp\\street_lamp.blend",
+  "target_size_m": [
+    1,
+    0.55,
+    3
+  ],
+  "glb_size_m": [
+    1.038,
+    0.5,
+    3.08
+  ],
+  "size_deviation": [
+    0.038,
+    -0.091,
+    0.027
+  ],
+  "bounds_min": [
+    -0.25,
+    -0.25,
+    0.0
+  ],
+  "bounds_max": [
+    0.788,
+    0.25,
+    3.08
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 744,
+  "source_triangles": 744,
+  "visual_mesh_nodes": 5,
+  "unique_meshes": 5,
+  "materials": [
+    "env_brass",
+    "env_iron",
+    "env_lantern_glow",
+    "env_stone_block"
+  ],
+  "collision_nodes": [
+    "street_lamp_base_col-convcolonly",
+    "street_lamp_post_col-convcolonly"
+  ],
+  "glb_nodes": 9,
+  "glb_kb": 341,
+  "glb_materials": [
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_lantern_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_block",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "street_lamp.001",
+    "street_lamp_light_anchor.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "street_lamp_cap",
+    "street_lamp_glass_insert",
+    "street_lamp_lantern_frame",
+    "street_lamp_post_bracket",
+    "street_lamp_stone_base"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

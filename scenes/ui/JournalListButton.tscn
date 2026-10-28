@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[node name="JournalListButton" type="Button" unique_id=1133288301]
+custom_minimum_size = Vector2(220, 60)
+theme_type_variation = &"ButtonList"
+focus_mode = 0
+alignment = 0
+expand_icon = true

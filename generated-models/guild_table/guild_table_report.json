@@ -1,0 +1,70 @@
+{
+  "id": "guild_table",
+  "category": "town/furniture",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/furniture\\guild_table.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\guild_table\\guild_table.blend",
+  "target_size_m": [
+    2,
+    0.9,
+    0.75
+  ],
+  "glb_size_m": [
+    2.0,
+    0.888,
+    0.75
+  ],
+  "size_deviation": [
+    0.0,
+    -0.013,
+    0.0
+  ],
+  "bounds_min": [
+    -1.0,
+    -0.444,
+    0.0
+  ],
+  "bounds_max": [
+    1.0,
+    0.444,
+    0.75
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 368,
+  "source_triangles": 368,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "guild_table_table_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 243,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "guild_table.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "guild_table_legs_crossbeams",
+    "guild_table_tabletop"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

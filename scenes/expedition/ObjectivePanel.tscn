@@ -1,0 +1,108 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/expedition/ObjectivePanel.gd" id="1_obj"]
+[ext_resource type="Script" path="res://scripts/ui/Bar.gd" id="2_bar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="3_pill"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="4_icon"]
+
+[node name="ObjectivePanel" type="PanelContainer"]
+custom_minimum_size = Vector2(330, 0)
+offset_right = 330.0
+theme_type_variation = &"PanelHud"
+script = ExtResource("1_obj")
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Head" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ObjName" type="Label" parent="Box/Head"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_type_variation = &"HeaderLabel"
+
+[node name="Fire" parent="Box/Head" instance=ExtResource("4_icon")]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Горит!"
+kind = "burnout"
+
+[node name="ObjPct" type="Label" parent="Box/Head"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"ValueLabel"
+theme_override_colors/font_color = Color(1, 0.86, 0.5, 1)
+horizontal_alignment = 2
+
+[node name="Res" parent="Box/Head" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+icon_kind = "cons"
+cons_id = "kit"
+value_width = 14.0
+
+[node name="ObjBar" type="Control" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 12)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_bar")
+color = Color(0.95, 0.7, 0.25, 1)
+
+[node name="Actions" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RepairHero" type="OptionButton" parent="Box/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 2
+tooltip_text = "Кого отправить. Пока герой чинит или тушит, он не сражается."
+focus_mode = 0
+
+[node name="RepButton" type="Button" parent="Box/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Ремонт"
+
+[node name="ExtButton" type="Button" parent="Box/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Потушить пожар за 3 с, без затрат."
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Тушить"
+
+[node name="CancelButton" type="Button" parent="Box/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+tooltip_text = "Отменить работу"
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "✕"
+
+[node name="Progress" type="Control" parent="Box"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(40, 16)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_bar")
+color = Color(0.45, 0.72, 0.95, 1)
+text_size = 11

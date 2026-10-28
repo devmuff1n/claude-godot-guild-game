@@ -1,0 +1,326 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/village/BoardView.gd" id="1_r0u47"]
+[ext_resource type="PackedScene" path="res://scenes/ui/FormationRow.tscn" id="2_0kd3l"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="3_pill"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="4_icon"]
+[ext_resource type="Script" path="res://scripts/ui/RouteBar.gd" id="5_route"]
+[ext_resource type="PackedScene" path="res://scenes/ui/RankBadge.tscn" id="6_rank"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DelegateCard.tscn" id="7_card"]
+
+[node name="BoardView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_r0u47")
+
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/separation = 16
+
+[node name="ListPanel" type="PanelContainer" parent="Columns"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Columns/ListPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="StoryHeader" type="Label" parent="Columns/ListPanel/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "СЮЖЕТНАЯ ГЛАВА"
+
+[node name="StoryList" type="VBoxContainer" parent="Columns/ListPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Gap" type="Control" parent="Columns/ListPanel/Box"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="SideHeader" type="Label" parent="Columns/ListPanel/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ПОБОЧНОЕ"
+
+[node name="SideList" type="VBoxContainer" parent="Columns/ListPanel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DetailsPanel" type="PanelContainer" parent="Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelDark"
+
+[node name="Details" type="VBoxContainer" parent="Columns/DetailsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Columns/DetailsPanel/Details"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Titles" type="VBoxContainer" parent="Columns/DetailsPanel/Details/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Kind" type="Label" parent="Columns/DetailsPanel/Details/Header/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+
+[node name="CName" type="Label" parent="Columns/DetailsPanel/Details/Header/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+theme_override_font_sizes/font_size = 30
+
+[node name="Level" parent="Columns/DetailsPanel/Details/Header" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Рекомендуемый уровень отряда"
+icon_kind = "sword"
+value_width = 16.0
+
+[node name="Threat" parent="Columns/DetailsPanel/Details/Header" instance=ExtResource("6_rank")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="CDesc" type="Label" parent="Columns/DetailsPanel/Details"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"BodyLabel"
+autowrap_mode = 3
+
+[node name="Twists" type="HFlowContainer" parent="Columns/DetailsPanel/Details"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+
+[node name="CIntro" type="Label" parent="Columns/DetailsPanel/Details"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"QuoteLabel"
+autowrap_mode = 3
+
+[node name="RewardRow" type="HBoxContainer" parent="Columns/DetailsPanel/Details"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Rewards" type="HBoxContainer" parent="Columns/DetailsPanel/Details/RewardRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Premium" type="HBoxContainer" parent="Columns/DetailsPanel/Details/RewardRow"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 0
+theme_override_constants/separation = 8
+
+[node name="Star" parent="Columns/DetailsPanel/Details/RewardRow/Premium" instance=ExtResource("4_icon")]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+kind = "xp"
+
+[node name="PremiumName" type="Label" parent="Columns/DetailsPanel/Details/RewardRow/Premium"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"GoldLabel"
+
+[node name="PremiumValue" type="Label" parent="Columns/DetailsPanel/Details/RewardRow/Premium"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+theme_override_colors/font_color = Color(1, 0.86, 0.5, 1)
+
+[node name="Route" type="Control" parent="Columns/DetailsPanel/Details"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("5_route")
+
+[node name="Sep" type="HSeparator" parent="Columns/DetailsPanel/Details"]
+layout_mode = 2
+
+[node name="Locked" type="HBoxContainer" parent="Columns/DetailsPanel/Details"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Lock" parent="Columns/DetailsPanel/Details/Locked" instance=ExtResource("4_icon")]
+layout_mode = 2
+size_flags_vertical = 4
+kind = "lock"
+
+[node name="LockedText" type="Label" parent="Columns/DetailsPanel/Details/Locked"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BadLabel"
+
+[node name="Prep" type="VBoxContainer" parent="Columns/DetailsPanel/Details"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Columns" type="HBoxContainer" parent="Columns/DetailsPanel/Details/Prep"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Objectives" type="VBoxContainer" parent="Columns/DetailsPanel/Details/Prep/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="GeneralHeader" type="Label" parent="Columns/DetailsPanel/Details/Prep/Columns/Objectives"]
+layout_mode = 2
+tooltip_text = "Необязательное условие на весь поход: деньги и опыт работы (JXP)"
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "ОБЩЕЕ ДОП. ПОРУЧЕНИЕ"
+
+[node name="GeneralRow" type="HFlowContainer" parent="Columns/DetailsPanel/Details/Prep/Columns/Objectives"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Gap" type="Control" parent="Columns/DetailsPanel/Details/Prep/Columns/Objectives"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="PersHeader" type="Label" parent="Columns/DetailsPanel/Details/Prep/Columns/Objectives"]
+layout_mode = 2
+tooltip_text = "Личная цель одного героя: деньги, опыт работы и дружба с Эйденом"
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "ЛИЧНОЕ ДОП. ПОРУЧЕНИЕ"
+
+[node name="PersHeroRow" type="HBoxContainer" parent="Columns/DetailsPanel/Details/Prep/Columns/Objectives"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PersObjRow" type="HFlowContainer" parent="Columns/DetailsPanel/Details/Prep/Columns/Objectives"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VSep" type="VSeparator" parent="Columns/DetailsPanel/Details/Prep/Columns"]
+layout_mode = 2
+
+[node name="Supplies" type="VBoxContainer" parent="Columns/DetailsPanel/Details/Prep/Columns"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PurseHeader" type="Label" parent="Columns/DetailsPanel/Details/Prep/Columns/Supplies"]
+layout_mode = 2
+tooltip_text = "Оплачивает дорожные решения и придорожную лавку, пополняется победами.
+После победы остаток вернётся в казну; при уходе из похода дорожный заработок не возвращается."
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "ПОХОДНЫЙ КОШЕЛЁК"
+
+[node name="PurseRow" type="HBoxContainer" parent="Columns/DetailsPanel/Details/Prep/Columns/Supplies"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PurseSlider" type="HSlider" parent="Columns/DetailsPanel/Details/Prep/Columns/Supplies/PurseRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+step = 5.0
+
+[node name="PurseValue" parent="Columns/DetailsPanel/Details/Prep/Columns/Supplies/PurseRow" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+value_width = 42.0
+
+[node name="Gap" type="Control" parent="Columns/DetailsPanel/Details/Prep/Columns/Supplies"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="SuppliesHeader" type="Label" parent="Columns/DetailsPanel/Details/Prep/Columns/Supplies"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ЗАПАСЫ ГИЛЬДИИ"
+
+[node name="Supplies" type="HFlowContainer" parent="Columns/DetailsPanel/Details/Prep/Columns/Supplies"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="FormationHeader" type="Label" parent="Columns/DetailsPanel/Details/Prep"]
+layout_mode = 2
+tooltip_text = "Нажмите двух героев, чтобы поменять их местами"
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "СТРОЙ"
+
+[node name="Formation" parent="Columns/DetailsPanel/Details/Prep" instance=ExtResource("2_0kd3l")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Mission" type="VBoxContainer" parent="Columns/DetailsPanel/Details"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MissionHeader" type="Label" parent="Columns/DetailsPanel/Details/Mission"]
+layout_mode = 2
+tooltip_text = "Черты героев меняются в отряде, вкладка «Черты»"
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "ДЕЛЕГАЦИЯ"
+
+[node name="Cards" type="HBoxContainer" parent="Columns/DetailsPanel/Details/Mission"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DelCard0" parent="Columns/DetailsPanel/Details/Mission/Cards" instance=ExtResource("7_card")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="DelCard1" parent="Columns/DetailsPanel/Details/Mission/Cards" instance=ExtResource("7_card")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="Columns/DetailsPanel/Details"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Footer" type="HBoxContainer" parent="Columns/DetailsPanel/Details"]
+layout_mode = 2
+alignment = 2
+
+[node name="DepartButton" type="Button" parent="Columns/DetailsPanel/Details/Footer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 52)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonPrimary"
+text = "Выступить"

@@ -1,0 +1,180 @@
+{
+  "id": "party_inn",
+  "category": "town/buildings",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/buildings\\party_inn.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\party_inn\\party_inn.blend",
+  "target_size_m": [
+    6.3,
+    5.7,
+    6.7
+  ],
+  "glb_size_m": [
+    6.09,
+    6.18,
+    6.89
+  ],
+  "size_deviation": [
+    -0.033,
+    0.084,
+    0.028
+  ],
+  "bounds_min": [
+    -2.78,
+    -3.43,
+    0.0
+  ],
+  "bounds_max": [
+    3.31,
+    2.75,
+    6.89
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 12706,
+  "source_triangles": 12706,
+  "visual_mesh_nodes": 7,
+  "unique_meshes": 7,
+  "materials": [
+    "env_brass",
+    "env_cloth_navy",
+    "env_iron",
+    "env_lantern_glow",
+    "env_leaves_bush",
+    "env_petal_cream",
+    "env_plaster",
+    "env_roof_blue",
+    "env_soil_dark",
+    "env_stone_block",
+    "env_stone_grey",
+    "env_timber",
+    "env_window_glow",
+    "env_wood_dark",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "party_inn_bay_col-convcolonly",
+    "party_inn_body_col-convcolonly",
+    "party_inn_porch_posts_col-convcolonly"
+  ],
+  "glb_nodes": 11,
+  "glb_kb": 1881,
+  "glb_materials": [
+    [
+      "env_timber",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_block",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cloth_navy",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_roof_blue",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_plaster",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_window_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_soil_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_leaves_bush",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_petal_cream",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_lantern_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 14,
+  "empties": [
+    "party_inn.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [
+    {
+      "part": "party_inn_door_leaf",
+      "axis": "local Z (hinge)",
+      "pivot": [
+        -0.325,
+        -1.935,
+        0.5
+      ],
+      "moves": true,
+      "max_z_before": 2.35,
+      "max_z_after": 2.35
+    },
+    {
+      "part": "party_inn_hanging_sign",
+      "axis": "local X (swing)",
+      "pivot": [
+        2.742,
+        -1.0,
+        3.2
+      ],
+      "moves": true,
+      "max_z_before": 3.2,
+      "max_z_after": 3.207
+    }
+  ],
+  "parts": [
+    "party_inn_balcony",
+    "party_inn_banners",
+    "party_inn_door_leaf",
+    "party_inn_hanging_sign",
+    "party_inn_roof",
+    "party_inn_sign_bracket",
+    "party_inn_walls"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

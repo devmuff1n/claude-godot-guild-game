@@ -1,0 +1,69 @@
+{
+  "id": "field_rock",
+  "category": "landscape",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\environment\\landscape\\field_rock.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\field_rock\\field_rock.blend",
+  "target_size_m": [
+    1.35,
+    1.1,
+    0.9
+  ],
+  "glb_size_m": [
+    1.35,
+    1.1,
+    0.9
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bounds_min": [
+    -0.675,
+    -0.55,
+    0.0
+  ],
+  "bounds_max": [
+    0.675,
+    0.55,
+    0.9
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1280,
+  "source_triangles": 1280,
+  "visual_mesh_nodes": 1,
+  "unique_meshes": 1,
+  "materials": [
+    "env_moss",
+    "env_stone_plates"
+  ],
+  "collision_nodes": [
+    "field_rock_stone_col-convcolonly"
+  ],
+  "glb_nodes": 3,
+  "glb_kb": 288,
+  "glb_materials": [
+    [
+      "env_stone_plates",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "field_rock.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "field_rock_stone_mesh"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-26 10:11"
+}

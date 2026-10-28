@@ -1,0 +1,139 @@
+{
+  "id": "stone_well",
+  "category": "town/props",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\town/props\\stone_well.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\stone_well\\stone_well.blend",
+  "target_size_m": [
+    2.4,
+    2.2,
+    2.7
+  ],
+  "glb_size_m": [
+    2.54,
+    2.038,
+    2.92
+  ],
+  "size_deviation": [
+    0.058,
+    -0.074,
+    0.081
+  ],
+  "bounds_min": [
+    -1.27,
+    -1.019,
+    -0.01
+  ],
+  "bounds_max": [
+    1.27,
+    1.019,
+    2.91
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 3394,
+  "source_triangles": 3394,
+  "visual_mesh_nodes": 6,
+  "unique_meshes": 6,
+  "materials": [
+    "env_brass",
+    "env_eye",
+    "env_iron",
+    "env_roof_red",
+    "env_rope",
+    "env_stone_block",
+    "env_timber",
+    "env_water",
+    "env_wood_dark",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "stone_well_post_0_col-convcolonly",
+    "stone_well_post_1_col-convcolonly",
+    "stone_well_ring_col-convcolonly"
+  ],
+  "glb_nodes": 10,
+  "glb_kb": 938,
+  "glb_materials": [
+    [
+      "env_timber",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_roof_red",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_block",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_eye",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_water",
+      "BLEND",
+      true
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 10,
+  "empties": [
+    "stone_well.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "stone_well_rope_bucket: 1 degenerate faces"
+  ],
+  "motion_test": [
+    {
+      "part": "stone_well_windlass",
+      "axis": "local X (windlass)",
+      "pivot": [
+        0.0,
+        0.0,
+        1.4
+      ],
+      "moves": true,
+      "max_z_before": 1.495,
+      "max_z_after": 1.493
+    }
+  ],
+  "parts": [
+    "stone_well_posts",
+    "stone_well_roof",
+    "stone_well_rope_bucket",
+    "stone_well_stone_ring",
+    "stone_well_water_surface",
+    "stone_well_windlass"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-28 16:54"
+}

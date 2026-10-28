@@ -1,0 +1,151 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/JournalView.gd" id="1_hjxox"]
+
+[node name="JournalView" type="HBoxContainer" unique_id=1046606847]
+theme_override_constants/separation = 14
+script = ExtResource("1_hjxox")
+
+[node name="List" type="VBoxContainer" parent="." unique_id=1531827857]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Scroll" type="ScrollContainer" parent="." unique_id=399036640]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Body" type="VBoxContainer" parent="Scroll" unique_id=756738886]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Dossier" type="VBoxContainer" parent="Scroll/Body" unique_id=2143758481]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="Scroll/Body/Dossier" unique_id=1710303031]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Portrait" type="TextureRect" parent="Scroll/Body/Dossier/Header" unique_id=1507060863]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Info" type="VBoxContainer" parent="Scroll/Body/Dossier/Header" unique_id=1770180866]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Name" type="Label" parent="Scroll/Body/Dossier/Header/Info" unique_id=1556903250]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Title2Label"
+
+[node name="Role" type="Label" parent="Scroll/Body/Dossier/Header/Info" unique_id=1407370264]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+
+[node name="Bio" type="Label" parent="Scroll/Body/Dossier/Header/Info" unique_id=470120232]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+autowrap_mode = 3
+
+[node name="Burnout" type="Label" parent="Scroll/Body/Dossier/Header/Info" unique_id=1359411641]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Растёт от тяжёлых боёв и походов, снижается после личного вечера. На характеристики не влияет."
+mouse_filter = 1
+theme_type_variation = &"SmallLabel"
+
+[node name="Sep" type="HSeparator" parent="Scroll/Body/Dossier" unique_id=84513372]
+layout_mode = 2
+
+[node name="CompanionBox" type="VBoxContainer" parent="Scroll/Body/Dossier" unique_id=2025674101]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RelAiden" type="VBoxContainer" parent="Scroll/Body/Dossier/CompanionBox" unique_id=1023954838]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Sep1" type="HSeparator" parent="Scroll/Body/Dossier/CompanionBox" unique_id=1505005547]
+layout_mode = 2
+
+[node name="PrefsHeader" type="Label" parent="Scroll/Body/Dossier/CompanionBox" unique_id=1616753901]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ПРЕДПОЧТЕНИЯ"
+
+[node name="Prefs" type="VBoxContainer" parent="Scroll/Body/Dossier/CompanionBox" unique_id=1454602828]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Sep2" type="HSeparator" parent="Scroll/Body/Dossier/CompanionBox" unique_id=1964825412]
+layout_mode = 2
+
+[node name="FactsHeader" type="Label" parent="Scroll/Body/Dossier/CompanionBox" unique_id=370300819]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ИЗВЕСТНЫЕ ФАКТЫ"
+
+[node name="Facts" type="VBoxContainer" parent="Scroll/Body/Dossier/CompanionBox" unique_id=1726449073]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Sep3" type="HSeparator" parent="Scroll/Body/Dossier/CompanionBox" unique_id=1527594970]
+layout_mode = 2
+
+[node name="OthersHeader" type="Label" parent="Scroll/Body/Dossier/CompanionBox" unique_id=1996026027]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ОТНОШЕНИЯ С ДРУГИМИ"
+
+[node name="Others" type="VBoxContainer" parent="Scroll/Body/Dossier/CompanionBox" unique_id=621630352]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AidenBox" type="VBoxContainer" parent="Scroll/Body/Dossier" unique_id=1567290844]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AidenHeader" type="Label" parent="Scroll/Body/Dossier/AidenBox" unique_id=241252224]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ОТНОШЕНИЯ ЭЙДЕНА"
+
+[node name="AidenRels" type="VBoxContainer" parent="Scroll/Body/Dossier/AidenBox" unique_id=1680677620]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Pairs" type="VBoxContainer" parent="Scroll/Body" unique_id=77880352]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PairsTitle" type="Label" parent="Scroll/Body/Pairs" unique_id=1141105763]
+layout_mode = 2
+theme_type_variation = &"Title2Label"
+text = "Отношения в отряде"
+
+[node name="PairList" type="VBoxContainer" parent="Scroll/Body/Pairs" unique_id=1571116064]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16

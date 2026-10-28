@@ -1,0 +1,184 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/expedition/ExpeditionTopBar.gd" id="1_bar"]
+[ext_resource type="Script" path="res://scripts/ui/RouteBar.gd" id="2_route"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="3_pill"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="4_icon"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_order"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_speed"]
+
+[node name="ExpeditionTopBar" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 84)
+anchor_right = 1.0
+offset_bottom = 84.0
+theme_type_variation = &"PanelTop"
+script = ExtResource("1_bar")
+
+[node name="Box" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Left" type="VBoxContainer" parent="Box"]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="TitleLabel" type="Label" parent="Box/Left"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"Title2Label"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Row" type="HBoxContainer" parent="Box/Left"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Purse" parent="Box/Left/Row" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Походный кошелёк: остаток вернётся в казну"
+icon_kind = "purse"
+value_width = 36.0
+
+[node name="TimePill" parent="Box/Left/Row" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+icon_kind = "sun"
+value_width = 54.0
+
+[node name="AdvButton" type="Button" parent="Box/Left/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 2
+tooltip_text = "Сблизиться с общей целью или ближайшим врагом — чтобы достать дальних лучников и знахарей. (C)"
+focus_mode = 0
+theme_type_variation = &"ButtonChip"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_order")
+text = "К цели"
+
+[node name="HoldButton" type="Button" parent="Box/Left/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 2
+tooltip_text = "Держать строй: задний ряд защищён, ближний бой делает лишь шаг навстречу. (N)"
+focus_mode = 0
+theme_type_variation = &"ButtonChip"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_order")
+text = "В строй"
+
+[node name="Route" type="Control" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 66)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 1
+script = ExtResource("2_route")
+
+[node name="Right" type="HBoxContainer" parent="Box"]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 4
+alignment = 2
+
+[node name="Speed05" type="Button" parent="Box/Right"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 32)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Скорость боя"
+focus_mode = 0
+theme_type_variation = &"ButtonChip"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_speed")
+text = "×0,5"
+
+[node name="Speed1" type="Button" parent="Box/Right"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 32)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Скорость боя"
+focus_mode = 0
+theme_type_variation = &"ButtonChip"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_speed")
+text = "×1"
+
+[node name="Speed15" type="Button" parent="Box/Right"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 32)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Скорость боя"
+focus_mode = 0
+theme_type_variation = &"ButtonChip"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_speed")
+text = "×1,5"
+
+[node name="Speed2" type="Button" parent="Box/Right"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 32)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Скорость боя"
+focus_mode = 0
+theme_type_variation = &"ButtonChip"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_speed")
+text = "×2"
+
+[node name="Gap" type="Control" parent="Box/Right"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="PauseButton" type="Button" parent="Box/Right"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(42, 36)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Пауза (Пробел)"
+focus_mode = 0
+theme_type_variation = &"ButtonIcon"
+
+[node name="PauseIcon" parent="Box/Right/PauseButton" instance=ExtResource("4_icon")]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 8.0
+offset_right = -11.0
+offset_bottom = -8.0
+mouse_filter = 2
+kind = "pause"
+
+[node name="MenuButton" type="Button" parent="Box/Right"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(42, 36)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Меню (Esc)"
+focus_mode = 0
+theme_type_variation = &"ButtonIcon"
+
+[node name="Icon" parent="Box/Right/MenuButton" instance=ExtResource("4_icon")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 8.0
+offset_right = -11.0
+offset_bottom = -8.0
+mouse_filter = 2
+kind = "menu"
