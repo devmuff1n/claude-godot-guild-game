@@ -1,0 +1,77 @@
+{
+  "id": "obelisk",
+  "category": "prologue/cave",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/cave\\obelisk.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\obelisk\\obelisk.blend",
+  "target_size_m": [
+    1.3,
+    1.3,
+    3.2
+  ],
+  "glb_size_m": [
+    1.384,
+    1.451,
+    3.317
+  ],
+  "size_deviation": [
+    0.065,
+    0.116,
+    0.037
+  ],
+  "bounds_min": [
+    -0.621,
+    -0.725,
+    -0.025
+  ],
+  "bounds_max": [
+    0.763,
+    0.725,
+    3.292
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 560,
+  "source_triangles": 560,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_bark_cursed",
+    "env_obelisk_glow",
+    "env_obelisk_stone"
+  ],
+  "collision_nodes": [
+    "obelisk_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 269,
+  "glb_materials": [
+    [
+      "env_obelisk_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark_cursed",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_obelisk_stone",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "obelisk.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "obelisk_glow",
+    "obelisk_roots",
+    "obelisk_stone"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

@@ -1,0 +1,78 @@
+{
+  "id": "cave_path_tile",
+  "category": "prologue/cave",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/cave\\cave_path_tile.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\cave_path_tile\\cave_path_tile.blend",
+  "target_size_m": [
+    6,
+    6,
+    0.2
+  ],
+  "glb_size_m": [
+    6.0,
+    6.0,
+    0.303
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.515
+  ],
+  "bounds_min": [
+    -3.0,
+    -3.0,
+    -0.2
+  ],
+  "bounds_max": [
+    3.0,
+    3.0,
+    0.103
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 2018,
+  "source_triangles": 2018,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_cave_floor_ref",
+    "env_cave_rock_ref",
+    "env_stone_plates"
+  ],
+  "collision_nodes": [
+    "cave_path_tile_ground_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 1182,
+  "glb_materials": [
+    [
+      "env_stone_plates",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cave_rock_ref",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cave_floor_ref",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "cave_path_tile.001",
+    "cave_path_tile_snap_east.001",
+    "cave_path_tile_snap_west.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "cave_path_tile_flagstones",
+    "cave_path_tile_floor"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 10:48"
+}

@@ -97,6 +97,9 @@ func _migrate() -> void:
 	for k in fresh.keys():
 		if not state.has(k):
 			state[k] = fresh[k]
+	for id in state.get("heroes", {}).keys():
+		# Ручное распределение очков атрибутов убрано: рост атрибутов теперь целиком в DB.HEROES → grow
+		state["heroes"][id].erase("alloc")
 	_unequip_forbidden()
 
 ## Снять вещи, которые герой по правилам не носит (правила брони менялись) — в кладовую или в очередь выдачи.
@@ -121,7 +124,7 @@ func _fresh_state() -> Dictionary:
 		"formation": ["marek", "aiden", "neris", "elira"],
 		"relations": {}, "knowledge": {"facts": {}, "prefs": {}}, "topics_done": {}, "pair_done": {},
 		"pending_choice": [], "expedition": null, "last_result": {}, "news": [], "saved_at": "",
-		"intro_seen": false, "ending_seen": false, "diplomacy": null,
+		"intro_seen": false, "ending_seen": false, "diplomacy": null, "cutscenes_seen": {},
 	}
 	var prev := state
 	state = st  # next_uid нужен для генерации
@@ -142,8 +145,8 @@ func _fresh_state() -> Dictionary:
 			eq[sl] = null
 		for g in start_gear[h]:
 			eq[g[1]] = Items.make(g[0], 1, "common", r)
-		st["heroes"][h] = {"level": 1, "xp": 0, "job": 1, "jxp": 0, "perks": {1: "", 2: "", 3: ""}, "equip": eq, "burnout": 0}
-	st["storage"][0] = Items.make("dagger_skin", 1, "common", r)
+		st["heroes"][h] = {"level": 1, "xp": 0, "job": 1, "jxp": 0, "perks": {1: "", 2: "", 3: ""}, "equip": eq}
+	st["storage"][0] = Items.make("leather_hands", 1, "common", r)
 	st["storage"][1] = Items.make("cloth_hands", 1, "uncommon", r)
 	st["storage"][2] = Items.make("ring_copper", 1, "common", r)
 	st["storage"][3] = Items.make("leather_head", 1, "common", r)
@@ -163,6 +166,10 @@ func hero(id: String) -> Dictionary:
 func derived(id: String) -> Dictionary:
 	var h := hero(id)
 	return Stats.derive(id, int(h["level"]), h["equip"])
+
+## Собственные атрибуты героя (растут сами с уровнем), без бонусов вещей
+func own_stats(id: String) -> Dictionary:
+	return Stats.natural(id, int(hero(id)["level"]))
 
 func perks_of(id: String) -> Dictionary:
 	return hero(id)["perks"]
@@ -221,6 +228,7 @@ func _apply_levels() -> Array:
 	for id in DB.HERO_IDS:
 		var h := hero(id)
 		var before := int(h["level"])
+		var d0 := _growth_stats(id)
 		while int(h["level"]) < DB.MAX_LEVEL and int(h["xp"]) >= DB.xp_to_next(int(h["level"])):
 			h["xp"] = int(h["xp"]) - DB.xp_to_next(int(h["level"]))
 			h["level"] = int(h["level"]) + 1
@@ -230,8 +238,16 @@ func _apply_levels() -> Array:
 				var l := int(DB.ABILITIES[ab]["lvl"])
 				if l > before and l <= int(h["level"]):
 					new_ab.append(DB.ABILITIES[ab]["name"])
-			ups.append({"hero": id, "from": before, "to": int(h["level"]), "abilities": new_ab})
+			ups.append({"hero": id, "from": before, "to": int(h["level"]), "abilities": new_ab, "before": d0, "after": _growth_stats(id)})
 	return ups
+
+## Параметры для экрана повышения уровня («было → стало»)
+func _growth_stats(id: String) -> Dictionary:
+	var d := derived(id)
+	var out := {}
+	for k in ["max_hp", "max_mp", "dmg_min", "dmg_max", "armor", "sp", "sta", "str", "agi", "int"]:
+		out[k] = int(d.get(k, 0))
+	return out
 
 func _add_jxp(id: String, amount: int) -> Array:
 	var h := hero(id)
@@ -330,6 +346,52 @@ func equip_from_storage(id: String, idx: int, sl: String = "") -> String:
 	changed.emit()
 	return ""
 
+## Насколько вещь усилит героя: {slot, gain} — лучший слот (у колец два) и прирост «силы» в долях.
+## slot == "" — надеть нельзя.
+func upgrade_gain(id: String, item: Dictionary) -> Dictionary:
+	var h := hero(id)
+	var lvl := int(h["level"])
+	var eq: Dictionary = h["equip"]
+	var slots := ["ring1", "ring2"] if Items.base_of(item).get("slot", "") == "ring" else [auto_slot(id, item)]
+	var cur := Stats.power(id, lvl, eq)
+	var best := {"slot": "", "gain": -1.0}
+	for sl in slots:
+		if Items.equip_problem(id, lvl, item, sl, eq) != "":
+			continue
+		var e2 := eq.duplicate()
+		e2[sl] = item
+		if sl == "main" and int(Items.base_of(item).get("hands", 1)) == 2:
+			e2["off"] = null
+		var g := Stats.power(id, lvl, e2) / maxf(1.0, cur) - 1.0
+		if g > float(best["gain"]):
+			best = {"slot": sl, "gain": g}
+	return best
+
+## «Надеть лучшее»: по очереди надевает из кладовой вещи, которые заметно усиливают героя. Возвращает число замен.
+func equip_best(id: String) -> int:
+	if state["expedition"] != null:
+		return 0
+	var n := 0
+	var guard := 0
+	var again := true
+	while again and guard < 40:
+		again = false
+		guard += 1
+		var best_i := -1
+		var best := {"slot": "", "gain": 0.01}
+		for i in storage().size():
+			var it = storage()[i]
+			if it == null or not Items.hero_can_use_type(id, it):
+				continue
+			var g := upgrade_gain(id, it)
+			if g["slot"] != "" and float(g["gain"]) > float(best["gain"]):
+				best = g
+				best_i = i
+		if best_i >= 0 and equip_from_storage(id, best_i, best["slot"]) == "":
+			n += 1
+			again = true
+	return n
+
 func unequip(id: String, sl: String) -> String:
 	if state["expedition"] != null:
 		return "Снаряжение меняют в деревне."
@@ -378,7 +440,7 @@ func _gen_shop(st: Dictionary, r: RandomNumberGenerator) -> void:
 			var lvl: int = int(st["heroes"][hid]["level"]) if st["heroes"].has(hid) else 1
 			it = Items.item_for_hero(hid, lvl + 1, ilvl, r, quality - 1.0)
 		else:
-			it = Items.random_item(ilvl, r, quality)
+			it = Items.random_item(ilvl, r, quality, DB.HERO_IDS)
 		stock.append(it)
 	st["shop"]["stock"] = stock
 	st["shop"]["gen"] = int(st["shop"].get("gen", 0)) + 1
@@ -484,6 +546,28 @@ func buyback(idx: int) -> String:
 	changed.emit()
 	return ""
 
+## Перековка: новые случайные свойства вещи из кладовой. Цена растёт с каждой попыткой (Items.reroll_price).
+## Свойства подкручиваются под случайного героя, который может носить вещь.
+func reroll_storage(idx: int) -> String:
+	var st := storage()
+	if idx < 0 or idx >= st.size() or st[idx] == null:
+		return "Выберите вещь в кладовой."
+	var it: Dictionary = st[idx]
+	if not Items.can_reroll(it):
+		return "У обычной вещи нет свойств для перековки."
+	var p := Items.reroll_price(it)
+	if int(state["treasury"]) < p:
+		return "Не хватает денег в казне."
+	state["treasury"] = int(state["treasury"]) - p
+	var who := []
+	for h in DB.HERO_IDS:
+		if Items.hero_can_use_type(h, it):
+			who.append(h)
+	Items.reroll(it, rng, who[rng.randi_range(0, who.size() - 1)] if not who.is_empty() else "")
+	save()
+	changed.emit()
+	return ""
+
 func choose_pending(idx: int) -> void:
 	var pc: Array = state["pending_choice"]
 	if idx < 0 or idx >= pc.size():
@@ -529,7 +613,7 @@ func start_expedition(cid: String, opts: Dictionary) -> String:
 		xp0[id] = int(hero(id)["xp"])
 	var route: Array = []
 	if c.get("outpost", false):
-		route = [{"type": "outpost", "name": "Застава"}]
+		route = [{"type": "outpost", "name": c.get("outpost_name", "Застава")}]
 	else:
 		route = c["route"].duplicate(true)
 	for n in route:
@@ -543,7 +627,7 @@ func start_expedition(cid: String, opts: Dictionary) -> String:
 		"flags": {}, "battle": null, "battle_ctx": {}, "event_result": "", "camp": {}, "road_shop": [],
 		"wagon": {"hp": 500.0, "max": 500.0} if c.get("escort", false) else null,
 		"kits": int(c.get("kits", 0)) + int(state["potions"].get("kit", 0)) if c.get("escort", false) else 0,
-		"gate": {"hp": 600.0, "max": 600.0} if c.get("outpost", false) else null,
+		"gate": {"hp": float(c.get("gate_hp", 600)), "max": float(c.get("gate_hp", 600))} if c.get("outpost", false) else null,
 		"materials": int(c.get("materials", 0)), "rel_battle": {}, "boss_time": -1.0, "chest_ok": true,
 		"xp_gain": 0, "log": [],
 	}
@@ -579,6 +663,7 @@ func battle_config(groups: Array, ambush: Array, boss: bool, chest: bool, champi
 		"level": int(c["level"]), "mode": "outpost" if c.get("outpost", false) else "route",
 		"wagon": e["wagon"], "gate": e["gate"], "chest": chest, "waves": c.get("waves", []),
 		"kits": int(e["kits"]), "materials": int(e["materials"]), "night": current_time() == "night", "boss": boss,
+		"outpost_ambush": c.get("outpost_ambush", ["wolf"]), "shade_k": shade_k(),
 		"potions": {"potion_hp": int(state["potions"]["potion_hp"]), "potion_mp": int(state["potions"]["potion_mp"])}}
 	if not champion.is_empty():
 		cfg["champion"] = champion
@@ -611,7 +696,7 @@ func absorb_battle(sim: BattleSim) -> void:
 	e["materials"] = int(st["materials"])
 	var c: Dictionary = st["counters"]
 	var ec: Dictionary = e["counters"]
-	for k in ["potions", "healing", "wards", "taunts", "interrupts", "curses", "spell_dmg", "xp", "coins", "champions"]:
+	for k in ["potions", "healing", "wards", "taunts", "interrupts", "curses", "spell_dmg", "xp", "xp_cut", "coins", "champions"]:
 		ec[k] = int(ec.get(k, 0)) + int(c.get(k, 0))
 	for k in c["ko"].keys():
 		ec["ko"][k] = true
@@ -619,6 +704,13 @@ func absorb_battle(sim: BattleSim) -> void:
 		ec["dmg_taken"][k] = int(ec["dmg_taken"].get(k, 0)) + int(c["dmg_taken"][k])
 	for k in c["kills"].keys():
 		ec["kills"][k] = int(ec["kills"].get(k, 0)) + int(c["kills"][k])
+	if not ec.has("by_hero"):
+		ec["by_hero"] = {}
+	for k in c.get("by_hero", {}).keys():
+		var dst: Dictionary = ec["by_hero"].get(k, {"dmg": 0, "heal": 0, "absorbed": 0, "int": 0})
+		for f in ["dmg", "heal", "absorbed", "int"]:
+			dst[f] = int(dst.get(f, 0)) + int(round(float(c["by_hero"][k].get(f, 0))))
+		ec["by_hero"][k] = dst
 	# Опыт начисляется сразу, уровень — после попытки
 	for id in DB.HERO_IDS:
 		hero(id)["xp"] = int(hero(id)["xp"]) + int(c["xp"])
@@ -632,13 +724,6 @@ func absorb_battle(sim: BattleSim) -> void:
 		if int(c["heal_by"][k]) >= 60 and int(e["rel_battle"].get(k, 0)) < 3:
 			e["rel_battle"][k] = int(e["rel_battle"].get(k, 0)) + 1
 			change_rel("aiden", k, 1, 0, "%s благодарна(ен) за лечение в бою." % DB.hero_name(k))
-	# Выгорание
-	for u in st["units"]:
-		if u["side"] == "hero":
-			if not u["alive"]:
-				hero(u["key"])["burnout"] = min(10, int(hero(u["key"])["burnout"]) + 2)
-			elif u["hp"] < u["max_hp"] * 0.3:
-				hero(u["key"])["burnout"] = min(10, int(hero(u["key"])["burnout"]) + 1)
 
 func walk_regen(dt: float) -> void:
 	var e := ex()
@@ -793,6 +878,43 @@ func current_time() -> String:
 	var e := ex()
 	return time_at(int(e.get("node", 0))) if not e.is_empty() else "day"
 
+## Кат-сцена на текущем отрезке пути (DB.CUTSCENES) или, после последнего пункта, сцена-итог; если её ещё не видели: id или "".
+func cutscene_due() -> String:
+	var e := ex()
+	if e.is_empty():
+		return ""
+	var id := DB.cutscene_for(String(e["cid"]), int(e["node"]))
+	if id == "" or state.get("cutscenes_seen", {}).has(id):
+		return ""
+	return id
+
+## Разбитые обелиски пещер ослабляют духов зверей: −10% здоровья за каждый.
+func obelisks_broken() -> int:
+	var n := 0
+	for cid in DB.SIDE_ORDER:
+		if DB.CONTRACTS[cid].get("cave", false) and int(state.get("completed", {}).get(cid, 0)) > 0:
+			n += 1
+	return n
+
+func shade_k() -> float:
+	return 1.0 - 0.1 * obelisks_broken()
+
+## Идущая кат-сцена похода: {id, step} или пусто.
+func story() -> Dictionary:
+	var e := ex()
+	return e.get("story", {}) if not e.is_empty() and e.get("story") is Dictionary else {}
+
+func set_story(id: String, step: int) -> void:
+	ex()["story"] = {"id": id, "step": step}
+	save()
+
+func end_story() -> void:
+	var st := story()
+	if not st.is_empty():
+		state["cutscenes_seen"][st["id"]] = 1
+	ex().erase("story")
+	save()
+
 func route_finished() -> bool:
 	var e := ex()
 	return int(e["node"]) >= e["route"].size()
@@ -860,8 +982,13 @@ func finish_expedition(kind: String) -> Dictionary:
 		res["purse_return"] = ret2
 		lines.append("Отряд отступил к деревне. Опыт сохранён (+%d каждому), оставшиеся деньги возвращены в казну." % int(e["xp_gain"]))
 		lines.append("Наград за победу нет.")
-		for id in DB.HERO_IDS:
-			hero(id)["burnout"] = min(10, int(hero(id)["burnout"]) + 1)
+		# Утешительный приз: одна обычная вещь чуть ниже уровня поручения, если отряд успел повоевать
+		if int(e["xp_gain"]) > 0:
+			var cons := Items.consolation_item(maxi(1, int(c["level"]) - 1), rng, DB.HERO_IDS)
+			res["items"].append(cons)
+			res["consolation"] = true
+			if not add_item(cons):
+				lines.append("Кладовая заполнена — %s в очереди выдачи." % Items.display_name(cons))
 		res["levels"] = _apply_levels()
 	else:
 		var first := contract_done_count(cid) == 0
@@ -932,7 +1059,7 @@ func finish_expedition(kind: String) -> Dictionary:
 		var champs := int(e["counters"].get("champions", 0))
 		for i in 2 + champs:
 			# За каждого побеждённого чемпиона — ещё одна вещь, получше обычной
-			var it := Items.random_item(clamp(ilvl + rng.randi_range(0, 1), 1, 10), rng, q + (1.0 if i >= 2 else 0.0))
+			var it := Items.random_item(clamp(ilvl + rng.randi_range(0, 1), 1, 10), rng, q + (1.0 if i >= 2 else 0.0), DB.HERO_IDS)
 			res["items"].append(it)
 			if not add_item(it):
 				lines.append("Кладовая заполнена — %s в очереди выдачи." % Items.display_name(it))
@@ -961,11 +1088,13 @@ func finish_expedition(kind: String) -> Dictionary:
 			if c.get("finale", false):
 				state["chapter_done"] = true
 				res["chapter_end"] = true
-		for id in DB.HERO_IDS:
-			hero(id)["burnout"] = min(10, int(hero(id)["burnout"]) + 1)
 		res["levels"] = _apply_levels()
 		_gen_shop(state, rng)
 		lines.append("Ассортимент лавки обновлён.")
+	res["by_hero"] = e["counters"].get("by_hero", {}).duplicate(true)
+	var cut := int(e["counters"].get("xp_cut", 0))
+	if kind != "abandon" and cut > 0:
+		lines.append("Опыт за врагов ниже уровнем отряда урезан: −%d" % cut)
 	res["unlocks"] = unlocks_since(snap)
 	if kind == "victory":
 		var nxt := next_story_contract()
@@ -1142,7 +1271,22 @@ func contract_twists(cid: String) -> Array:
 			out.append({"title": "Возможны опасные враги", "icon": "skull",
 				"tip": "Говорят, на этом пути видели кого-то пострашнее обычных врагов.\nЗа победу над ним — лишняя вещь в добыче."})
 			break
+	var f := contract_xp_factor(cid)
+	if f < 1.0:
+		out.append({"title": "Отряд сильнее", "icon": "xp",
+			"tip": "Отряд (ур. %d) выше врагов поручения (ур. %d): они падают быстрее,\nно опыта за них — %d%% от обычного." % [int(party_level()), int(c["level"]), int(round(f * 100.0))]})
 	return out
+
+## Средний уровень отряда
+func party_level() -> float:
+	var sum := 0.0
+	for id in DB.HERO_IDS:
+		sum += float(hero(id)["level"])
+	return sum / DB.HERO_IDS.size()
+
+## Доля опыта за врагов поручения при нынешнем уровне отряда (DB.xp_factor)
+func contract_xp_factor(cid: String) -> float:
+	return DB.xp_factor(party_level(), int(DB.CONTRACTS[cid]["level"]))
 
 ## Подсказка к рангу: название ранга, описание, опасность для своего уровня и самый тяжёлый бой.
 func threat_tip(cid: String) -> String:
@@ -1276,22 +1420,18 @@ func personal_evening(hid: String, gift: String) -> String:
 	state["backpack"][gift] = int(state["backpack"][gift]) - 1
 	if int(state["backpack"][gift]) <= 0:
 		state["backpack"].erase(gift)
-	var h := hero(hid)
 	var lines: Dictionary = DB.EVENING_LINES[hid]
 	var out := ""
 	if DB.PREFERENCES[hid] == gift:
 		change_rel("aiden", hid, 9, 0, "Личный вечер: %s пришлись по душе." % DB.consumable_name(gift))
-		h["burnout"] = max(0, int(h["burnout"]) - 4)
 		state["knowledge"]["prefs"][hid][gift] = "confirmed"
-		out = lines["love"] + "\n\nПредпочтение подтверждено. Дружба ↑↑, выгорание заметно спало."
+		out = lines["love"] + "\n\nПредпочтение подтверждено. Дружба ↑↑."
 	elif gift in DB.LIKES_OK[hid]:
 		change_rel("aiden", hid, 4, 0, "Личный вечер: %s." % DB.consumable_name(gift))
-		h["burnout"] = max(0, int(h["burnout"]) - 2)
 		state["knowledge"]["prefs"][hid][gift] = "ok"
-		out = lines["ok"] + "\n\nНеплохо, но не любимое. Дружба ↑, выгорание спало."
+		out = lines["ok"] + "\n\nНеплохо, но не любимое. Дружба ↑."
 	else:
 		change_rel("aiden", hid, 1, 0, "Личный вечер: %s — не то." % DB.consumable_name(gift))
-		h["burnout"] = max(0, int(h["burnout"]) - 1)
 		state["knowledge"]["prefs"][hid][gift] = "no"
 		out = lines["meh"] + "\n\nНе угадал. Журнал отметил это."
 	e["camp"]["evening"] = true

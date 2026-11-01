@@ -31,6 +31,10 @@ func _ready() -> void:
 		side_tab = "social"
 		refresh())
 	%QueueButton.pressed.connect(func(): Game.take_queue())
+	%BestButton.pressed.connect(func():
+		var n := Game.equip_best(hero_id)
+		sel_storage = -1
+		Game.notify("Надето вещей: %d." % n if n > 0 else "В кладовой нет вещей лучше надетых."))
 	%EquipButton.pressed.connect(func():
 		_toast(Game.equip_from_storage(hero_id, sel_storage))
 		sel_storage = -1)
@@ -41,7 +45,7 @@ func _ready() -> void:
 	%Doll.slot_right_clicked.connect(func(sl: String): _toast(Game.unequip(hero_id, sl)))
 	for i in DB.STORAGE_SIZE:
 		var s2: ItemSlot = ITEM_SLOT.instantiate()
-		s2.custom_minimum_size = Vector2(52, 52)
+		s2.custom_minimum_size = Vector2(50, 50)
 		s2.drop_cb = _on_drop
 		# Ячейки показывают только вещи выбранного героя, поэтому номер ячейки кладовой берём из ctx
 		s2.clicked.connect(func(sl: ItemSlot):
@@ -101,10 +105,6 @@ func _fill_center() -> void:
 	for a in hd["armors"]:
 		at.append(DB.ARMOR_TYPE_NAMES[a])
 	%HeroName.tooltip_text = "%s\n\nОружие: %s\nБроня: %s" % [hd["bio"], ", ".join(wt), ", ".join(at)]
-	var bo := int(h["burnout"])
-	%Pips.value = bo
-	%Pips.color = UIK.GREEN if bo < 3 else (UIK.GOLD if bo < 6 else UIK.RED)
-	%Burnout.tooltip_text = "Выгорание %d/10 — %s\nРастёт от тяжёлых походов, снижается после личного вечера." % [bo, "спокоен(на)" if bo < 3 else ("устал(а)" if bo < 6 else "на пределе")]
 	%XpBar.set_val(int(h["xp"]), DB.xp_to_next(int(h["level"])), "Base %d · %d/%d XP" % [int(h["level"]), int(h["xp"]), DB.xp_to_next(int(h["level"]))])
 	%JobBar.set_val(int(h["jxp"]), DB.jxp_to_next(int(h["job"])), "Job %d · %d/%d JXP" % [int(h["job"]), int(h["jxp"]), DB.jxp_to_next(int(h["job"]))])
 	%Doll.show_hero(hero_id)
@@ -145,6 +145,7 @@ func _fill_center() -> void:
 	%StorageTitle.mouse_filter = Control.MOUSE_FILTER_PASS
 	%StorageTitle.tooltip_text = ("Скрыто вещей, которые %s не носит: %d" % [DB.hero_name(hero_id), hidden]) if hidden > 0 else ""
 	var slots := %StorageGrid.get_children()
+	var any_up := false
 	for j in slots.size():
 		var s2: ItemSlot = slots[j]
 		s2.visible = j < shown.size()
@@ -154,16 +155,20 @@ func _fill_center() -> void:
 		var i: int = shown[j]
 		var it3 = st[i]
 		s2.dim = false
+		s2.upgrade = false
 		s2.tip_hero = hero_id
 		s2.tip_note = ""
 		if it3 != null:
 			var prob2 := Game.equip_problem(hero_id, it3, Game.auto_slot(hero_id, it3))
 			s2.dim = prob2 != ""
-			# Невыполненные требования и так красные в подсказке; иная причина — отдельной красной строкой
+			s2.upgrade = prob2 == "" and float(Game.upgrade_gain(hero_id, it3)["gain"]) > 0.01
+			any_up = any_up or s2.upgrade
+			# Нехватку уровня и так видно красным в подсказке; иная причина — отдельной красной строкой
 			if prob2 != "" and Items.meets_requirements(hero_id, int(h["level"]), it3):
 				s2.tip_note = prob2
 		s2.setup(it3, {"kind": "storage", "index": i})
 		s2.selected = i == sel_storage
+	%BestButton.disabled = not any_up
 
 func _on_drop(from: Dictionary, to: Dictionary) -> void:
 	if from["kind"] == "storage" and to["kind"] == "storage":

@@ -14,14 +14,16 @@ func _sim(groups: Array, ambush := []) -> BattleSim:
 	sim.setup(Game.battle_config(groups, ambush, false, false))
 	return sim
 
+## Минимальный зазор между стоящими героями. Пара, где один обходит другого сбоку (passing), не считается:
+## там сближение задумано.
 func _min_hero_gap(sim: BattleSim) -> float:
-	var xs := []
-	for h in sim.alive_of("hero"):
-		xs.append(float(h["x"]))
-	xs.sort()
+	var hs: Array = sim.alive_of("hero").duplicate()
+	hs.sort_custom(func(a, b): return a["x"] < b["x"])
 	var m := 1e9
-	for i in range(1, xs.size()):
-		m = min(m, xs[i] - xs[i - 1])
+	for i in range(1, hs.size()):
+		if int(hs[i].get("passing", 0)) != 0 or int(hs[i - 1].get("passing", 0)) != 0:
+			continue
+		m = min(m, float(hs[i]["x"]) - float(hs[i - 1]["x"]))
 	return m
 
 func _ready() -> void:

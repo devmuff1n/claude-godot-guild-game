@@ -19,7 +19,8 @@ func show_choices(ev: Dictionary, purse: int, hp_pots: int, mp_pots: int) -> voi
 	%PotHp.set_value(str(hp_pots))
 	%PotMp.set_value(str(mp_pots))
 	%Resources.visible = true
-	%Footer.visible = false
+	%FightButton.visible = false
+	%NextButton.visible = false
 	UIK.clear(%Choices)
 	%Choices.visible = true
 	for ch in ev["choices"]:

@@ -1,0 +1,82 @@
+{
+  "id": "drying_rack",
+  "category": "prologue/hamlet",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/hamlet\\drying_rack.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\drying_rack\\drying_rack.blend",
+  "target_size_m": [
+    2.6,
+    1.0,
+    2.0
+  ],
+  "glb_size_m": [
+    2.6,
+    0.984,
+    1.92
+  ],
+  "size_deviation": [
+    0.0,
+    -0.016,
+    -0.04
+  ],
+  "bounds_min": [
+    -1.3,
+    -0.492,
+    -0.01
+  ],
+  "bounds_max": [
+    1.3,
+    0.492,
+    1.91
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 456,
+  "source_triangles": 456,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_liquid_tan",
+    "env_rope",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "drying_rack_rack_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 258,
+  "glb_materials": [
+    [
+      "env_liquid_tan",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "drying_rack.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "drying_rack_fish",
+    "drying_rack_frame"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

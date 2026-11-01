@@ -1,0 +1,78 @@
+{
+  "id": "haystack",
+  "category": "prologue/farm",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/farm\\haystack.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\haystack\\haystack.blend",
+  "target_size_m": [
+    2.4,
+    2.1,
+    2.9
+  ],
+  "glb_size_m": [
+    2.31,
+    2.131,
+    2.902
+  ],
+  "size_deviation": [
+    -0.037,
+    0.015,
+    0.001
+  ],
+  "bounds_min": [
+    -1.05,
+    -1.065,
+    -0.002
+  ],
+  "bounds_max": [
+    1.26,
+    1.065,
+    2.9
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 472,
+  "source_triangles": 472,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_iron",
+    "env_thatch_ref",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "haystack_hay_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 691,
+  "glb_materials": [
+    [
+      "env_thatch_ref",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 3,
+  "empties": [
+    "haystack.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "haystack_hay: 1 degenerate faces"
+  ],
+  "motion_test": [],
+  "parts": [
+    "haystack_hay",
+    "haystack_pole_fork"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

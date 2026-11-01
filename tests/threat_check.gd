@@ -1,7 +1,7 @@
 extends Node
 ## Ранги угрозы поручений: godot --headless --path . res://tests/ThreatCheck.tscn
 func _ready() -> void:
-	for cid in DB.STORY_ORDER + ["s1"]:
+	for cid in DB.STORY_ORDER + DB.SIDE_ORDER:
 		var t := Game.contract_threat(cid)
 		var fs := []
 		for f in t["fights"]:

@@ -1,0 +1,109 @@
+{
+  "id": "patched_tent",
+  "category": "prologue/hamlet",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/hamlet\\patched_tent.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\patched_tent\\patched_tent.blend",
+  "target_size_m": [
+    3.2,
+    2.8,
+    1.9
+  ],
+  "glb_size_m": [
+    3.219,
+    3.626,
+    1.827
+  ],
+  "size_deviation": [
+    0.006,
+    0.295,
+    -0.038
+  ],
+  "bounds_min": [
+    -1.609,
+    -2.119,
+    -0.027
+  ],
+  "bounds_max": [
+    1.609,
+    1.507,
+    1.8
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1336,
+  "source_triangles": 1336,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_canvas_dirty",
+    "env_canvas_patch",
+    "env_cow_hide",
+    "env_iron",
+    "env_rope",
+    "env_stone_grey",
+    "env_wood_dark",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "patched_tent_tent_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 613,
+  "glb_materials": [
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_canvas_dirty",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_cow_hide",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_canvas_patch",
+      "OPAQUE",
+      true
+    ]
+  ],
+  "glb_images": 8,
+  "empties": [
+    "patched_tent.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "patched_tent_camp: 1 degenerate faces"
+  ],
+  "motion_test": [],
+  "parts": [
+    "patched_tent_camp",
+    "patched_tent_poles",
+    "patched_tent_tent_sheets"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 08:47"
+}

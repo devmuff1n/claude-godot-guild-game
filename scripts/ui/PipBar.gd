@@ -1,7 +1,7 @@
 @tool
 class_name PipBar
 extends Control
-## Шкала из делений (выгорание, заряды): count делений, value заполнено.
+## Шкала из делений (заряды и т. п.): count делений, value заполнено.
 
 @export var count: int = 10:
 	set(v):

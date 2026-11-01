@@ -59,13 +59,13 @@ static func stats(item: Dictionary) -> Dictionary:
 		s[a[0]] = s.get(a[0], 0.0) + a[1]
 	return s
 
-static func requirements(item: Dictionary) -> Dictionary:
-	var b := base_of(item)
-	var ilvl: int = int(item.get("ilvl", 1))
-	var r := {}
-	for k in b.get("req", {}).keys():
-		r[k] = int(round(b["req"][k] * ilvl_mult(ilvl, 0.1)))
-	return r
+## Требуемый уровень героя. Требований к характеристикам нет — только уровень (как в WoW).
+static func req_level(item: Dictionary) -> int:
+	return maxi(1, int(item.get("ilvl", 1)) - 1)
+
+## Собственные атрибуты героя на уровне (без бонусов вещей)
+static func own_stats(hero_id: String, level: int) -> Dictionary:
+	return Stats.natural(hero_id, level)
 
 static func price(item: Dictionary) -> int:
 	var b := base_of(item)
@@ -109,18 +109,27 @@ static func equip_problem(hero_id: String, level: int, item: Dictionary, slot: S
 	elif b.has("atype") and b["atype"] != "jewel":
 		if not (b["atype"] in hero["armors"]):
 			return "%s не носит броню типа «%s»." % [hero["name"], DB.ARMOR_TYPE_NAMES[b["atype"]]]
-	var nat := Stats.natural(hero_id, level)
-	var req := requirements(item)
-	for k in req.keys():
-		if nat.get(k, 0) < req[k]:
-			return "Нужно %s %d (собственное значение %s: %d, бонусы вещей не учитываются)." % [DB.STAT_NAMES[k], req[k], hero["name"], int(nat.get(k, 0))]
+	if b.has("wtype") and int(b.get("hands", 1)) == 2 and hero.get("one_hand", false):
+		return "%s не берёт двуручное оружие." % hero["name"]
+	if level < req_level(item):
+		return "Нужен %d-й уровень (сейчас %d-й)." % [req_level(item), level]
 	return ""
 
 ## Генерация экземпляра
-static func make(base_id: String, ilvl: int, rarity: String, rng: RandomNumberGenerator) -> Dictionary:
-	var b: Dictionary = DB.BASES[base_id]
+## target — герой, под которого «подкручены» свойства: его статы выпадают чаще (DB.HEROES → affix_w),
+## но любое свойство остаётся возможным. Пустой target — все свойства равновероятны.
+static func make(base_id: String, ilvl: int, rarity: String, rng: RandomNumberGenerator, target := "") -> Dictionary:
 	var item := {"uid": Game.next_uid(), "base": base_id, "ilvl": ilvl, "rarity": rarity, "affixes": []}
-	var n: int = DB.RARITY_AFFIXES[rarity]
+	item["affixes"] = roll_affixes(base_id, ilvl, int(DB.RARITY_AFFIXES[rarity]), rng, target)
+	return item
+
+## Вес случайного свойства для героя; у неупомянутых свойств небольшой вес, чтобы «чужие» вещи тоже попадались.
+const OFF_AFFIX_W := 0.35
+
+static func roll_affixes(base_id: String, ilvl: int, n: int, rng: RandomNumberGenerator, target := "") -> Array:
+	var b: Dictionary = DB.BASES[base_id]
+	var wmap: Dictionary = DB.HEROES[target].get("affix_w", {}) if DB.HEROES.has(target) else {}
+	var out := []
 	var pool := []
 	for a in DB.AFFIXES:
 		var st: String = a[0]
@@ -129,22 +138,29 @@ static func make(base_id: String, ilvl: int, rarity: String, rng: RandomNumberGe
 		if st == "parry" and not (b.get("wtype", "") in ["sword", "mace", "dagger", "shield"]):
 			continue
 		pool.append(a)
-	# Перемешиваем детерминированно через rng
-	for i in range(pool.size() - 1, 0, -1):
-		var j := rng.randi_range(0, i)
-		var tmp = pool[i]
-		pool[i] = pool[j]
-		pool[j] = tmp
-	for i in min(n, pool.size()):
-		var a: Array = pool[i]
+	var picked := []
+	for _i in mini(n, pool.size()):
+		var total := 0.0
+		for a in pool:
+			total += float(wmap.get(a[0], OFF_AFFIX_W)) if not wmap.is_empty() else 1.0
+		var r := rng.randf() * total
+		var k := pool.size() - 1
+		for i in pool.size():
+			r -= float(wmap.get(pool[i][0], OFF_AFFIX_W)) if not wmap.is_empty() else 1.0
+			if r <= 0.0:
+				k = i
+				break
+		picked.append(pool[k])
+		pool.remove_at(k)
+	for a in picked:
 		var hi: float = a[1] + a[2] * float(ilvl)
 		var v: float = hi * rng.randf_range(0.55, 1.0)
 		if a[0] in DB.PCT_STATS:
 			v = snapped(v, 0.1)
 		else:
 			v = max(1.0, round(v))
-		item["affixes"].append([a[0], v])
-	return item
+		out.append([a[0], v])
+	return out
 
 static func roll_rarity(rng: RandomNumberGenerator, quality: float) -> String:
 	var w := RARITY_WEIGHTS.duplicate()
@@ -170,35 +186,68 @@ static func bases_for_level(ilvl: int) -> Array:
 	res.sort()
 	return res
 
-static func random_item(ilvl: int, rng: RandomNumberGenerator, quality: float = 0.0) -> Dictionary:
+## Доля добычи со случайной основой (может не подойти никому из отряда).
+const WILD_LOOT := 0.2
+
+## Случайная вещь. party — герои отряда: чаще выпадают вещи, которые они носят, со «своими» свойствами.
+## Пустой party — старое поведение: любая основа, свойства равновероятны.
+static func random_item(ilvl: int, rng: RandomNumberGenerator, quality: float = 0.0, party: Array = []) -> Dictionary:
+	if not party.is_empty() and rng.randf() >= WILD_LOOT:
+		var hid: String = party[rng.randi_range(0, party.size() - 1)]
+		var base_h := pick_base_for(hid, ilvl, 99, rng)
+		if base_h != "":
+			return make(base_h, ilvl, roll_rarity(rng, quality), rng, hid)
 	var pool := bases_for_level(ilvl)
 	var base_id: String = pool[rng.randi_range(0, pool.size() - 1)]
-	return make(base_id, ilvl, roll_rarity(rng, quality), rng)
+	# Основа случайная, но свойства всё равно тянутся к тому, кто из отряда может её носить
+	var who := []
+	for h in party:
+		if hero_can_use_type(h, {"base": base_id}):
+			who.append(h)
+	return make(base_id, ilvl, roll_rarity(rng, quality), rng, who[rng.randi_range(0, who.size() - 1)] if not who.is_empty() else "")
 
-## Вещь, подходящая конкретному герою (по владению и требованиям на текущем уровне)
-static func item_for_hero(hero_id: String, level: int, ilvl: int, rng: RandomNumberGenerator, quality: float) -> Dictionary:
-	var hero: Dictionary = DB.HEROES[hero_id]
-	var nat := Stats.natural(hero_id, level)
+## Утешительный приз за поражение: обычная вещь (без свойств) для кого-то из отряда
+static func consolation_item(ilvl: int, rng: RandomNumberGenerator, party: Array) -> Dictionary:
+	var hid: String = party[rng.randi_range(0, party.size() - 1)]
+	var base_id := pick_base_for(hid, ilvl, 99, rng)
+	if base_id == "":
+		base_id = bases_for_level(ilvl)[0]
+	return make(base_id, ilvl, "common", rng)
+
+## Случайная основа, которую герой может носить (тип, хват) и надеть на уровне level. "" — нет такой.
+static func pick_base_for(hero_id: String, ilvl: int, level: int, rng: RandomNumberGenerator) -> String:
 	var pool := []
 	for k in bases_for_level(ilvl):
-		var b: Dictionary = DB.BASES[k]
-		if b.has("wtype") and not (b["wtype"] in hero["weapons"]):
-			continue
-		if b.has("atype") and b["atype"] != "jewel" and not (b["atype"] in hero["armors"]):
-			continue
-		var ok := true
-		for st in b.get("req", {}).keys():
-			if nat.get(st, 0) < int(round(b["req"][st] * ilvl_mult(ilvl, 0.1))):
-				ok = false
-		if ok:
+		var probe := {"base": k, "ilvl": ilvl}
+		if hero_can_use_type(hero_id, probe) and req_level(probe) <= level:
 			pool.append(k)
 	if pool.is_empty():
+		return ""
+	return pool[rng.randi_range(0, pool.size() - 1)]
+
+## Вещь, подходящая конкретному герою (тип, хват, уровень), не ниже необычной, со свойствами под него
+static func item_for_hero(hero_id: String, level: int, ilvl: int, rng: RandomNumberGenerator, quality: float) -> Dictionary:
+	var base_id := pick_base_for(hero_id, ilvl, level, rng)
+	if base_id == "":
 		return random_item(ilvl, rng, quality)
-	var base_id: String = pool[rng.randi_range(0, pool.size() - 1)]
 	var rar := roll_rarity(rng, quality + 1.0)
 	if rar == "common":
 		rar = "uncommon"
-	return make(base_id, ilvl, rar, rng)
+	return make(base_id, ilvl, rar, rng, hero_id)
+
+# ---------------------------------------------------------------- Перековка свойств
+## Цена перековки растёт с каждой попыткой (×1,6), отсчёт хранится в самой вещи.
+static func reroll_price(item: Dictionary) -> int:
+	var base := maxf(8.0, price(item) * 0.35)
+	return int(round(base * pow(1.6, int(item.get("rerolls", 0)))))
+
+static func can_reroll(item: Dictionary) -> bool:
+	return int(DB.RARITY_AFFIXES.get(item.get("rarity", "common"), 0)) > 0
+
+## Новые случайные свойства (то же число, тот же уровень). target — под кого подкручивать.
+static func reroll(item: Dictionary, rng: RandomNumberGenerator, target := "") -> void:
+	item["affixes"] = roll_affixes(item["base"], int(item.get("ilvl", 1)), int(DB.RARITY_AFFIXES[item.get("rarity", "common")]), rng, target)
+	item["rerolls"] = int(item.get("rerolls", 0)) + 1
 
 static func stat_line(k: String, v) -> String:
 	var nm: String = DB.STAT_NAMES.get(k, k)
@@ -213,18 +262,15 @@ static func hero_can_use_type(hero_id: String, item: Dictionary) -> bool:
 		return false
 	var hero: Dictionary = DB.HEROES[hero_id]
 	if b.has("wtype"):
+		if int(b.get("hands", 1)) == 2 and hero.get("one_hand", false):
+			return false
 		return b["wtype"] in hero["weapons"]
 	var at: String = b.get("atype", "")
 	return at == "jewel" or at in hero["armors"]
 
-## Хватает ли собственных характеристик героя для требований вещи
-static func meets_requirements(hero_id: String, level: int, item: Dictionary) -> bool:
-	var nat := Stats.natural(hero_id, level)
-	var req := requirements(item)
-	for k in req.keys():
-		if nat.get(k, 0) < req[k]:
-			return false
-	return true
+## Дорос ли герой до вещи
+static func meets_requirements(_hero_id: String, level: int, item: Dictionary) -> bool:
+	return level >= req_level(item)
 
 # ---------------------------------------------------------------- Подсказка в духе WoW Classic
 # Цвета — как в клиенте WoW: качество предмета, белый текст, жёлтый уровень предмета, зелёные «Если на персонаже», красные запреты.
@@ -308,17 +354,40 @@ static func tooltip_lines(item: Dictionary, hero_id: String = "", level: int = 1
 			if hero_can_use_type(h, item):
 				who.append(DB.HEROES[h]["name"])
 		rows.append(_row("Герои: %s" % ", ".join(who), bad))
-	var req := requirements(item)
-	var nat := Stats.natural(hero_id, level) if hero_id != "" else {}
-	for k in req.keys():
-		var ok: bool = hero_id == "" or nat.get(k, 0) >= req[k]
-		rows.append(_row("Требуется: %s %d" % [DB.STAT_NAMES[k], req[k]], TT_WHITE if ok else TT_RED))
+	var rl := req_level(item)
+	if rl > 1:
+		rows.append(_row("Требуется уровень %d" % rl, TT_WHITE if hero_id == "" or level >= rl else TT_RED))
 	# Особые свойства («Если на персонаже: …») — только уникальные эффекты вещи, не характеристики
 	for t in base_of(item).get("equip", []) + item.get("equip", []):
 		rows.append(_row("Если на персонаже: " + String(t), TT_GREEN))
 	if note != "":
 		rows.append(_row(note, TT_RED))
 	rows.append(_row("Цена продажи:", TT_WHITE, str(sell_price(item)), TT_WHITE, "money"))
+	return rows
+
+## Сравнение с надетым, как в WoW: «Если вы замените этот предмет…» — разница new − old по строкам
+## характеристик, зелёным прибавка, красным потеря. Пустой массив — разницы нет.
+static func compare_rows(new_item: Dictionary, old_item: Dictionary) -> Array:
+	var a := stats(new_item)
+	var b := stats(old_item)
+	var rows := []
+	var lines := [["armor", "к броне"], ["block_val", "к блоку"]] + TT_STAT_LINES
+	for e in lines:
+		var k: String = e[0]
+		var dv := float(a.get(k, 0.0)) - float(b.get(k, 0.0))
+		if absf(dv) < 0.05:
+			continue
+		var pct: bool = k in DB.PCT_STATS
+		var t := UIK.fmt_pct(absf(dv)) if pct else "%d" % int(round(absf(dv)))
+		if t == "0" or t == "0%":
+			continue
+		rows.append(_row("%s%s %s" % ["+" if dv > 0 else "−", t, e[1]], TT_GREEN if dv > 0 else TT_RED))
+	if a.has("dmg_min") or b.has("dmg_min"):
+		var dps_a := (float(a.get("dmg_min", 0)) + float(a.get("dmg_max", 0))) * 0.5 / float(a.get("interval", 1.0)) if a.has("dmg_min") else 0.0
+		var dps_b := (float(b.get("dmg_min", 0)) + float(b.get("dmg_max", 0))) * 0.5 / float(b.get("interval", 1.0)) if b.has("dmg_min") else 0.0
+		var dd := dps_a - dps_b
+		if absf(dd) >= 0.05:
+			rows.append(_row("%s%s ед. урона в секунду" % ["+" if dd > 0 else "−", _num(absf(dd))], TT_GREEN if dd > 0 else TT_RED))
 	return rows
 
 static func _bb_row(r: Dictionary) -> String:

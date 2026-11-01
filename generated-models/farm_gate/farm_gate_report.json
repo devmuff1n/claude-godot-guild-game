@@ -1,0 +1,82 @@
+{
+  "id": "farm_gate",
+  "category": "prologue/farm",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/farm\\farm_gate.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\farm_gate\\farm_gate.blend",
+  "target_size_m": [
+    3.1,
+    0.5,
+    2.0
+  ],
+  "glb_size_m": [
+    3.097,
+    0.388,
+    2.02
+  ],
+  "size_deviation": [
+    -0.001,
+    -0.224,
+    0.01
+  ],
+  "bounds_min": [
+    -1.552,
+    -0.195,
+    0.0
+  ],
+  "bounds_max": [
+    1.546,
+    0.192,
+    2.02
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 540,
+  "source_triangles": 540,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_iron",
+    "env_wood_light",
+    "env_wood_mid",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "farm_gate_gate_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 436,
+  "glb_materials": [
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "farm_gate.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "farm_gate_gate_leaf",
+    "farm_gate_posts"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

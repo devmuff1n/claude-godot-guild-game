@@ -23,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(360, 0)
+custom_minimum_size = Vector2(380, 410)
 layout_mode = 2
 theme_type_variation = &"PanelModal"
 
@@ -77,6 +77,50 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 focus_mode = 0
 text = "Сохранить и выйти в главное меню"
+
+[node name="LookRow" type="HBoxContainer" parent="Center/Panel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LookLabel" type="Label" parent="Center/Panel/Box/LookRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+tooltip_text = "Вид героев в бою и в пути. Герой без своих спрайтов или модели рисуется простой фигуркой."
+mouse_filter = 1
+theme_type_variation = &"MutedLabel"
+text = "Герои"
+
+[node name="LookSimple" type="Button" parent="Center/Panel/Box/LookRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Простой"
+
+[node name="Look2D" type="Button" parent="Center/Panel/Box/LookRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "2D"
+
+[node name="Look3D" type="Button" parent="Center/Panel/Box/LookRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "3D"
+
+[node name="Spacer" type="Control" parent="Center/Panel/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="Controls" type="Label" parent="Center/Panel/Box"]
 unique_name_in_owner = true

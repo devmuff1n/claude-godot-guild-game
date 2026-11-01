@@ -8,7 +8,8 @@ func setup(cid: String) -> ContractListItem:
 	var n := Game.contract_done_count(cid)
 	%Num.text = str(int(c["story"])) if int(c["story"]) > 0 else "✦"
 	%Name.text = c["name"]
-	%Sub.text = "Уровень %d" % int(c["level"]) + ((" · выполнено ×%d" % n) if n > 0 else "")
+	var xf := Game.contract_xp_factor(cid)
+	%Sub.text = "Уровень %d" % int(c["level"]) + ((" · выполнено ×%d" % n) if n > 0 else "") + ((" · опыт %d%%" % int(round(xf * 100.0))) if xf < 1.0 and avail else "")
 	%Rank.set_rank(Game.contract_threat(cid)["rank"], not avail)
 	%State.kind = "lock" if not avail else ("check" if n > 0 else "xp")
 	%State.tint = Color(1, 1, 1, 1) if avail else Color(1, 1, 1, 0.6)
@@ -21,4 +22,6 @@ func setup(cid: String) -> ContractListItem:
 		tooltip_text = "Откроется после: " + ", ".join(req)
 	else:
 		tooltip_text = ("Новое поручение\n" if n == 0 else "") + Game.threat_tip(cid)
+		if xf < 1.0:
+			tooltip_text += "\nОтряд выше уровнем: враги падают быстрее, опыта за них — %d%%." % int(round(xf * 100.0))
 	return self

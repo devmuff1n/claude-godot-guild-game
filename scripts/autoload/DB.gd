@@ -31,7 +31,7 @@ const RARITY_NAMES := {"common": "Обычная", "uncommon": "Необычна
 const RARITY_COLORS := {"common": Color(0.86, 0.84, 0.8), "uncommon": Color(0.45, 0.85, 0.4), "rare": Color(0.4, 0.62, 1.0), "epic": Color(0.78, 0.45, 1.0)}
 const RARITY_AFFIXES := {"common": 0, "uncommon": 1, "rare": 2, "epic": 3}
 const ARMOR_TYPE_NAMES := {"cloth": "ткань", "leather": "кожа", "mail": "кольчуга", "plate": "латы", "jewel": "украшение"}
-const WEAPON_TYPE_NAMES := {"sword": "меч", "mace": "булава", "dagger": "кинжал", "bow": "лук", "staff": "посох", "shield": "щит"}
+const WEAPON_TYPE_NAMES := {"sword": "меч", "mace": "булава", "dagger": "кинжал", "bow": "лук", "staff": "посох", "shield": "щит", "axe": "топор"}
 
 # ---------------------------------------------------------------- Герои
 var HEROES := {
@@ -39,8 +39,9 @@ var HEROES := {
 		"name": "Эйден", "full": "Эйден", "cls": "Жрец", "role": "Целитель, щиты света",
 		"color": Color(0.95, 0.85, 0.55),
 		"base": {"sta": 10, "str": 6, "agi": 7, "int": 16},
-		"grow": {"sta": 2.2, "str": 0.8, "agi": 1.0, "int": 3.2},
-		"weapons": ["staff", "mace"], "armors": ["cloth"],
+		"grow": {"sta": 4.2, "str": 0.8, "agi": 1.0, "int": 5.2},
+		"weapons": ["staff"], "armors": ["cloth"],
+		"affix_w": {"int": 5, "sp": 5, "sta": 3, "crit": 1.5, "dodge": 1, "armor": 1, "res_shadow": 1, "res_fire": 1, "res_nature": 1},
 		"school": "holy",
 		"bio": "Молодой жрец, унаследовавший от наставника, отца Тибальда, дом гильдии, долги и упрямую веру в то, что людям надо помогать — даже за медяки.",
 		"likes_hint": "",
@@ -49,8 +50,9 @@ var HEROES := {
 		"name": "Марек", "full": "Марек Вальд", "cls": "Воин", "role": "Защитник: меч и щит",
 		"color": Color(0.35, 0.45, 0.75),
 		"base": {"sta": 16, "str": 14, "agi": 8, "int": 5},
-		"grow": {"sta": 3.4, "str": 2.6, "agi": 1.2, "int": 0.4},
-		"weapons": ["sword", "mace", "shield"], "armors": ["mail", "plate"],
+		"grow": {"sta": 5.4, "str": 4.6, "agi": 1.2, "int": 0.4},
+		"weapons": ["sword", "mace", "axe", "shield"], "armors": ["mail", "plate"], "one_hand": true,
+		"affix_w": {"str": 5, "sta": 5, "agi": 2, "armor": 3, "parry": 2.5, "block": 3, "hit": 1.5, "crit": 1, "dodge": 1.5, "res_shadow": 1, "res_fire": 1, "res_nature": 1},
 		"school": "phys",
 		"bio": "Бывший сержант пограничной стражи. Немногословен, встаёт первым под удар и последним садится к костру.",
 	},
@@ -58,8 +60,9 @@ var HEROES := {
 		"name": "Элира", "full": "Элира", "cls": "Охотница", "role": "Лучница против опасных целей",
 		"color": Color(0.35, 0.65, 0.35),
 		"base": {"sta": 11, "str": 7, "agi": 16, "int": 7},
-		"grow": {"sta": 2.2, "str": 0.8, "agi": 3.2, "int": 0.8},
-		"weapons": ["bow", "dagger"], "armors": ["leather"],
+		"grow": {"sta": 3.2, "str": 0.8, "agi": 6.2, "int": 0.8},
+		"weapons": ["bow"], "armors": ["leather"],
+		"affix_w": {"agi": 5, "sta": 3, "crit": 3, "hit": 3, "str": 1, "dodge": 1.5, "armor": 1, "res_shadow": 1, "res_fire": 1, "res_nature": 1},
 		"school": "phys",
 		"bio": "Эльфийская охотница из лесов за Ольховым Бродом. Смеётся громко, стреляет тихо и считает каждого волка на тракте.",
 	},
@@ -67,8 +70,9 @@ var HEROES := {
 		"name": "Нэрис", "full": "Нэрис Вейль", "cls": "Чернокнижница", "role": "Проклятия и тёмная магия",
 		"color": Color(0.6, 0.35, 0.7),
 		"base": {"sta": 9, "str": 5, "agi": 7, "int": 17},
-		"grow": {"sta": 2.0, "str": 0.4, "agi": 1.0, "int": 3.4},
-		"weapons": ["staff", "dagger"], "armors": ["cloth"],
+		"grow": {"sta": 3.0, "str": 0.4, "agi": 1.0, "int": 6.4},
+		"weapons": ["staff"], "armors": ["cloth"],
+		"affix_w": {"int": 5, "sp": 5, "sta": 3, "crit": 2, "hit": 2, "dodge": 1, "armor": 1, "res_shadow": 1, "res_fire": 1, "res_nature": 1},
 		"school": "shadow",
 		"bio": "Чернокнижница с рогами и острым языком. Деревенские крестятся ей вслед, а она делает вид, что ей всё равно.",
 	},
@@ -175,26 +179,26 @@ var PERKS := {
 }
 
 # ---------------------------------------------------------------- Предметы
-# Основы: тип, слот, требования, базовые параметры, цена. Числа масштабируются уровнем предмета.
+# Основы: тип, слот, базовые параметры, цена (требуемый уровень — от уровня предмета, Items.req_level). Числа масштабируются уровнем предмета.
 var BASES := {
 	# Оружие
-	"sword_rusty": {"name": "Ржавый меч", "slot": "main", "wtype": "sword", "hands": 1, "dmg": [8, 12], "interval": 2.0, "range": 75, "price": 30, "req": {"str": 10}, "minlvl": 1},
-	"sword_watch": {"name": "Меч дозорного", "slot": "main", "wtype": "sword", "hands": 1, "dmg": [11, 16], "interval": 2.0, "range": 75, "price": 70, "req": {"str": 16}, "minlvl": 2},
-	"sword_knight": {"name": "Рыцарский клинок", "slot": "main", "wtype": "sword", "hands": 1, "dmg": [14, 20], "interval": 2.1, "range": 80, "price": 140, "req": {"str": 24}, "minlvl": 5},
-	"mace_iron": {"name": "Железная булава", "slot": "main", "wtype": "mace", "hands": 1, "dmg": [11, 17], "interval": 2.4, "range": 70, "price": 55, "req": {"str": 12}, "minlvl": 1},
-	"dagger_skin": {"name": "Свежевальный нож", "slot": "main", "wtype": "dagger", "hands": 1, "dmg": [6, 9], "interval": 1.5, "range": 65, "price": 35, "req": {"agi": 10}, "minlvl": 1},
-	"bow_hunt": {"name": "Охотничий лук", "slot": "main", "wtype": "bow", "hands": 2, "dmg": [9, 14], "interval": 2.4, "range": 620, "price": 40, "req": {"agi": 12}, "minlvl": 1},
-	"bow_long": {"name": "Длинный тисовый лук", "slot": "main", "wtype": "bow", "hands": 2, "dmg": [13, 19], "interval": 2.6, "range": 700, "price": 110, "req": {"agi": 20}, "minlvl": 3},
-	"staff_novice": {"name": "Посох послушника", "slot": "main", "wtype": "staff", "hands": 2, "dmg": [7, 11], "interval": 2.8, "range": 360, "price": 35, "req": {"int": 12}, "sp": 4, "minlvl": 1},
-	"staff_sun": {"name": "Солнечный посох", "slot": "main", "wtype": "staff", "hands": 2, "dmg": [9, 13], "interval": 2.8, "range": 370, "price": 120, "req": {"int": 22}, "sp": 10, "minlvl": 3},
-	"staff_amethyst": {"name": "Посох с аметистом", "slot": "main", "wtype": "staff", "hands": 2, "dmg": [10, 14], "interval": 2.8, "range": 370, "price": 120, "req": {"int": 22}, "sp": 10, "minlvl": 3},
-	"shield_wood": {"name": "Деревянный щит", "slot": "off", "wtype": "shield", "armor": 70, "block": 12, "block_val": 8, "price": 30, "req": {"str": 10}, "minlvl": 1},
-	"shield_iron": {"name": "Окованный щит", "slot": "off", "wtype": "shield", "armor": 120, "block": 16, "block_val": 14, "price": 90, "req": {"str": 18}, "minlvl": 3},
+	"sword_rusty": {"name": "Ржавый меч", "slot": "main", "wtype": "sword", "hands": 1, "dmg": [8, 12], "interval": 2.0, "range": 75, "price": 30, "minlvl": 1},
+	"sword_watch": {"name": "Меч дозорного", "slot": "main", "wtype": "sword", "hands": 1, "dmg": [11, 16], "interval": 2.0, "range": 75, "price": 70, "minlvl": 2},
+	"sword_knight": {"name": "Рыцарский клинок", "slot": "main", "wtype": "sword", "hands": 1, "dmg": [14, 20], "interval": 2.1, "range": 80, "price": 140, "minlvl": 5},
+	"mace_iron": {"name": "Железная булава", "slot": "main", "wtype": "mace", "hands": 1, "dmg": [11, 17], "interval": 2.4, "range": 70, "price": 55, "minlvl": 1},
+	"dagger_skin": {"name": "Свежевальный нож", "slot": "main", "wtype": "dagger", "hands": 1, "dmg": [6, 9], "interval": 1.5, "range": 65, "price": 35, "minlvl": 1},
+	"bow_hunt": {"name": "Охотничий лук", "slot": "main", "wtype": "bow", "hands": 2, "dmg": [9, 14], "interval": 2.4, "range": 620, "price": 40, "minlvl": 1},
+	"bow_long": {"name": "Длинный тисовый лук", "slot": "main", "wtype": "bow", "hands": 2, "dmg": [13, 19], "interval": 2.6, "range": 700, "price": 110, "minlvl": 3},
+	"staff_novice": {"name": "Посох послушника", "slot": "main", "wtype": "staff", "hands": 2, "dmg": [7, 11], "interval": 2.8, "range": 360, "price": 35, "sp": 4, "minlvl": 1},
+	"staff_sun": {"name": "Солнечный посох", "slot": "main", "wtype": "staff", "hands": 2, "dmg": [9, 13], "interval": 2.8, "range": 370, "price": 120, "sp": 10, "minlvl": 3},
+	"staff_amethyst": {"name": "Посох с аметистом", "slot": "main", "wtype": "staff", "hands": 2, "dmg": [10, 14], "interval": 2.8, "range": 370, "price": 120, "sp": 10, "minlvl": 3},
+	"shield_wood": {"name": "Деревянный щит", "slot": "off", "wtype": "shield", "armor": 70, "block": 12, "block_val": 8, "price": 30, "minlvl": 1},
+	"shield_iron": {"name": "Окованный щит", "slot": "off", "wtype": "shield", "armor": 120, "block": 16, "block_val": 14, "price": 90, "minlvl": 3},
 	# Украшения
-	"amulet_bone": {"name": "Костяной амулет", "slot": "neck", "atype": "jewel", "price": 40, "req": {}, "minlvl": 1},
-	"amulet_sun": {"name": "Солнечный медальон", "slot": "neck", "atype": "jewel", "price": 80, "req": {}, "minlvl": 3},
-	"ring_copper": {"name": "Медное кольцо", "slot": "ring", "atype": "jewel", "price": 30, "req": {}, "minlvl": 1},
-	"ring_silver": {"name": "Серебряное кольцо", "slot": "ring", "atype": "jewel", "price": 70, "req": {}, "minlvl": 3},
+	"amulet_bone": {"name": "Костяной амулет", "slot": "neck", "atype": "jewel", "price": 40, "minlvl": 1},
+	"amulet_sun": {"name": "Солнечный медальон", "slot": "neck", "atype": "jewel", "price": 80, "minlvl": 3},
+	"ring_copper": {"name": "Медное кольцо", "slot": "ring", "atype": "jewel", "price": 30, "minlvl": 1},
+	"ring_silver": {"name": "Серебряное кольцо", "slot": "ring", "atype": "jewel", "price": 70, "minlvl": 3},
 }
 # Броня генерируется по слоту и типу
 const ARMOR_NAMES := {
@@ -206,16 +210,49 @@ const ARMOR_NAMES := {
 # Броня в масштабе Classic WoW (нагрудник ур. 1: ткань ~20, кожа ~40, кольчуга ~70, латы ~105)
 const ARMOR_BASE := {"cloth": 15, "leather": 30, "mail": 50, "plate": 75}
 const SLOT_ARMOR_MULT := {"head": 0.8, "chest": 1.4, "hands": 0.6, "waist": 0.5, "feet": 0.7}
-const ARMOR_REQ := {"cloth": {}, "leather": {"agi": 9}, "mail": {"str": 14}, "plate": {"str": 20}}
 const ARMOR_PRICE := {"cloth": 18, "leather": 24, "mail": 34, "plate": 44}
 
 func _init() -> void:
+	_add_shades()
+	_add_obelisks()
 	for t in ARMOR_NAMES.keys():
 		for s in ARMOR_NAMES[t].keys():
 			var id: String = "%s_%s" % [t, s]
 			BASES[id] = {"name": ARMOR_NAMES[t][s], "slot": s, "atype": t,
 				"armor_t": ARMOR_BASE[t] * SLOT_ARMOR_MULT[s], "price": int(ARMOR_PRICE[t] * (1.0 + SLOT_ARMOR_MULT[s])),
-				"req": ARMOR_REQ[t].duplicate(), "minlvl": 1 if t != "plate" else 2}
+				"minlvl": 1 if t != "plate" else 2}
+
+## Духи зверей: те же звери, но подчинённые друиду — тёмные, с красными глазами, после гибели рассыпаются пеплом
+## (тег phantom). Монет с них вдвое меньше: тела не остаётся.
+const SHADES := {
+	"shade_wolf": ["wolf", ["Призрачный волк", "Пепельный волк", "Тень стаи"]],
+	"shade_alpha": ["wolf_alpha", ["Призрачный вожак", "Пепельный вожак", "Вожак теней"]],
+	"shade_boar": ["boar", ["Призрачный кабан", "Пепельный секач", "Тень секача"]],
+	"shade_lynx": ["lynx", ["Призрачная рысь", "Пепельная рысь", "Тень чащи"]],
+	"shade_spider": ["spider", ["Призрачный паук", "Пепельный тенетник", "Тень гнезда"]],
+	"shade_bear": ["bear", ["Призрачный медведь", "Пепельный медведь", "Тень хозяина леса"]],
+}
+
+## Обелиски пещер: неподвижные, тянут тёмную силу друида и выпускают духов своего зверя (приём «Тёмный импульс»).
+## Стоят на месте 3D-обелиска уровня (fixed_x — экранный x пункта), гибель обелиска рассыпает всех духов боя.
+const OBELISKS := {"obelisk_wolf": "shade_wolf", "obelisk_spider": "shade_spider", "obelisk_bear": "shade_wolf"}
+
+func _add_obelisks() -> void:
+	for id in OBELISKS.keys():
+		ENEMIES[id] = {"name": "Обелиск", "names": ["Обелиск", "Древний обелиск", "Обелиск друида"], "wow": "Корень скверны (сюжетный)",
+			"rank": "elite", "hp_k": 5.0, "dmg_k": 0.4, "armor_k": 1.5, "interval": 99.0, "range": 0, "speed": 0, "xp": 40, "coins": 20,
+			"tags": ["object", "phantom", "elite"], "dodge": 0, "look": "obelisk", "fixed_x": 1150.0, "summon": OBELISKS[id], "story": true,
+			"skills": [{"id": "pulse", "name": "Тёмный импульс", "tier": 1, "cast": 2.0, "cd": 9.0, "desc": "Выпускает двух духов."}]}
+
+func _add_shades() -> void:
+	for id in SHADES.keys():
+		var e: Dictionary = ENEMIES[SHADES[id][0]].duplicate(true)
+		e["names"] = SHADES[id][1]
+		e["name"] = SHADES[id][1][0]
+		e["tags"].append("phantom")
+		e["coins"] = max(1, int(e["coins"]) / 2)
+		e.erase("biome")
+		ENEMIES[id] = e
 
 # Случайные свойства: [стат, мин на ур.1, прирост за уровень предмета]
 const AFFIXES := [
@@ -287,6 +324,10 @@ var ENEMIES := {
 			{"id": "howl", "name": "Вой стаи", "tier": 1, "cast": 2.2, "cd": 14.0},
 			{"id": "call", "name": "Созыв", "tier": 2, "cast": 2.5, "cd": 99.0, "once": true, "desc": "Раз за бой зовёт двух волков."},
 			{"id": "packhaste", "name": "Гон", "tier": 3, "passive": true, "desc": "Вой ещё и ускоряет атаки стаи."}]},
+	# Сюжетный враг кат-сцены c1: первый встреченный дух, крепче обычного. phantom — гибнет без тела, рассыпаясь пеплом.
+	"red_wolf": {"name": "Красноглазый волк", "names": ["Красноглазый волк", "Красноглазый волк", "Красноглазый волк"], "wow": "Shadow Wolf (сюжетный)", "rank": "normal", "hp_k": 1.6, "dmg_k": 0.9, "armor_k": 0.8,
+		"interval": 1.5, "range": 60, "speed": 190, "xp": 10, "coins": 0, "tags": ["beast", "phantom"], "dodge": 8, "look": "wolf", "story": true,
+		"skills": []},
 	"boar": {"name": "Кабан", "names": ["Кабан", "Секач", "Старый секач"], "wow": "Thistle Boar", "rank": "normal", "hp_k": 1.7, "dmg_k": 1.2, "armor_k": 1.6,
 		"interval": 2.2, "range": 65, "speed": 120, "xp": 12, "coins": 4, "tags": ["beast"], "dodge": 3, "look": "boar",
 		"skills": [
@@ -350,7 +391,8 @@ var ENEMIES := {
 			{"id": "firepot", "name": "Горшок с маслом", "tier": 3, "passive": true, "desc": "Погибая, поджигает всех рядом."}]},
 	"captain": {"name": "Ганс Рыжий", "names": ["Ганс Рыжий", "Ганс Рыжий", "Ганс Рыжий"], "wow": "Mr. Smite (босс Мертвых копей)", "rank": "boss", "hp_k": 1.0, "dmg_k": 1.0, "armor_k": 2.4,
 		"interval": 2.0, "range": 80, "speed": 100, "xp": 90, "coins": 45, "tags": ["human", "boss"], "parry": 8, "look": "captain",
-		"skills": [{"id": "whirl", "name": "Вихрь клинков", "tier": 1, "cast": 2.6, "cd": 13.0}]},
+		"skills": [{"id": "whirl", "name": "Вихрь клинков", "tier": 1, "cast": 2.6, "cd": 13.0},
+			{"id": "call", "name": "Зов чащи", "tier": 1, "cast": 2.5, "cd": 99.0, "once": true, "desc": "Раз за бой зовёт двух духов-волков."}]},
 }
 
 ## Ступень врага (1–3) по его уровню
@@ -438,122 +480,115 @@ var PERSONAL_OBJECTIVES := {
 # Враг в группе — "wolf" (уровень поручения) или ["wolf", 3] (свой уровень). hp_pct / dmg_pct — множители точки, %.
 # Волны, уровни и множители переопределяются файлом data/balance.json (меню баланса F10, см. scripts/core/Balance.gd).
 var CONTRACTS := {
-	"c1": {"name": "Первый лесной тракт", "story": 1, "requires": [], "level": 1,
-		"desc": "Староста Берта просит расчистить тракт к Ольховому Броду: волки нападают на путников у Старой развилки.",
+	"c1": {"name": "Тревожные вести", "story": 1, "requires": [], "level": 1,
+		"desc": "Лес вокруг гильдии стал опасен: звери выходят к дорогам, хутора замолчали. Тимофей, что возит гильдии хлеб и молоко, не приехал на торг. Нужно расчистить тропу в его сторону.",
 		"pay": 110, "repeat_pay": 55, "premium": {"name": "Все возвращаются", "check": "no_ko", "coins": 60},
 		"jxp": 100, "general": ["helpful", "few_potions"], "night": false,
-		"twists": [["Засада с тыла", "Волки выскакивают из кустов и бьют задний ряд."]],
+		"twists": [["Красные глаза", "Некоторые звери — духи: сильнее обычных и после гибели рассыпаются пеплом."], ["Засада с тыла", "Волки выскакивают из кустов и бьют задний ряд."]],
 		"route": [
-			{"type": "battle", "name": "Опушка", "groups": [["wolf", "wolf"], ["wolf", "wolf", "wolf"]]},
+			{"type": "battle", "name": "Опушка", "groups": [["wolf", "wolf"], ["wolf", "shade_wolf", "wolf"]]},
 			{"type": "event", "name": "Волчий родник", "event": "spring"},
-			{"type": "battle", "name": "Бурелом", "groups": [["wolf", "wolf", "wolf"], ["boar"], [["wolf", 2], ["wolf", 2]]], "ambush": [["wolf", 2], ["wolf", 2], ["wolf", 1]]},
+			{"type": "battle", "name": "Бурелом", "groups": [["wolf", "wolf", "shade_wolf"], ["boar"], [["wolf", 2], ["wolf", 2]]], "ambush": [["wolf", 2], ["wolf", 2], ["wolf", 1]]},
 			{"type": "camp", "name": "Привал"},
 			{"type": "event", "name": "Развилка", "event": "wounded_trader"},
-			{"type": "battle", "name": "Логово", "groups": [["wolf", "wolf", "wolf"], [["wolf", 2], "wolf", ["wolf", 2]], [["wolf", 2], ["wolf_alpha", 2], ["wolf", 2]]], "boss": true},
+			{"type": "battle", "name": "Логово", "groups": [["wolf", "wolf", "shade_wolf"], [["wolf", 2], "shade_wolf", ["wolf", 2]], [["shade_wolf", 2], ["shade_alpha", 2], ["wolf", 2]]], "boss": true},
 		],
-		"intro": "Тракт зарос, а волки осмелели. Если гильдия справится, деревня, быть может, снова начнёт нам платить.",
-		"outro": "У логова мы нашли не только кости. Ошейник с медной биркой: «Собственность К.Г.» Кто держит волков на привязи?"},
-	"c2": {"name": "Запасы для Ольховки", "story": 2, "requires": ["c1"], "level": 2,
-		"desc": "Хутор Ольховка отрезан. Нужно донести мешки с солью и лекарства, пока разбойники не перехватили и эти.",
+		"intro": "Лес, что кормил гильдию, вдруг стал чужим. Сначала тропа, потом Тимофей.",
+		"outro": "Вожак стаи рассыпался пеплом, как и первый волк. Тропа к хутору Тимофея свободна, но лес дальше темнее."},
+	"c2": {"name": "Дорога к хутору", "story": 2, "requires": ["c1"], "level": 2,
+		"desc": "Хутор Тимофея стоит в глубине леса. Звери-духи там гуще, а тропа заросла. Дойти до фермера и узнать, жив ли он.",
 		"pay": 150, "repeat_pay": 70, "premium": {"name": "Бережливость", "check": "few_potions", "coins": 60},
 		"jxp": 110, "general": ["thrift", "no_ko"], "night": false,
-		"twists": [["Стрелки", "Лучники держатся позади и дают залпы по площади. Сбивайте подготовку."]],
+		"twists": [["Глубокий лес", "Рыси подкрадываются невидимыми, пауки опутывают паутиной. Духов здесь больше, чем живых зверей."]],
 		"route": [
-			{"type": "battle", "name": "Мост", "groups": [["bandit", "bandit", "archer"], ["bandit", "bandit"]]},
-			{"type": "event", "name": "Сборщик у моста", "event": "bridge"},
-			{"type": "shop", "name": "Придорожная лавка"},
-			{"type": "battle", "name": "Овраг", "groups": [["bandit", "archer", "bandit"], ["bandit", "archer", "bandit"]], "ambush": ["wolf", "wolf"]},
-			{"type": "camp", "name": "Привал"},
+			{"type": "battle", "name": "Тёмный ельник", "groups": [["shade_wolf", "wolf", "wolf"], ["shade_boar"]]},
 			{"type": "event", "name": "Дикий улей", "event": "hive"},
-			{"type": "battle", "name": "Ольховка", "groups": [["bandit", "archer", "bandit"], ["brute", "bandit", "archer"]], "boss": true,
-				"champion": {"type": "bandit", "affix": "stone", "name": "Меченый"}},
+			{"type": "shop", "name": "Придорожная лавка"},
+			{"type": "battle", "name": "Ручей", "groups": [["lynx", "shade_wolf"], ["shade_spider", "shade_spider"]], "ambush": ["shade_wolf", "wolf"]},
+			{"type": "camp", "name": "Привал"},
+			{"type": "event", "name": "Мёртвый охотник", "event": "dead_merc"},
+			{"type": "battle", "name": "Хутор Тимофея", "groups": [["shade_wolf", "shade_lynx", "wolf"], ["shade_wolf", "shade_wolf"]], "boss": true,
+				"champion": {"type": "shade_boar", "affix": "stone", "name": "Старый секач"}},
 		],
-		"intro": "Соль, бинты и письма. Ольховка ждёт уже неделю.",
-		"outro": "Хуторяне рассказали: долговые расписки за «охрану дороги» им приносил человек ростовщика Корнелия."},
-	"c3": {"name": "Последний обоз", "story": 3, "requires": ["c2"], "level": 3, "escort": true,
-		"desc": "Возчик Тимофей ведёт последний в сезоне обоз с зерном. Налётчики охотятся именно на повозки.",
-		"pay": 200, "repeat_pay": 90, "premium": {"name": "Обоз ≥80%", "check": "wagon80", "coins": 80},
-		"jxp": 120, "general": ["no_ko", "few_potions"], "night": false, "kits": 2,
+		"intro": "Тимофей кормил нас всю зиму. Теперь наша очередь.",
+		"outro": "Тимофей с дочерью Асей живы: заперлись в доме и ждали. Звери обходили хутор, но вчера к воротам приходили люди с рогатыми амулетами."},
+	"c3": {"name": "Оборона хутора", "story": 3, "requires": ["c2"], "level": 3, "outpost": true, "outpost_name": "Хутор", "start_time": "evening",
+		"desc": "К хутору Тимофея идут бандиты. Звери их не трогают и, похоже, идут с ними заодно. Ворота хутора должны устоять.",
+		"pay": 200, "repeat_pay": 90, "premium": {"name": "Крепкие ворота", "check": "gate60", "coins": 80},
+		"jxp": 120, "general": ["no_ko", "few_potions"], "materials": 4, "gate_hp": 800, "outpost_ambush": ["shade_wolf"],
+		"twists": [["Оборона", "Пять волн. Бандиты и духи зверей идут вместе. Чините ворота и тушите пожары между волнами."]],
+		"waves": [
+			[["bandit", "bandit", "archer"]],
+			[["shade_wolf", "shade_wolf", "wolf"]],
+			[["bandit", "archer", "arsonist"], ["raider", "raider"]],
+			[["shade_boar", "shade_wolf"], ["bandit", "bandit", "archer"]],
+			[["brute", "bandit", "archer"], ["shade_wolf", "shade_wolf", "arsonist"]],
+		],
+		"intro": "Звери не трогают бандитов. Значит, это не просто лес сошёл с ума.",
+		"outro": "Хутор отбит. Уходя, бандиты кричали, что лес сам выгонит «тёмных» — и тех, кто их прячет."},
+	"c4": {"name": "Обоз Тимофея", "story": 4, "requires": ["c3"], "level": 4, "escort": true,
+		"desc": "На хуторе оставаться нельзя. Тимофей грузит повозку, и отряд ведёт её к дому гильдии через лес, где ждут и бандиты, и духи.",
+		"pay": 230, "repeat_pay": 100, "premium": {"name": "Обоз ≥80%", "check": "wagon80", "coins": 90},
+		"jxp": 130, "general": ["helpful", "no_ko"], "night": false, "kits": 2,
 		"twists": [["Обоз", "Налётчики бегут к повозке, поджигатели жгут её. Чините и тушите — повозка должна дойти."]],
 		"route": [
-			{"type": "battle", "name": "Лес", "groups": [["raider", "wolf", "raider"], ["boar"]], "ambush": ["wolf", "wolf"]},
+			{"type": "battle", "name": "Лес", "groups": [["raider", "shade_wolf", "raider"], ["shade_boar"]], "ambush": ["shade_wolf", "shade_wolf"]},
 			{"type": "event", "name": "Кузня", "event": "stuck_wagon"},
-			{"type": "battle", "name": "Развилка", "groups": [["raider", "raider", "archer"], ["raider", "bandit", "archer"]]},
+			{"type": "battle", "name": "Развилка", "groups": [["raider", "raider", "archer"], ["raider", "bandit", "shade_lynx"]]},
 			{"type": "camp", "name": "Лагерь"},
 			{"type": "shop", "name": "Застава"},
-			{"type": "event", "name": "Мёртвый наёмник", "event": "dead_merc"},
-			{"type": "battle", "name": "Ущелье", "groups": [["raider", "arsonist", "raider"], ["brute", "archer", "raider"]], "boss": true},
-		],
-		"intro": "Обоз — это хлеб на зиму. И, если мы не ошибаемся, лакомый кусок для того, кто скупает долги голодных.",
-		"outro": "Повозка дошла. Тимофей шепнул: налётчики спрашивали не про зерно, а про «бумаги с печатью старосты»."},
-	"c4": {"name": "Спасение возчиков", "story": 4, "requires": ["c3"], "level": 4,
-		"desc": "Трое возчиков пропали на Каменном броде. Говорят, их держат в лагере банды и требуют выкуп.",
-		"pay": 230, "repeat_pay": 100, "premium": {"name": "Спасти всех", "check": "carters_all", "coins": 90},
-		"jxp": 130, "general": ["helpful", "no_ko"], "night": false,
-		"twists": [["Пленники", "По дороге можно освободить возчиков. Премия — за всех троих."]],
-		"route": [
-			{"type": "battle", "name": "Брод", "groups": [["bandit", "archer", "raider"], ["bandit", "bandit", "archer"]]},
-			{"type": "event", "name": "Пленник у дороги", "event": "captive_one"},
-			{"type": "battle", "name": "Посты", "groups": [["bandit", "bandit", "archer"], ["archer", "bandit"]], "ambush": ["boar", "wolf"],
-				"champion": {"type": "bandit", "affix": "vampire", "name": "Ждан Кровопийца"}},
-			{"type": "event", "name": "Кости у костра", "event": "dice"},
-			{"type": "camp", "name": "Привал"},
-			{"type": "event", "name": "Клетка на колёсах", "event": "captive_camp"},
-			{"type": "battle", "name": "Клетки", "groups": [["bandit", "archer", "bandit"], ["brute", "bandit", "bandit", "archer"]], "boss": true},
-		],
-		"intro": "Выкуп — триста монет. У возчиков таких денег нет. У нас тоже. Значит, придётся иначе.",
-		"outro": "Возчики узнали одного из разбойников — его видели у дома Корнелия, когда тот выдавал «займы на охрану»."},
-	"c5": {"name": "Ночной дозор", "story": 5, "requires": ["c4"], "level": 5, "night": true, "start_time": "night",
-		"desc": "По ночам кто-то жжёт сараи на окраине. Берта просит отряд пройти дозором вдоль Ольхового тракта.",
-		"pay": 250, "repeat_pay": 110, "premium": {"name": "Все возвращаются", "check": "no_ko", "coins": 90},
-		"jxp": 140, "general": ["few_potions", "thrift"],
-		"twists": [["Ночь", "Враги дальше 360 шагов от героев скрыты во тьме: по ним не попасть, а их лучники бьют из темноты. Сблизьтесь: приказ «К цели» (C)."]],
-		"route": [
-			{"type": "battle", "name": "Окраина", "groups": [["arsonist", "bandit", "bandit"], ["arsonist", "archer"]], "ambush": ["wolf", "wolf"]},
-			{"type": "event", "name": "Сарай в огне", "event": "barn_fire"},
-			{"type": "battle", "name": "Мельница", "groups": [["wolf", "wolf", "wolf"], ["wolf", "wolf_alpha", "wolf"]], "ambush": ["wolf"],
-				"champion": {"type": "wolf", "affix": "swift", "name": "Одноухий"}},
 			{"type": "event", "name": "Телега в кювете", "event": "ditch_cart"},
-			{"type": "camp", "name": "Ночёвка"},
-			{"type": "battle", "name": "Овчарня", "groups": [["arsonist", "archer", "bandit"], ["brute", "archer", "bandit"]], "ambush": ["wolf", "wolf"], "boss": true, "time": "night"},
+			{"type": "battle", "name": "Ущелье", "groups": [["raider", "arsonist", "shade_wolf"], ["brute", "archer", "raider"], ["shade_alpha", "shade_wolf"]], "boss": true},
 		],
-		"intro": "Ночью лес звучит иначе. Элира говорит, что волки ходят не стаей, а будто по чьей-то указке.",
-		"outro": "У поджигателя нашли расписку: «За шум у окраины — 20 монет. К.Г.» Почерк знаком всей деревне."},
-	"c6": {"name": "След сборщика", "story": 6, "requires": ["c5"], "level": 6,
-		"desc": "Сборщик Корнелия ходит в лес по вторникам. Проследить, куда — и не попасться.",
+		"intro": "Повозка, две лошади, Тимофей, Ася и всё, что они нажили. До гильдии — день пути.",
+		"outro": "Обоз во дворе гильдии. Ася впервые за неделю смеётся. А на опушке Элира заметила чужого разведчика — он видел, куда мы пришли."},
+	"c5": {"name": "Штурм на закате", "story": 5, "requires": ["c4"], "level": 5, "outpost": true, "outpost_name": "Ворота гильдии", "start_time": "evening",
+		"desc": "Бандиты пришли по следу обоза. На закате они штурмуют дом гильдии: люди, лучники, поджигатели и двое главарей.",
+		"pay": 250, "repeat_pay": 110, "premium": {"name": "Крепкие ворота", "check": "gate60", "coins": 90},
+		"jxp": 140, "general": ["few_potions", "no_ko"], "materials": 5, "gate_hp": 1000, "outpost_ambush": [["bandit", 4]],
+		"twists": [["Штурм", "Пять волн, только люди. На третьей и пятой — чемпионы. Поджигатели метят в ворота."]],
+		"waves": [
+			[[["bandit", 4], ["bandit", 4], ["archer", 4]]],
+			[[["raider", 4], ["raider", 4], ["bandit", 4]]],
+			{"groups": [[["brute", 4], ["raider", 4], ["raider", 4]], [["archer", 4], ["bandit", 4]]], "champion": {"type": "archer", "affix": "swift", "name": "Сова"}},
+			{"groups": [[["brute", 4], ["bandit", 4], ["archer", 4]], [["bandit", 4], ["bandit", 4]]], "hp_pct": 90},
+			{"groups": [[["brute", 4], ["arsonist", 4], ["bandit", 4]], [["archer", 4], ["bandit", 4]]], "hp_pct": 90, "champion": {"type": "brute", "affix": "stone", "name": "Ольгерд Бычья Шея"}},
+		],
+		"intro": "Солнце садится, в лесу загораются факелы. Их много. Тимофей с Асей — в погребе, мы — у ворот.",
+		"outro": "К ночи штурм отбит. Раненый бандит рассказал, где их посёлок и кому они там молятся."},
+	"c6": {"name": "Контратака", "story": 6, "requires": ["c5"], "level": 6,
+		"desc": "Пока бандиты зализывают раны, отряд идёт к их посёлку. По дороге — их дозоры, духи зверей и люди, которых вожаки держат в страхе.",
 		"pay": 270, "repeat_pay": 120, "premium": {"name": "Полный кошелёк", "check": "thrift", "coins": 100},
 		"jxp": 150, "general": ["no_ko", "helpful"],
-		"twists": [],
+		"twists": [["Чужая земля", "Дозоры бандитов ходят вместе с духами. В событиях можно помочь жителям посёлка."]],
 		"route": [
 			{"type": "event", "name": "Охотничья вышка", "event": "tracks"},
-			{"type": "battle", "name": "Чаща", "groups": [["raider", "archer", "arsonist"], ["raider", "raider", "bandit"]], "ambush": ["boar", "wolf"]},
+			{"type": "battle", "name": "Чаща", "groups": [["raider", "archer", "shade_wolf"], ["raider", "raider", "bandit"]], "ambush": ["shade_boar", "shade_wolf"]},
 			{"type": "event", "name": "Часовня", "event": "chapel"},
 			{"type": "shop", "name": "Угольщики"},
-			{"type": "battle", "name": "Старый тракт", "groups": [["bandit", "arsonist", "archer"], ["brute", "bandit", "archer", "bandit"]],
+			{"type": "battle", "name": "Старый тракт", "groups": [["bandit", "arsonist", "archer"], ["brute", "bandit", "shade_lynx", "bandit"]],
 				"champion": {"type": "arsonist", "affix": "fiery", "name": "Огнебород"}},
 			{"type": "camp", "name": "Привал"},
 			{"type": "event", "name": "Тайник", "event": "cache"},
-			{"type": "battle", "name": "Ущелье Ганса", "groups": [["raider", "archer", "raider"], ["brute", "arsonist", "raider", "archer"]], "boss": true},
+			{"type": "battle", "name": "Овраг у посёлка", "groups": [["raider", "archer", "raider"], ["brute", "arsonist", "shade_wolf", "archer"]], "boss": true},
 		],
-		"intro": "Если сборщик приведёт нас к логову, мы узнаем, кто платит разбойникам.",
-		"outro": "Сборщик передал Гансу Рыжему кошель и сказал: «Книга у тебя, не потеряй — там все наши». Долговая книга."},
-	"c7": {"name": "Долговая книга", "story": 7, "requires": ["c6"], "level": 7, "chest": true,
-		"desc": "Логово Ганса Рыжего. В его сундуке — долговая книга Корнелия: кому дан заём, кому заплачено за налёты.",
-		"pay": 400, "repeat_pay": 150, "premium": {"name": "Книга цела", "check": "chest_safe", "coins": 150},
-		"jxp": 180, "general": ["no_ko", "fast_boss"],
-		"twists": [["Сундук с книгой", "Поджигатели тянутся к сундуку. Если он сгорит, премии не будет."], ["Главарь", "Ганс Рыжий крутит Вихрь клинков: отводите героев или сбивайте подготовку."]],
+		"intro": "Пленный сказал: там не столько бандиты, сколько голодные. Командуют ими те, кто слышит лес.",
+		"outro": "Мальчишка из посёлка вызвался провести к помосту вожака. «Ганс Рыжий говорит, что лес выбрал его. И лес его слушается»."},
+	"c7": {"name": "Пепелище", "story": 7, "requires": ["c6"], "level": 7,
+		"desc": "Посёлок бандитов разорён и наполовину сгорел. На помосте среди пепла — Ганс Рыжий, вожак, которому подчиняются звери. Короткий путь и тяжёлый бой.",
+		"pay": 400, "repeat_pay": 150, "premium": {"name": "Быстрая расправа", "check": "fast_boss", "coins": 150},
+		"jxp": 180, "general": ["no_ko", "helpful"],
+		"twists": [["Вожак", "Ганс Рыжий крутит Вихрь клинков и зовёт духов-волков. Отводите героев или сбивайте подготовку."]],
 		"route": [
-			{"type": "battle", "name": "Частокол", "groups": [["bandit", "archer", "arsonist"], ["bandit", "bandit", "archer"]], "ambush": ["wolf", "wolf"]},
+			{"type": "battle", "name": "Частокол", "groups": [["bandit", "archer", "arsonist"], ["bandit", "bandit", "shade_wolf"]], "ambush": ["shade_wolf", "shade_wolf"]},
 			{"type": "event", "name": "Перебежчик", "event": "turncoat"},
-			{"type": "battle", "name": "Двор логова", "groups": [["bandit", "raider", "archer"], ["brute", "archer", "bandit", "raider"]]},
-			{"type": "event", "name": "Придорожный идол", "event": "idol"},
-			{"type": "camp", "name": "Последний привал"},
-			{"type": "battle", "name": "Шатёр главаря", "groups": [["bandit", "archer", "arsonist"], ["captain", "archer", "bandit"]], "boss": true, "chest": true},
+			{"type": "event", "name": "Рогатый идол", "event": "idol"},
+			{"type": "battle", "name": "Помост вожака", "groups": [["bandit", "archer", "arsonist"], ["captain", "archer", "shade_alpha"]], "boss": true},
 		],
-		"intro": "Вот и всё. Либо гильдия закроется, либо закроется чья-то лавочка поприбыльнее.",
-		"outro": "Книга у нас. Страница за страницей — займы, «охрана», выплаты Гансу. Корнелий Гримм наживался на каждой беде тракта."},
+		"intro": "Здесь кончается лес и начинается пепел.",
+		"outro": "Ганс Рыжий мёртв. Но над пепелищем мы видели того, кто держит лес в кулаке, — друида Морвена. И он обещал вернуться."},
 	"c8": {"name": "Слово в столице", "story": 8, "requires": ["c7"], "level": 7, "diplomacy": "capital", "rank": "D", "finale": true,
-		"desc": "Книгу Корнелия надо отвезти в столицу и добиться, чтобы её приняли в королевской палате. Едут двое: Эйден и глава гильдии Ортвин Хейл. Боя не будет — только слова.",
+		"desc": "О друиде, что подчинил себе лесную живность, должны узнать при дворе. Едут двое: Эйден и глава гильдии Ортвин Хейл. Боя не будет — только слова.",
 		"pay": 200, "repeat_pay": 0, "premium": {"name": "Триумф при дворе", "check": "diplo_triumph", "coins": 150},
 		"jxp": 150, "general": [],
 		"twists": [["Дипломатия", "Вместо боёв — разговоры. Варианты ответа проверяют социальные черты: d20 + черта против КС.\nЕсли у напарника эта черта 3 и выше, он помогает: бросаются два кубика, берётся лучший."],
@@ -565,25 +600,289 @@ var CONTRACTS := {
 			{"type": "talk", "name": "Пир у графа", "time": "night"},
 			{"type": "talk", "name": "Палата", "time": "morning"},
 		],
-		"intro": "Книга у нас. Но пока её не прочтут в столице, это просто тетрадь с цифрами.",
+		"intro": "У нас есть пепел, рогатая корона Ганса и рассказ, в который трудно поверить.",
 		"outro": "Обратная дорога кажется короче. Ортвин дремлет в телеге, прижимая к груди грамоту."},
-	# Побочный
-	"s1": {"name": "Оборона лесной заставы", "story": 0, "requires": ["c3"], "level": 4, "outpost": true, "side": true, "start_time": "evening",
-		"desc": "Лесная застава у Ущелья осталась без гарнизона. Шесть волн налётчиков; ворота должны устоять.",
-		"pay": 220, "repeat_pay": 110, "premium": {"name": "Крепкие ворота", "check": "gate60", "coins": 80},
-		"jxp": 120, "general": ["no_ko", "few_potions"], "materials": 4,
-		"waves": [
-			[["raider", "raider", "raider"]],
-			[["boar", "wolf", "wolf", "arsonist"]],
-			[["bandit", "archer", "arsonist"], ["raider", "raider"]],
-			[["brute", "raider", "raider"], ["archer", "bandit"]],
-			[["brute", "bandit", "arsonist", "archer"], ["raider", "raider"]],
-			[["brute", "arsonist", "wolf_alpha", "raider"], ["archer", "bandit", "raider"]],
+	# Побочные: пещеры с обелисками
+	"sc1": {"name": "Волчья нора", "story": 0, "side": true, "cave": true, "requires": ["c2"], "level": 3, "start_time": "night",
+		"desc": "Элира нашла нору, из которой выходят духи-волки. В глубине — что-то, от чего у Нэрис ноют рога. Найти источник и разбить его.",
+		"pay": 140, "repeat_pay": 60, "premium": {"name": "Все возвращаются", "check": "no_ko", "coins": 50},
+		"jxp": 90, "general": ["no_ko", "few_potions"],
+		"twists": [["Обелиск", "В глубине пещеры стоит обелиск. Он не ходит и не бьёт, но выпускает духов. Разбейте его — и все духи рассыплются."], ["Тьма", "В пещере темно: враги дальше 360 шагов от героев не видны."]],
+		"route": [
+			{"type": "battle", "name": "Вход в нору", "time": "night", "groups": [["shade_wolf", "shade_wolf"], ["shade_wolf", "wolf", "shade_wolf"]]},
+			{"type": "battle", "name": "Кости", "time": "night", "groups": [["shade_wolf", "shade_alpha"]], "ambush": ["shade_wolf"]},
+			{"type": "battle", "name": "Обелиск", "time": "night", "groups": [["obelisk_wolf", "shade_wolf", "shade_wolf"]], "boss": true},
 		],
-		"intro": "Застава — это частокол, ворота и надежда, что налётчики устанут раньше нас.",
-		"outro": "Шесть волн отбиты. Комендант с дальнего поста обещал прислать людей — и не забыть, кто держал ворота."},
+		"intro": "Нора уходит под корни старого дуба. Оттуда тянет холодом и пеплом.",
+		"outro": "Обелиск рассыпался. Волки у норы больше не горят красным: живые разбежались, тени истаяли."},
+	"sc2": {"name": "Паучий грот", "story": 0, "side": true, "cave": true, "requires": ["c4"], "level": 5, "start_time": "night",
+		"desc": "Тимофей рассказал про грот у ручья: туда ушли пауки, а вернулись тени. Второй обелиск должен быть там.",
+		"pay": 200, "repeat_pay": 80, "premium": {"name": "Бережливость", "check": "few_potions", "coins": 70},
+		"jxp": 110, "general": ["no_ko", "few_potions"],
+		"twists": [["Обелиск", "Обелиск выпускает духов-пауков. Разбейте его — и все духи рассыплются."], ["Тьма", "В гроте темно, рыси подкрадываются невидимыми."]],
+		"route": [
+			{"type": "battle", "name": "Паутина", "time": "night", "groups": [["shade_spider", "shade_spider"], ["shade_lynx", "shade_spider"]]},
+			{"type": "battle", "name": "Гнездо", "time": "night", "groups": [["shade_spider", "spider", "shade_spider"], ["shade_lynx", "shade_lynx"]]},
+			{"type": "battle", "name": "Обелиск", "time": "night", "groups": [["obelisk_spider", "shade_spider", "shade_lynx"]], "boss": true},
+		],
+		"intro": "Стены грота затянуты паутиной, в ней светятся грибы. И что-то пульсирует красным.",
+		"outro": "Второй обелиск разбит. Пауки в гроте снова просто пауки — злые, но свои."},
+	"sc3": {"name": "Медвежий разлом", "story": 0, "side": true, "cave": true, "requires": ["c6"], "level": 7, "start_time": "night",
+		"desc": "Мальчишка из посёлка показал расщелину, куда вожаки водили людей «к хозяину леса». Там третий обелиск и тот, кто его стережёт.",
+		"pay": 260, "repeat_pay": 100, "premium": {"name": "Все возвращаются", "check": "no_ko", "coins": 90},
+		"jxp": 130, "general": ["no_ko", "few_potions"],
+		"twists": [["Обелиск", "Обелиск выпускает духов-волков. Его стережёт призрачный медведь."], ["Тьма", "В разломе темно."]],
+		"route": [
+			{"type": "battle", "name": "Разлом", "time": "night", "groups": [["shade_alpha", "shade_wolf", "shade_wolf"], ["shade_bear"]]},
+			{"type": "battle", "name": "Логово хозяина", "time": "night", "groups": [["shade_bear", "shade_lynx"]], "ambush": ["shade_wolf", "shade_wolf"]},
+			{"type": "battle", "name": "Обелиск", "time": "night", "groups": [["obelisk_bear", "shade_wolf", "shade_wolf"]], "boss": true},
+		],
+		"intro": "Разлом дышит теплом, как зверь во сне. На камнях — рогатые знаки культа.",
+		"outro": "Третий обелиск рассыпался. Где-то далеко в лесу кто-то закричал от злости — и голос был знаком."},
 }
 const STORY_ORDER := ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"]
+## Побочные поручения: три пещеры с обелисками друида, открываются по ходу сюжета.
+## Каждый разбитый обелиск ослабляет духов зверей во всех походах (Game.shade_k).
+const SIDE_ORDER: Array = ["sc1", "sc2", "sc3"]
+
+# ---------------------------------------------------------------- Кат-сцены
+## Короткие сюжетные сцены прямо на дороге (проигрывает scenes/expedition/Cutscene.tscn).
+## contract — поручение; node — перед каким пунктом маршрута (сцена идёт на отрезке пути к нему);
+## at — доля этого отрезка, на которой отряд останавливается. Сцена показывается один раз за игру
+## (Game.state.cutscenes_seen); на повторных прохождениях поручения её нет.
+## Шаги (steps), по порядку:
+##   {"say": "elira", "text": "…"}            — реплика над героем или актёром; "" — текст рассказчика внизу. Ждёт щелчка.
+##   {"enter": "wolf", "look": "wolf_shade", "name": "…", "x": 1180, "speed": 520}
+##                                             — актёр выбегает справа и встаёт в x (пиксели экрана). Ждёт, пока добежит.
+##   {"anim": "aiden", "kind": "cast_release", "fx": "ward", "at": "wolf"}
+##                                             — движение героя (в 3D/2D-виде) и вспышка над целью; у актёра — выпад.
+##   {"wait": 0.8}                             — пауза.
+##   {"cam": 1.25} / {"cam": 0}                — наезд камеры на отряд и актёров / обычный вид.
+##   {"fight": [["shade_wolf"]], "actors": ["wolf"]}
+##                                             — настоящий бой: актёры становятся врагами там, где стоят. После победы сцена идёт дальше.
+##   {"banner": "…"}                           — крупная надпись по центру.
+## Пропуск сцены проматывает шаги до ближайшего боя (бой не пропускается) или до конца.
+var CUTSCENES := {
+	"c1_red_eyes": {"contract": "c1", "node": 0, "at": 0.55, "steps": [
+		{"say": "", "text": "Лес вокруг гильдии. Тропа в сторону хутора Тимофея."},
+		{"say": "elira", "text": "Стойте. Лес замолчал. Ни птиц, ни белок."},
+		{"enter": "wolf", "look": "wolf_shade", "name": "Волк", "x": 1190, "speed": 560},
+		{"cam": 1.22},
+		{"say": "marek", "text": "Всего лишь волк. Один. Отойдёт."},
+		{"say": "elira", "text": "Посмотри на глаза. У волков таких не бывает."},
+		{"say": "aiden", "text": "Тише, серый. Мы тебе не враги. Ступай своей дорогой."},
+		{"anim": "aiden", "kind": "cast_release", "fx": "ward", "at": "wolf"},
+		{"wait": 0.9},
+		{"say": "wolf", "text": "Р-р-р-р…"},
+		{"say": "neris", "text": "Не слушает. Он смотрит не на нас, а сквозь нас."},
+		{"anim": "wolf"},
+		{"say": "marek", "text": "Щиты! Он бросается!"},
+		{"fight": [["red_wolf"]], "actors": ["wolf"]},
+		{"wait": 0.8},
+		{"cam": 1.22},
+		{"say": "marek", "text": "Волки так не умирают."},
+		{"say": "elira", "text": "Ни крови, ни шерсти. И следов на тропе нет, будто он не пришёл, а появился."},
+		{"say": "neris", "text": "Это не зверь. Проекция, тень, которую кто-то отбросил на лес. И натравил её на нас."},
+		{"say": "aiden", "text": "Значит, у этой беды есть хозяин. Тем важнее дойти до Тимофея."},
+		{"say": "marek", "text": "Тогда держимся тропы и смотрим в оба."},
+		{"cam": 0},
+	]},
+	"c1_end": {"contract": "c1", "node": "end", "steps": [
+		{"cam": 1.2},
+		{"say": "elira", "text": "Вожак тоже рассыпался. Половина этой стаи была не живой."},
+		{"say": "neris", "text": "Кто-то лепит их из тени и злобы. Много и быстро."},
+		{"say": "aiden", "text": "Хутор Тимофея ещё глубже в лесу. Если здесь так, что же там?"},
+		{"say": "marek", "text": "Значит, завтра идём к нему."},
+		{"cam": 0},
+	]},
+	"c2_watchers": {"contract": "c2", "node": 0, "at": 0.5, "steps": [
+		{"say": "", "text": "Чем дальше от гильдии, тем темнее лес. Птиц здесь нет совсем."},
+		{"enter": "w1", "look": "wolf_shade", "name": "Волк", "x": 1230, "speed": 420},
+		{"enter": "w2", "look": "wolf_shade", "name": "Волк", "x": 1360, "speed": 420, "dy": -18},
+		{"cam": 1.2},
+		{"say": "elira", "text": "Двое. Стоят и смотрят."},
+		{"say": "marek", "text": "Не нападают?"},
+		{"say": "neris", "text": "Им не велели. Пока."},
+		{"exit": "w1"},
+		{"exit": "w2"},
+		{"say": "aiden", "text": "Будто убежали кому-то сказать, что мы идём."},
+		{"cam": 0},
+	]},
+	"c2_end": {"contract": "c2", "node": "end", "steps": [
+		{"enter": "tim", "look": "farmer", "name": "Тимофей", "x": 1120, "speed": 240},
+		{"cam": 1.2},
+		{"say": "tim", "text": "Гильдия! Свет вас храни, я уж думал — всё."},
+		{"say": "aiden", "text": "Живы? А Ася?"},
+		{"say": "tim", "text": "В погребе. Звери нас не трогали, только кружили. А вчера пришли люди с рогатыми амулетами."},
+		{"say": "tim", "text": "Звери перед ними расступались, как собаки перед хозяином. Сказали: к вечеру хутор должен опустеть."},
+		{"say": "marek", "text": "К вечеру они и вернутся. Готовим ворота."},
+		{"cam": 0},
+	]},
+	"c3_bandits": {"contract": "c3", "node": 0, "at": 0.55, "steps": [
+		{"say": "", "text": "Вечер у хутора Тимофея. Из леса выходят люди."},
+		{"enter": "b1", "look": "bandit", "name": "Бандит с амулетом", "x": 1140, "speed": 300},
+		{"enter": "b2", "look": "archer", "name": "Лучница", "x": 1280, "speed": 300, "dy": -18},
+		{"enter": "wolf", "look": "wolf_shade", "name": "Волк", "x": 1390, "speed": 300, "dy": 16},
+		{"cam": 1.2},
+		{"say": "b1", "text": "Гильдейские? Уходите. Лес не хочет вас здесь."},
+		{"say": "aiden", "text": "Лес? Звери с красными глазами — это не лес."},
+		{"say": "b1", "text": "Это его сила. Вы — зараза, и природа сама вас выталкивает. А нас она бережёт."},
+		{"say": "neris", "text": "Бережёт, пока вы полезны. Вы просто удобные пешки в чужой игре."},
+		{"say": "b2", "text": "Пешки? А вы видели, что с вашими волками? Не умирают — сгорают в пепел."},
+		{"say": "b1", "text": "Это ваша тёмная сила. Она не убивает, а изгоняет из мира живых. Как в старой легенде о Пепельных."},
+		{"say": "neris", "text": "Меня ещё ни разу не называли легендой. Даже приятно."},
+		{"say": "b1", "text": "Хутор будет наш. А вы ляжете в пепел вместе со своими волками."},
+		{"exit": "b1"},
+		{"exit": "b2"},
+		{"exit": "wolf"},
+		{"say": "marek", "text": "К воротам. Сейчас начнётся."},
+		{"cam": 0},
+	]},
+	"c3_end": {"contract": "c3", "node": "end", "steps": [
+		{"enter": "tim", "look": "farmer", "name": "Тимофей", "x": 1080, "speed": 240},
+		{"cam": 1.2},
+		{"say": "tim", "text": "Ушли… Грозились, что вернутся вместе с лесом."},
+		{"say": "elira", "text": "Вернутся. Оставаться здесь нельзя, Тимофей."},
+		{"say": "tim", "text": "Значит, грузим повозку. Всё, что увезём."},
+		{"cam": 0},
+	]},
+	"c4_farewell": {"contract": "c4", "node": 0, "at": 0.45, "steps": [
+		{"say": "", "text": "Утро. Повозка Тимофея скрипит на лесной дороге."},
+		{"say": "aiden", "text": "Тимофей, держись ближе к повозке. Ася — внутри, под мешками."},
+		{"say": "marek", "text": "Тридцать лет хутору, сказал он. Дед ещё ставил."},
+		{"say": "aiden", "text": "Вернётся. Когда лес снова станет лесом."},
+		{"say": "elira", "text": "Впереди и люди, и звери. Глядите за повозкой, они пойдут к ней."},
+	]},
+	"c4_end": {"contract": "c4", "node": "end", "steps": [
+		{"enter": "tim", "look": "farmer", "name": "Тимофей", "x": 1080, "speed": 240},
+		{"cam": 1.2},
+		{"say": "tim", "text": "Дошли! Ася, гляди — дом гильдии."},
+		{"say": "marek", "text": "Элира, ты что?"},
+		{"say": "elira", "text": "На опушке человек. Смотрел, куда мы свернули, и ушёл в лес."},
+		{"say": "neris", "text": "Значит, скоро у нас гости."},
+		{"cam": 0},
+	]},
+	"c5_torches": {"contract": "c5", "node": 0, "at": 0.5, "steps": [
+		{"say": "", "text": "Закат. В лесу один за другим загораются факелы."},
+		{"say": "marek", "text": "Ворота заперты. Тимофей с Асей в погребе."},
+		{"say": "neris", "text": "Их много. И ни одного зверя рядом. Странно."},
+		{"say": "aiden", "text": "Звери — для леса. А дом гильдии они хотят взять своими руками."},
+		{"say": "elira", "text": "Тогда пусть попробуют."},
+	]},
+	"c5_end": {"contract": "c5", "node": "end", "steps": [
+		{"say": "", "text": "К ночи штурм отбит."},
+		{"enter": "pr", "look": "bandit", "name": "Пленный", "x": 1060, "speed": 160},
+		{"cam": 1.2},
+		{"say": "pr", "text": "Не убивайте! Нас гонят вожаки… Ганс Рыжий говорит, что лес выбрал его."},
+		{"say": "marek", "text": "Где ваш посёлок?"},
+		{"say": "pr", "text": "За Чёрным оврагом. Там голод, а вожаки молятся рогатому идолу."},
+		{"say": "aiden", "text": "Значит, идём туда. Не за местью — за ответом."},
+		{"cam": 0},
+	]},
+	"c6_boy": {"contract": "c6", "node": 0, "at": 0.5, "steps": [
+		{"say": "", "text": "Земля бандитов. Пни вместо деревьев, пустые силки."},
+		{"enter": "boy", "look": "farmer", "name": "Мальчишка", "x": 1130, "speed": 320},
+		{"cam": 1.2},
+		{"say": "boy", "text": "Вы из гильдии? Вы правда тёмные?"},
+		{"say": "aiden", "text": "Мы лечим людей, а не изгоняем."},
+		{"say": "boy", "text": "У нас все голодают. Вожаки забирают еду для идола. Кто спорит — того в лес, к зверям."},
+		{"say": "elira", "text": "А звери?"},
+		{"say": "boy", "text": "Слушаются Ганса. А Ганс — кого-то в чаще. Ночью он ходит туда один."},
+		{"exit": "boy"},
+		{"say": "neris", "text": "Кого-то в чаще. Вот и нить, Эйден."},
+		{"cam": 0},
+	]},
+	"c6_end": {"contract": "c6", "node": "end", "steps": [
+		{"say": "marek", "text": "Овраг взят. Дальше — их посёлок."},
+		{"say": "elira", "text": "Пахнет гарью. Там что-то горело, и недавно."},
+		{"say": "aiden", "text": "Пойдём, пока Ганс не собрал людей."},
+	]},
+	"c7_hans": {"contract": "c7", "node": 0, "at": 0.5, "steps": [
+		{"say": "", "text": "Посёлок наполовину сгорел. Пепел лежит, как снег."},
+		{"enter": "hans", "look": "captain", "name": "Ганс Рыжий", "x": 1230, "speed": 220},
+		{"cam": 1.2},
+		{"say": "hans", "text": "Пришли, тёмные! Смотрите, люди: вот кто жжёт лес и изгоняет его детей!"},
+		{"say": "aiden", "text": "Твои люди голодают, Ганс. А ты отдаёшь их хлеб идолу."},
+		{"say": "hans", "text": "Лес дал мне силу. Звери ложатся у моих ног. А вам он даст только пепел!"},
+		{"say": "neris", "text": "Сила не твоя. Тебя держат на поводке, просто поводок длинный."},
+		{"say": "hans", "text": "Хватит! На помосте и поговорим."},
+		{"exit": "hans"},
+		{"cam": 0},
+	]},
+	"c7_druid": {"contract": "c7", "node": "end", "steps": [
+		{"say": "", "text": "Пепел над помостом закручивается вихрем."},
+		{"enter": "druid", "look": "druid", "name": "Морвен", "x": 1180, "speed": 140},
+		{"cam": 1.25},
+		{"say": "druid", "text": "Ганс был полезен. Глуп, но полезен."},
+		{"say": "aiden", "text": "Так это ты держишь лес."},
+		{"say": "druid", "text": "Я его хозяин. Каждый зверь, каждый корень. А вы — гниль в его теле."},
+		{"say": "elira", "text": "Ты травишь лес, а не бережёшь."},
+		{"say": "druid", "text": "Убить меня? Попробуйте."},
+		{"anim": "druid"},
+		{"say": "marek", "text": "Щиты!"},
+		{"vanish": "druid"},
+		{"wait": 1.0},
+		{"say": "", "text": "Голос звучит отовсюду: «Я не оставлю вас в покое. Ни вас, ни ваших детей. До скончания веков»."},
+		{"say": "neris", "text": "Он не ушёл. Он просто стал лесом."},
+		{"say": "aiden", "text": "Об этом должны узнать в столице."},
+		{"cam": 0},
+	]},
+	"sc1_start": {"contract": "sc1", "node": 0, "at": 0.5, "steps": [
+		{"say": "", "text": "Нора под корнями старого дуба. Внутри темно и пахнет пеплом."},
+		{"say": "neris", "text": "Чувствуете? Как будто зуб ноет, только во всём теле. Здесь что-то тянет силу."},
+		{"say": "elira", "text": "Следов много, а живых зверей ни одного."},
+		{"say": "aiden", "text": "Держимся вместе. Свет — впереди."},
+	]},
+	"sc1_end": {"contract": "sc1", "node": "end", "steps": [
+		{"say": "", "text": "Осколки обелиска гаснут один за другим."},
+		{"enter": "wolf", "look": "wolf", "name": "Волк", "x": 1250, "speed": 300},
+		{"cam": 1.2},
+		{"say": "elira", "text": "Смотрите. Глаза обычные. Живой волк."},
+		{"say": "wolf", "text": "…"},
+		{"exit": "wolf", "speed": 500},
+		{"say": "aiden", "text": "Его просто отпустило. Значит, зверей можно вылечить — если ломать эти камни."},
+		{"say": "neris", "text": "Один из трёх. Я слышу ещё два, далеко."},
+		{"cam": 0},
+	]},
+	"sc2_start": {"contract": "sc2", "node": 0, "at": 0.5, "steps": [
+		{"say": "", "text": "Грот у ручья. Паутина от стены до стены, в ней светятся грибы."},
+		{"say": "marek", "text": "Ненавижу пауков."},
+		{"say": "neris", "text": "Это не пауки, Марек. Это тени пауков. Так легче?"},
+		{"say": "marek", "text": "Нет."},
+	]},
+	"sc2_end": {"contract": "sc2", "node": "end", "steps": [
+		{"say": "", "text": "Второй обелиск трескается и осыпается пеплом."},
+		{"say": "elira", "text": "Паутина больше не светится. Грот стал просто гротом."},
+		{"say": "aiden", "text": "Друид почувствует это. Пусть знает, что мы идём."},
+	]},
+	"sc3_start": {"contract": "sc3", "node": 0, "at": 0.5, "steps": [
+		{"say": "", "text": "Разлом в скале. На камнях — рогатые знаки, как на тотемах бандитов."},
+		{"say": "elira", "text": "Медвежьи следы. Огромные. И пепел в них."},
+		{"say": "marek", "text": "Щиты вперёд. Если это медведь, он будет первым."},
+	]},
+	"sc3_end": {"contract": "sc3", "node": "end", "steps": [
+		{"say": "", "text": "Последний обелиск рассыпается. Где-то далеко в лесу кто-то кричит от злости."},
+		{"say": "neris", "text": "Он это почувствовал. И ему больно."},
+		{"say": "aiden", "text": "Три из трёх. Лес снова может дышать — хотя бы здесь."},
+	]},
+}
+
+## Длина маршрута поручения (у обороны — один пункт).
+func route_len(cid: String) -> int:
+	var c: Dictionary = CONTRACTS[cid]
+	return 1 if c.get("outpost", false) else c.get("route", []).size()
+
+## Кат-сцена, которая должна идти на отрезке пути к пункту node поручения cid ("" — нет).
+## node = длина маршрута — сцена-итог после последнего пункта ("node": "end").
+func cutscene_for(cid: String, node: int) -> String:
+	for id in CUTSCENES.keys():
+		var cs: Dictionary = CUTSCENES[id]
+		var n = cs["node"]
+		if typeof(n) == TYPE_STRING:
+			n = route_len(cid) if n == "end" else -1
+		if cs["contract"] == cid and int(n) == node:
+			return id
+	return ""
 
 # ---------------------------------------------------------------- Социальные черты и дипломатия
 # Вторичные характеристики для проверок характера (в духе DnD): d20 + значение черты против КС.
@@ -599,7 +898,7 @@ const SOCIAL_DESC := {
 	"ins": "Видеть ложь, страх и выгоду за вежливыми словами.",
 }
 const SOCIAL_MAX := 6          # потолок черты (природное + очки)
-const SOCIAL_UNLOCK_STORY := 7 # черты открываются после «Долговой книги»
+const SOCIAL_UNLOCK_STORY := 7 # черты открываются после «Пепелища»
 const SOCIAL_HELP := 3         # напарник с чертой не ниже этого помогает: бросок с преимуществом (2d20, лучший)
 ## Природные значения черт (характер героя)
 const SOCIAL_BASE := {
@@ -625,9 +924,9 @@ var DIPLOMACY := {
 		"party": ["aiden", "ortwin"],
 		"beats": [
 			{"place": 0, "who": "Сержант Брун, стража Медных ворот",
-				"text": "Столица встречает очередью телег и запахом дёгтя. Сержант у Медных ворот стучит алебардой по сундуку с книгой: «Пошлина с груза — двадцать монет. Или открывайте, поглядим, что вы там везёте».",
+				"text": "Столица встречает очередью телег и запахом дёгтя. Сержант у Медных ворот стучит алебардой по сундуку: «Пошлина с груза — двадцать монет. Или открывайте, поглядим, что вы там везёте».",
 				"options": [
-					{"text": "«Мы везём доказательства для палаты. Задержишь — ответишь сам»", "speaker": "aiden", "check": {"stat": "cha", "dc": 11},
+					{"text": "«Мы везём вести для палаты. Задержишь — ответишь сам»", "speaker": "aiden", "check": {"stat": "cha", "dc": 11},
 						"ok": {"say": "Сержант мнётся, потом машет рукой: «Проезжайте. Я вас не видел». Слух о гильдии с важным сундуком бежит впереди вас.", "favor": 1},
 						"fail": {"say": "«Все так говорят». Пришлось платить пошлину под смешки очереди.", "coins": -20}},
 					{"text": "«Статут о гильдиях, статья третья: свои бумаги гильдия везёт без пошлины»", "speaker": "ortwin", "check": {"stat": "lore", "dc": 11},
@@ -642,7 +941,7 @@ var DIPLOMACY := {
 					{"text": "«Грамоту дают на имя главы, а не короля. Глава — я, и я жив»", "speaker": "ortwin", "check": {"stat": "lore", "dc": 13},
 						"ok": {"say": "Флавий впервые поднимает глаза. «Хм. Действительно». Прошение ложится в нужную стопку.", "favor": 2},
 						"fail": {"say": "Флавий сверяется с тремя томами и откладывает прошение «на рассмотрение». Ждать придётся до вечера."}},
-					{"text": "«Пока здесь спорят о печатях, на тракте горят сараи»", "speaker": "aiden", "check": {"stat": "elo", "dc": 13},
+					{"text": "«Пока здесь спорят о печатях, лес у Ольхового Брода сходит с ума»", "speaker": "aiden", "check": {"stat": "elo", "dc": 13},
 						"ok": {"say": "Флавий молча выводит на прошении: «Срочно».", "favor": 2},
 						"fail": {"say": "«Трогательно. Следующий». Прошение уходит в общую стопку.", "favor": -1}},
 					{"text": "Похвалить безупречный почерк секретаря", "speaker": "aiden", "check": {"stat": "app", "dc": 12},
@@ -650,77 +949,77 @@ var DIPLOMACY := {
 						"fail": {"say": "Лесть звучит как лесть. Флавий морщится, но прошение всё же берёт."}},
 				]},
 			{"place": 1, "who": "Мэтр Флавий, секретарь лорда-казначея",
-				"text": "Флавий листает долговую книгу и останавливается на подписи под выплатами: «Две буквы. Чьи?»",
+				"text": "Флавий разглядывает рогатую корону Ганса и склянку с серым пеплом: «Звери, что сгорают в пепел. Вы понимаете, как это звучит? Кто, по-вашему, за этим стоит?»",
 				"options": [
-					{"text": "«К.Г. — Корнелий Гримм, ростовщик из Ольхового Брода»", "answer": true,
-						"ok": {"say": "«Сходится с его векселями в казне», — бормочет Флавий и делает пометку.", "favor": 1}},
-					{"text": "«Ганса Рыжего, главаря разбойников»", "answer": false,
-						"fail": {"say": "«Разбойник, который подписывает векселя казны? Не смешите меня».", "favor": -1}},
-					{"text": "«Это шифр. Мы надеялись, что вы подскажете»", "answer": false,
+					{"text": "«Друид. Он зовёт себя Морвеном и говорит, что лес — его»", "answer": true,
+						"ok": {"say": "Флавий бледнеет и выписывает имя на отдельный лист. «В архиве есть похожее. Очень старое».", "favor": 1}},
+					{"text": "«Бандиты Ганса Рыжего. Они приручили зверей»", "answer": false,
+						"fail": {"say": "«Приручили зверей, которые сгорают в пепел? Не смешите меня».", "favor": -1}},
+					{"text": "«Мы надеялись, что вы подскажете»", "answer": false,
 						"fail": {"say": "Флавий смотрит на вас, как на школяров, не выучивших урок."}},
 				]},
 			{"place": 2, "who": "Прелат Аврелия, храм Светлой Матери",
-				"text": "Перед аудиенцией вас зовут в храм. Прелат говорит мягко: «Корнелий Гримм отстроил нам колокольню. Зачем жрецу ссорить храм с его благодетелем?»",
+				"text": "Перед аудиенцией вас зовут в храм. Прелат говорит мягко: «Рассказы о проклятом лесе пугают паству. Зачем жрецу сеять страх, если можно молиться?»",
 				"options": [
-					{"text": "«„Не бери с вдовы залога“. Колокольня Гримма звонит на чужие слёзы»", "speaker": "aiden", "check": {"stat": "faith", "dc": 12},
+					{"text": "«Молитва не остановит зверей у порога. Остановят люди, которым поверили»", "speaker": "aiden", "check": {"stat": "faith", "dc": 12},
 						"ok": {"say": "Аврелия долго молчит. «Я буду в палате. И скажу то же самое».", "favor": 2, "flag": "prelate"},
-						"fail": {"say": "Цитата выходит неточной. Аврелия поправляет вас — вежливо и холодно."}},
+						"fail": {"say": "Слова выходят резкими. Аврелия поправляет вас — вежливо и холодно."}},
 					{"text": "Понять, чего прелат боится на самом деле", "speaker": "ortwin", "check": {"stat": "ins", "dc": 13},
-						"ok": {"say": "Ортвин тихо обещает, что имя храма в деле не прозвучит. «Вы понятливы, мастер Хейл. Храм не будет мешать».", "favor": 1, "flag": "prelate"},
+						"ok": {"say": "Ортвин тихо обещает, что храм не назовут виноватым в панике. «Вы понятливы, мастер Хейл. Храм не будет мешать».", "favor": 1, "flag": "prelate"},
 						"fail": {"say": "Аврелия оскорблена намёком и уходит, не попрощавшись.", "favor": -1}},
 					{"text": "Оставить пожертвование на нужды храма", "answer": true,
 						"ok": {"say": "Монеты звенят о дно чаши. Аврелия благословляет вас — сдержанно.", "favor": 1, "coins": -30}},
 				]},
-			{"place": 3, "who": "Граф Ланфорд Вирт, покровитель Корнелия",
-				"text": "Вечером вас зовут на пир. Граф Вирт с улыбкой отводит Эйдена к камину: «Сто монет гильдии — и книга сгорит прямо здесь. Все останутся при своих. Даже вы».",
+			{"place": 3, "who": "Граф Ланфорд Вирт, владелец лесных угодий",
+				"text": "Вечером вас зовут на пир. Граф Вирт с улыбкой отводит Эйдена к камину: «Мои леса, мои охотничьи угодья. Если пойдут слухи о проклятии, их никто не купит. Сто монет гильдии — и вы рассказываете о бандитах. Только о бандитах».",
 				"options": [
 					{"text": "Отказать громко, чтобы слышал весь зал", "speaker": "aiden", "check": {"stat": "cha", "dc": 14},
 						"ok": {"say": "Зал замолкает. Кто-то из гостей начинает хлопать. Граф улыбается уже не так широко.", "favor": 2},
 						"fail": {"say": "Голос срывается на середине фразы. Гости смеются — и не над графом.", "favor": -1}},
-					{"text": "«Сжечь? Тогда сгорят и ваши страницы, граф»", "speaker": "ortwin", "check": {"stat": "ins", "dc": 13},
-						"ok": {"say": "Граф бледнеет и до конца вечера больше к вам не подходит.", "favor": 1, "flag": "count_named"},
+					{"text": "«Если лес не остановить, продавать будет нечего, граф»", "speaker": "ortwin", "check": {"stat": "ins", "dc": 13},
+						"ok": {"say": "Граф бледнеет, долго молчит и наконец кивает: в палате он мешать не станет.", "favor": 1, "flag": "count_named"},
 						"fail": {"say": "Граф смеётся: «Старик бредит». Возможно, так оно и есть."}},
 					{"text": "Пригласить на танец графиню и расспросить её", "speaker": "aiden", "check": {"stat": "app", "dc": 13},
-						"ok": {"say": "Графиня смеётся и шепчет три имени. Одно из них — её собственный муж.", "favor": 1, "flag": "count_named"},
+						"ok": {"say": "Графиня смеётся и шепчет: граф сам видел зверя с красными глазами, но молчит из-за денег.", "favor": 1, "flag": "count_named"},
 						"fail": {"say": "Вы наступаете ей на ногу. Дважды."}},
 					{"text": "Взять деньги и пообещать подумать", "answer": true,
-						"ok": {"say": "Кошель тяжёлый. Ортвин отворачивается. Книгу вы, конечно, не отдали, но о взятке к утру знает весь двор.", "favor": -3, "coins": 100, "flag": "bribed"}},
+						"ok": {"say": "Кошель тяжёлый. Ортвин отворачивается. Молчать вы, конечно, не будете, но о взятке к утру знает весь двор.", "favor": -3, "coins": 100, "flag": "bribed"}},
 				]},
 			{"place": 4, "who": "Лорд-казначей Эдгар Морн, королевская палата",
-				"text": "Палата. Лорд-казначей листает книгу, придворные шепчутся за колоннами. «Чем вы докажете, что это книга Гримма, а не ваша подделка?»",
+				"text": "Палата. Лорд-казначей вертит в руках рогатую корону, придворные шепчутся за колоннами. «Чем вы докажете, что это не сказка для выпрашивания денег?»",
 				"bonus": {"prelate": [2, "прелат Аврелия на вашей стороне"], "count_named": [1, "граф Вирт молчит"]},
 				"options": [
-					{"text": "«Посмотрите сами: каждая страница цела, каждая выплата — его рукой»", "answer": true, "req": {"premium": "c7"},
-						"ok": {"say": "Морн листает долго. Придворные перестают шептаться.", "favor": 2}},
-					{"text": "«У поджигателя на окраине нашли расписку с той же подписью. Сличите почерк»", "answer": true,
-						"ok": {"say": "Писари сличают почерк. Совпадает до завитка.", "favor": 1}},
-					{"text": "«Векселя Гримма хранятся в вашей же казне. Сличите печати»", "speaker": "ortwin", "check": {"stat": "lore", "dc": 14},
-						"ok": {"say": "Писари приносят векселя. Печать та же. Морн медленно закрывает книгу.", "favor": 2},
-						"fail": {"say": "Векселей нужного года в казне не находят. Морн хмурится."}},
+					{"text": "«Ганс пал за минуты. Без друида за спиной он был просто разбойником»", "answer": true, "req": {"premium": "c7"},
+						"ok": {"say": "Морн долго смотрит на корону. Придворные перестают шептаться.", "favor": 2}},
+					{"text": "«Вот пепел зверя. Пусть его осмотрят ваши маги»", "answer": true,
+						"ok": {"say": "Придворный маг растирает пепел в пальцах и хмурится: «Это не горело. Это… развеялось».", "favor": 1}},
+					{"text": "«В архиве палаты есть хроники о Пепельных. Поднимите их»", "speaker": "ortwin", "check": {"stat": "lore", "dc": 14},
+						"ok": {"say": "Писари приносят пыльный том. Двести лет назад в тех же лесах было то же самое. Морн медленно откладывает корону.", "favor": 2},
+						"fail": {"say": "Нужного тома в архиве не находят. Морн хмурится."}},
 				]},
 			{"place": 4, "who": "Лорд-казначей Эдгар Морн, королевская палата",
-				"text": "Морн откладывает книгу: «Последнее слово, гильдия. Чего вы просите у короны?»",
+				"text": "Морн откладывает корону: «Последнее слово, гильдия. Чего вы просите у короны?»",
 				"bonus": {"prelate": [2, "прелат Аврелия на вашей стороне"], "count_named": [1, "граф Вирт молчит"]},
 				"options": [
-					{"text": "«Списать долги Ольхового Брода. Это не милость — это справедливость»", "speaker": "aiden", "check": {"stat": "elo", "dc": 14},
+					{"text": "«Признать угрозу и прислать к Ольховому Броду королевских егерей»", "speaker": "aiden", "check": {"stat": "elo", "dc": 14},
 						"ok": {"say": "Тишина. Потом Морн кивает писарю: «Записывайте».", "favor": 2},
 						"fail": {"say": "Речь выходит длинной и сбивчивой. Морн терпеливо ждёт, когда вы закончите."}},
-					{"text": "«Для себя — ничего. Пусть на тракте снова будет тихо»", "speaker": "aiden", "check": {"stat": "faith", "dc": 13},
+					{"text": "«Для себя — ничего. Пусть люди в лесу снова спят спокойно»", "speaker": "aiden", "check": {"stat": "faith", "dc": 13},
 						"ok": {"say": "Прелат за колонной склоняет голову. Морн смотрит на вас иначе.", "favor": 2},
 						"fail": {"say": "Слова звучат как проповедь. В палате проповеди не любят."}},
-					{"text": "Перечислить статьи закона, которые нарушил Гримм", "speaker": "ortwin", "check": {"stat": "elo", "dc": 12},
-						"ok": {"say": "Ортвин говорит сухо и долго. Возразить нечего.", "favor": 1},
-						"fail": {"say": "Ортвин сбивается со счёта статей. Кто-то из придворных зевает."}},
+					{"text": "Перечислить, во что обойдётся короне бездействие", "speaker": "ortwin", "check": {"stat": "elo", "dc": 12},
+						"ok": {"say": "Ортвин говорит сухо и долго: хутора, торговля, лесная подать. Возразить нечего.", "favor": 1},
+						"fail": {"say": "Ортвин сбивается в подсчётах. Кто-то из придворных зевает."}},
 				]},
 		],
 		## Итог по расположению двора (от лучшего)
 		"outcomes": [
 			{"min": 9, "id": "triumph", "name": "Триумф при дворе", "coins": 150,
-				"text": "Корнелий Гримм объявлен вне закона, его векселя аннулированы. Гильдии продлена грамота — с печатью нового короля."},
-			{"min": 5, "id": "success", "name": "Долги списаны", "coins": 60,
-				"text": "Долги Ольхового Брода списаны. Корнелий бежал из столицы, не дождавшись приговора."},
+				"text": "Корона признала угрозу. К Ольховому Броду отправят королевских егерей, а гильдии продлена грамота и выдано жалованье на поиски друида."},
+			{"min": 5, "id": "success", "name": "Угроза признана", "coins": 60,
+				"text": "Палата выделила гильдии деньги на поиски источника скверны. Остальным при дворе пока не до леса."},
 			{"min": -99, "id": "partial", "name": "Дело отложено", "coins": 0,
-				"text": "Книгу приняли «к рассмотрению». Долги заморожены, но не списаны, а Корнелий по-прежнему на свободе."},
+				"text": "Рассказ о друиде сочли байкой. Гильдии придётся справляться самой."},
 		],
 	},
 }
@@ -774,28 +1073,25 @@ var EVENTS := {
 			{"text": "Марек выведет корову (−25% ОЗ Марека)", "fx": {"hp_hero": {"marek": -25}, "trust": 2, "helped": true, "rel": {"aiden|marek": 2}}, "say": "Марек выходит из дыма с коровой на поводу и в тлеющем плаще."},
 			{"text": "Дождаться поджигателя (бой)", "fx": {"battle": [["arsonist", "bandit", "bandit"]], "purse": 20, "trust": -2}, "say": "Поджигатель вернулся полюбоваться. В его котомке монеты и чужая расписка. А сарай догорел."},
 			{"text": "Отдать хозяйке зелье", "fx": {"potion_hp": -1, "trust": 3, "helped": true}, "req": {"potion_hp": 1}, "say": "Ожоги у неё на руках затягиваются. «Гильдия? Та самая, нищая? Храни вас свет»."}]},
-	"tracks": {"title": "Охотничья вышка", "text": "За деревьями старая охотничья вышка. Наверху висит колчан и рваный плащ. Хозяин, похоже, ушёл в спешке.",
+	"tracks": {"title": "Охотничья вышка", "text": "На старой охотничьей вышке прячутся двое детей из посёлка бандитов. Худые, в рваных плащах. Увидев оружие, они замирают.",
 		"choices": [
-			{"text": "Элира залезет осмотреться", "fx": {"rel": {"aiden|elira": 2}, "fact": "elira_tracks"}, "say": "«Сборщик ходит здесь каждую неделю. С окованным сундучком», — шепчет Элира сверху."},
-			{"text": "Забрать колчан и плащ", "chance": 70, "fx": {"purse": 25, "gift": "berries"}, "fail_fx": {"purse": 25, "gift": "berries", "hp_hero": {"elira": -20}},
-				"say": "В колчане нашёлся кошель, в плаще горсть сушёной земляники.", "fail_say": "Ступенька подломилась. Добычу достали, но Элира ушиблась."},
-			{"text": "Передохнуть в тени", "fx": {"heal_pct": 15, "mana_pct": 15}, "say": "Полчаса тишины под вышкой."}]},
-	"cache": {"title": "Тайник разбойников", "text": "Под корнями дуба яма с разбитым сундуком. Внутри что-то блестит, вокруг каркают вороны. Похоже, здесь стоит ловушка.",
+			{"text": "Элира поговорит с ними", "fx": {"rel": {"aiden|elira": 2}, "fact": "elira_tracks", "helped": true}, "say": "«Вожаки носят рогатые амулеты. Звери их не трогают, а нас — едят», — шепчет старший."},
+			{"text": "Отдать им еду (−15 мон.)", "req": {"purse": 15}, "fx": {"purse": -15, "trust": 3, "helped": true, "rel": {"aiden|marek": 2}}, "say": "Дети едят молча и быстро. Потом младший показывает тропу в обход дозора."},
+			{"text": "Передохнуть под вышкой", "fx": {"heal_pct": 15, "mana_pct": 15}, "say": "Полчаса тишины. Дети так и не спустились."}]},
+	"cache": {"title": "Тайник с данью", "text": "Под корнями дуба яма, в ней мешки с зерном и кошели. Это дань, которую вожаки отобрали у жителей посёлка для идола. Вокруг каркают вороны, похоже, стоит ловушка.",
 		"choices": [
-			{"text": "Обыскать сверху", "chance": 75, "fx": {"purse": 30}, "fail_fx": {"hp_hero": {"marek": -20}},
-				"say": "Тридцать монет из разбитого сундука.", "fail_say": "Щёлкнул капкан. Марек выдернул руку, но поранился."},
-			{"text": "Обыскать глубже", "chance": 50, "fx": {"purse": 30, "potion_hp": 1}, "fail_fx": {"hp_hero": {"marek": -20}, "battle": [["bandit", "bandit", "archer"]]},
-				"say": "Монеты и склянка с зельем на самом дне.", "fail_say": "Сработал капкан, а на вороний крик пришли хозяева тайника."},
-			{"text": "Перерыть всё", "chance": 25, "fx": {"purse": 30, "potion_hp": 1, "gift": "wine"}, "fail_fx": {"hp_hero": {"marek": -20}, "battle": [["bandit", "bandit", "archer", "brute"]]},
-				"say": "Монеты, зелье и бутылка хорошего вина. Вороны остались ни с чем.", "fail_say": "Возня затянулась. Хозяева тайника вернулись всей шайкой."},
-			{"text": "Оставить метку для стражи", "fx": {"trust": 4, "helped": true, "rel": {"marek|elira": 2, "aiden|marek": 2}}, "say": "Марек кивает: «Правильно. Пусть всё увидят законно»."},
+			{"text": "Вернуть дань жителям посёлка", "fx": {"trust": 4, "helped": true, "rel": {"marek|elira": 2, "aiden|marek": 2}}, "say": "К вечеру о гильдии в посёлке говорят шёпотом — но уже не как о «тёмных»."},
+			{"text": "Взять кошели сверху", "chance": 75, "fx": {"purse": 30}, "fail_fx": {"hp_hero": {"marek": -20}},
+				"say": "Тридцать монет. Зерно остаётся в яме.", "fail_say": "Щёлкнул капкан. Марек выдернул руку, но поранился."},
+			{"text": "Перерыть всё", "chance": 40, "fx": {"purse": 45, "potion_hp": 1}, "fail_fx": {"hp_hero": {"marek": -20}, "battle": [["bandit", "bandit", "archer", "shade_wolf"]]},
+				"say": "Монеты и склянка с зельем на самом дне.", "fail_say": "Возня затянулась. Сторожа тайника вернулись вместе с духом-волком."},
 			{"text": "Уйти", "fx": {}, "say": "Отряд оставляет тайник воронам."}]},
-	"turncoat": {"title": "Перебежчик", "text": "Из кустов выходит молодой разбойник с поднятыми руками, нож он бросил в траву. «Я знаю, где Ганс держит книгу. Только отпустите»",
+	"turncoat": {"title": "Перебежчик", "text": "Из-за обгоревшего забора выходит молодой бандит с поднятыми руками, рогатый амулет он бросил в пепел. «Я больше не хочу. Ганс говорит с лесом, а лес жрёт наших. Отпустите»",
 		"choices": [
-			{"text": "Отпустить и выслушать", "fx": {"trust": 2, "helped": true, "flag": "turncoat", "rel": {"aiden|neris": 2}}, "say": "Он рассказывает про сундук в шатре и про поджигателя, который сожжёт книгу при первой тревоге."},
+			{"text": "Отпустить и выслушать", "fx": {"trust": 2, "helped": true, "flag": "turncoat", "rel": {"aiden|neris": 2}}, "say": "Он рассказывает: каждую ночь Ганс уходит к идолу, и оттуда звучит второй голос."},
 			{"text": "Связать и оставить страже (+30 мон.)", "fx": {"purse": 30, "rel": {"aiden|marek": 1, "aiden|neris": -1}}, "say": "Марек связывает парня. Нэрис отворачивается."},
-			{"text": "Взять проводником", "chance": 60, "fx": {"flag": "turncoat", "purse": 20, "trust": 1}, "fail_fx": {"battle": [["raider", "bandit", "bandit"]]},
-				"say": "Парень ведёт тайной тропой и показывает схрон Ганса.", "fail_say": "Тропа привела прямо в засаду. Перебежчик исчез первым."},
+			{"text": "Взять проводником", "chance": 60, "fx": {"flag": "turncoat", "purse": 20, "trust": 1}, "fail_fx": {"battle": [["raider", "bandit", "shade_wolf"]]},
+				"say": "Парень ведёт через пепелище и показывает схрон Ганса.", "fail_say": "Тропа привела прямо в засаду. Перебежчик исчез первым."},
 			{"text": "Забрать его припасы", "fx": {"heal_pct": 15, "mana_pct": 15}, "say": "Хлеба и воды хватит на последний рывок."}]},
 	"hive": {"title": "Дикий улей", "text": "В конце тропинки старая липа. В дупле гудит дикий улей, по коре стекает мёд, а внизу в траве дремлет объевшийся барсук.",
 		"choices": [
@@ -803,10 +1099,10 @@ var EVENTS := {
 			{"text": "Взять воск", "fx": {"kit": 1}, "say": "Марек обмазывает воском ремни и колёсную ось. Почти ремкомплект."},
 			{"text": "Поесть мёда на месте", "fx": {"heal_pct": 30}, "say": "Липкие пальцы, довольные лица. Барсук смотрит с завистью."},
 			{"text": "Забрать всё (пчёлы ужалят)", "fx": {"gift": "bread", "kit": 1, "heal_pct": 10}, "say": "Рой взлетает тучей. Добычу унесли, но опухшие носы будут болеть до вечера."}]},
-	"dead_merc": {"title": "Мёртвый наёмник", "text": "У поваленного дерева лежит наёмник в изодранной кольчуге. Рядом расколотый щит и дорожный мешок. На земле следы огромных когтей.",
+	"dead_merc": {"title": "Мёртвый охотник", "text": "У поваленного дерева лежит охотник с соседнего хутора. Рядом сломанный лук и дорожный мешок. На земле следы огромных когтей и пятна серого пепла.",
 		"choices": [
-			{"text": "Обыскать тело (вожак может вернуться)", "chance": 50, "fx": {"purse": 35, "potion_hp": 1}, "fail_fx": {"purse": 35, "battle": [["wolf_alpha", "wolf", "wolf"]]},
-				"say": "Кошель, зелье, ничего лишнего. Чаща молчит.", "fail_say": "Едва Марек развязал мешок, из кустов выходит вожак. Он не любит, когда трогают его добычу."},
+			{"text": "Обыскать мешок (звери могут вернуться)", "chance": 50, "fx": {"purse": 35, "potion_hp": 1}, "fail_fx": {"purse": 35, "battle": [["shade_alpha", "shade_wolf", "wolf"]]},
+				"say": "Кошель, зелье, ничего лишнего. Чаща молчит.", "fail_say": "Едва Марек развязал мешок, из кустов выходит призрачный вожак. Глаза горят красным."},
 			{"text": "Проститься с ним", "fx": {"rel": {"aiden|marek": 2, "aiden|elira": 2, "aiden|neris": 2}}, "say": "Эйден читает молитву и накрывает тело плащом. Даже Нэрис молчит."},
 			{"text": "Уйти", "fx": {}, "say": "Отряд обходит поваленное дерево стороной."}]},
 	"dice": {"title": "Кости у костра", "text": "Трое охранников купца играют в кости на перевёрнутом бочонке. Рядом кучка монет и кружки. «Сыграете, гильдейские?»",
@@ -830,11 +1126,11 @@ var EVENTS := {
 			{"text": "Пожертвовать 30 мон.", "req": {"purse": 30}, "fx": {"purse": -30, "heal_pct": 40, "mana_pct": 20, "trust": 2}, "say": "Служка кланяется до земли. Старые раны будто перестают ныть."},
 			{"text": "Эйден поможет служке", "fx": {"mana_hero": {"aiden": -30}, "potion_mp": 1, "rel": {"aiden|marek": 1}}, "say": "Эйден подправил крышу и починил скамью. Служка дарит склянку освящённой воды."},
 			{"text": "Обчистить кружку", "fx": {"purse": 40, "trust": -5, "rel": {"aiden|marek": -3}}, "say": "Лампада гаснет. Служка ничего не говорит, только смотрит вслед."}]},
-	"idol": {"title": "Придорожный идол", "text": "На обочине каменный идол старого лесного бога, поросший мхом. В его ладонях горсть монет-подношений, на ветвях вокруг ленточки.",
+	"idol": {"title": "Рогатый идол", "text": "Посреди пепелища — идол из коряг и оленьих рогов, увешанный красными лентами. У подножия миски с последним зерном посёлка.",
 		"choices": [
-			{"text": "Забрать подношения", "fx": {"purse": 50, "mana_pct": -15, "rel": {"aiden|marek": -1}}, "say": "Глаза идола вспыхивают красным. До вечера у всех тяжёлые головы."},
-			{"text": "Положить монету", "req": {"purse": 5}, "fx": {"purse": -5, "heal_pct": 15, "mana_pct": 15}, "say": "Ветер шевелит ленточки. Идти становится легче."},
-			{"text": "Нэрис изучит руны", "fx": {"mana_hero": {"neris": -20}, "rel": {"aiden|neris": 2, "elira|neris": 1}}, "say": "«Старая вера. Они просили не богатства, а дороги без волков», — говорит Нэрис."},
+			{"text": "Раздать зерно голодным", "fx": {"trust": 3, "helped": true, "rel": {"aiden|elira": 2}}, "say": "Люди выходят из-за развалин по одному. Идол смотрит пустыми глазницами."},
+			{"text": "Нэрис изучит руны", "fx": {"mana_hero": {"neris": -20}, "rel": {"aiden|neris": 2, "elira|neris": 1}}, "say": "«Друидские знаки. Это не молитва, это поводок. Идол передаёт чью-то волю»."},
+			{"text": "Повалить идола", "fx": {"mana_pct": -15, "purse": 20, "rel": {"aiden|marek": 1}}, "say": "Рога трещат, ленты вспыхивают красным. До вечера у всех тяжёлые головы."},
 			{"text": "Пройти мимо", "fx": {}, "say": "Отряд идёт дальше."}]},
 }
 
@@ -849,7 +1145,7 @@ var FACTS := {
 	"marek_commander": {"hero": "marek", "text": "Ясеневку сдал разбойникам его командир за взятку; Марек ослушался приказа, но опоздал."},
 	"elira_clan": {"hero": "elira", "text": "Родом из клана Зелёного Вереска, ушла сама."},
 	"elira_mentor": {"hero": "elira", "text": "Её наставник Тавиэль погиб от капкана браконьеров.", "assumed": "Элира ищет кого-то — или что-то — на тракте."},
-	"elira_tracks": {"hero": "elira", "text": "Сборщик Корнелия носит тяжёлый окованный сундучок по одной и той же тропе."},
+	"elira_tracks": {"hero": "elira", "text": "Вожаки бандитов носят рогатые амулеты — звери их не трогают."},
 	"elira_marks": {"hero": "elira", "text": "Метки на ошейниках волков — те же, что на капканах, убивших Тавиэля."},
 	"neris_pact": {"hero": "neris", "text": "Заключила договор с «Тихим Голосом» ребёнком, чтобы пережить лихорадку."},
 	"neris_money": {"hero": "neris", "text": "Отправляет почти всё жалованье в приют Святой Ивы.", "assumed": "Нэрис куда-то тратит почти всё жалованье."},
@@ -884,9 +1180,9 @@ var TOPICS := {
 			"choices": [
 				{"text": "Ты не опоздал сегодня. И не опоздаешь завтра.", "friend": 7, "say": "«Я держусь за эту мысль», — тихо отвечает он."},
 				{"text": "Я рядом не как командир. Как тот, кому ты дорог.", "friend": 4, "romance": 8, "say": "Марек замирает, потом осторожно кладёт ладонь на твоё плечо. «Я… подумаю над этим. По-хорошему подумаю»."},
-				{"text": "Корнелий ответит и за это.", "friend": 4, "say": "«Не месть, Эйден. Суд». Но кулаки у него сжаты."}]},
+				{"text": "Тот, кто натравил зверей, ответит и за это.", "friend": 4, "say": "«Не месть, Эйден. Суд». Но кулаки у него сжаты."}]},
 		{"id": "m5", "title": "Кем мы стали", "friend": 42, "story": 6,
-			"lines": ["Марек: Знаешь, на заставе меня звали «Стеной». Здесь зовут по имени. Это… лучше.", "Марек: После книги что будет с гильдией?"],
+			"lines": ["Марек: Знаешь, на заставе меня звали «Стеной». Здесь зовут по имени. Это… лучше.", "Марек: После всего этого что будет с гильдией?"],
 			"choices": [
 				{"text": "Будем жить. Вместе.", "friend": 6, "say": "«Вместе», — повторяет он, как клятву."},
 				{"text": "Останься со мной, когда всё кончится.", "friend": 3, "romance": 10, "req_romance": 6, "say": "Марек не отвечает словами. Но утром у твоего мешка лежит самое красное яблоко."}]},
@@ -945,7 +1241,7 @@ var TOPICS := {
 				{"text": "Хорошо. Но если нужна помощь — скажи.", "friend": 6, "say": "Она ничего не отвечает. Но утром благодарит за кашу — впервые."},
 				{"text": "Ты играешь в кости? Должна кому-то?", "friend": -3, "say": "«Должна. Всему миру», — шипит она и уходит."}]},
 		{"id": "n4", "title": "Приют Святой Ивы", "friend": 26, "story": 3,
-			"lines": ["Нэрис: Ладно. Я выросла в приюте Святой Ивы. Туда и отправляю жалованье. Корнелий купил их долг этой весной.", "Нэрис: Если гильдия закроется, приют закроется следом. Так что — не смей проиграть."],
+			"lines": ["Нэрис: Ладно. Я выросла в приюте Святой Ивы. Туда и отправляю жалованье. Столичный ростовщик купил их долг этой весной.", "Нэрис: Если гильдия закроется, приют закроется следом. Так что — не смей проиграть."],
 			"fact": "neris_orphan", "confirm": "neris_money",
 			"choices": [
 				{"text": "Мы не проиграем. Ни гильдия, ни приют.", "friend": 7, "say": "«Обещания жрецов, — хмыкает Нэрис. — Ладно. Твоему верю»."},
@@ -1029,6 +1325,15 @@ func all_pairs() -> Array:
 
 func xp_to_next(level: int) -> int:
 	return 50 + 45 * level
+
+## Доля опыта за врага, который ниже уровнем, чем отряд (как в WoW: «серые» враги почти ничего не дают).
+const XP_LEVEL_FACTOR := [1.0, 0.8, 0.5, 0.25, 0.1]
+
+func xp_factor(party_level: float, enemy_level: int) -> float:
+	var diff := int(floor(party_level + 0.01)) - enemy_level
+	if diff <= 0:
+		return 1.0
+	return XP_LEVEL_FACTOR[mini(diff, XP_LEVEL_FACTOR.size() - 1)]
 
 func jxp_to_next(job: int) -> int:
 	return 80 + 60 * job

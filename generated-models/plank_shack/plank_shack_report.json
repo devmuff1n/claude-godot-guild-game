@@ -1,0 +1,107 @@
+{
+  "id": "plank_shack",
+  "category": "prologue/hamlet",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/hamlet\\plank_shack.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\plank_shack\\plank_shack.blend",
+  "target_size_m": [
+    3.8,
+    3.2,
+    3.2
+  ],
+  "glb_size_m": [
+    4.047,
+    3.418,
+    3.378
+  ],
+  "size_deviation": [
+    0.065,
+    0.068,
+    0.056
+  ],
+  "bounds_min": [
+    -1.787,
+    -1.703,
+    0.0
+  ],
+  "bounds_max": [
+    2.259,
+    1.715,
+    3.378
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 2940,
+  "source_triangles": 2940,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_bark",
+    "env_brass",
+    "env_canvas_patch",
+    "env_soil_dark",
+    "env_timber",
+    "env_wood_dark",
+    "env_wood_mid",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "plank_shack_shack_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 963,
+  "glb_materials": [
+    [
+      "env_soil_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_canvas_patch",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_bark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_timber",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 8,
+  "empties": [
+    "plank_shack.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "plank_shack_details",
+    "plank_shack_roof",
+    "plank_shack_walls"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:06"
+}

@@ -24,6 +24,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="ChroniclePanel" type="PanelContainer" parent="Columns/Left"]
+custom_minimum_size = Vector2(0, 280)
 layout_mode = 2
 theme_type_variation = &"PanelDark"
 
@@ -114,6 +115,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 16
 
 [node name="SquadPanel" type="PanelContainer" parent="Columns/Right"]
+custom_minimum_size = Vector2(0, 390)
 layout_mode = 2
 theme_type_variation = &"PanelDark"
 
@@ -132,6 +134,7 @@ layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="RewardPanel" type="PanelContainer" parent="Columns/Right"]
+custom_minimum_size = Vector2(0, 390)
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"PanelDark"

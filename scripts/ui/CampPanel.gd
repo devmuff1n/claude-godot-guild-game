@@ -108,10 +108,10 @@ func _fill_left() -> void:
 	UIK.clear(%EveningHeroes)
 	for hid in DB.COMPANIONS:
 		var h2: String = hid
-		var bo := int(Game.hero(hid)["burnout"])
+		var fr := int(Game.rel("aiden", hid)["friend"])
 		_chip(%EveningHeroes, DB.hero_name(hid), func():
 			evening_pick = h2
-			_fill_left(), "Выгорание: %d/10" % bo, evening_pick == hid, busy)
+			_fill_left(), "Дружба с Эйденом: %d" % fr, evening_pick == hid, busy)
 	UIK.clear(%GiftGrid)
 	%GiftEmpty.visible = evening_pick != "" and Game.state["backpack"].is_empty()
 	if evening_pick == "":
@@ -152,7 +152,8 @@ func _fill_dialog() -> void:
 	UIK.clear(%DlgChoices)
 	var d: Dictionary = camp().get("dialog", {})
 	var who: String = d.get("hero", "")
-	%PortraitFrame.visible = who != ""
+	# Рамка портрета всегда занимает место: у сцен без говорящего текст не становится шире
+	%PortraitFrame.modulate.a = 1.0 if who != "" else 0.0
 	if who != "":
 		%DlgPortrait.texture = UIK.portrait(who)
 	%DlgOk.visible = d.get("kind", "") == "result"

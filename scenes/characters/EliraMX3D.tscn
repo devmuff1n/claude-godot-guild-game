@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/characters/HeroModel3D.gd" id="1"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/elira2/elira2.glb" id="2"]
+
+[node name="EliraMX3D" type="Node3D"]
+script = ExtResource("1")
+head_pitch_fix_deg = 0.0
+walk_clip_mps = 1.17
+run_clip_mps = 2.26
+loops_mocap = {
+"cast": "MX_AimOverdraw",
+"idle": "MX_IdleUnarmed",
+"run": "MX_Run",
+"walk": "MX_PlainWalk"
+}
+one_shots_mocap = {
+"attack": "MX_Shot",
+"cast_release": "MX_AimRecoil",
+"cast_start": "MX_DrawArrow",
+"death": "MX_Death",
+"dodge": "MX_DodgeBack",
+"hit": "MX_Hit",
+"quick_release": "MX_Shot"
+}
+impact_times = {
+"MX_Shot": 1.15
+}
+impact_lead = 0.25
+mirrored_clips = PackedStringArray()
+spring_chains = []
+prop_scene = null
+
+[node name="Model" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.087, 0, 0, 0, 1.087, 0, 0, 0, 1.087, 0, 0, 0)

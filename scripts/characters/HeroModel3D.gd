@@ -6,13 +6,24 @@ extends Node3D
 ## В руке оружие-проп: следует за костью кисти, в стойке и касте выпрямляется. Для лука ещё тетива и стрела.
 ## Значения по умолчанию — Нэрис (посох в правой руке); другие герои переопределяют их в своей сцене.
 
-@export var blend_time := 0.15
+@export var blend_time := 0.2
 @export var secondary_motion := true
 ## true — клипы из библиотеки мокапа Quaternius (CC0), false — пробные клипы, поставленные вручную в модели.
 @export var use_mocap := true
 ## Мокап Quaternius снят на скелете с наклонённой вперёд шеей: взгляд уходил в пол на ~30°.
 ## Поворачиваем шею и голову вверх на столько градусов (делится между двумя костями).
 @export var head_pitch_fix_deg := 26.0
+## Скорость, на которую рассчитан клип ходьбы (м/с, в масштабе файла модели): под неё подстраивается темп шага.
+## Масштаб узла модели в сцене учитывается сам (tests/hero_gait_probe.gd меряет обе скорости).
+@export var walk_clip_mps := 0.6
+## То же для бега; 0 — темп бега не подстраивается.
+@export var run_clip_mps := 0.0
+## Клип → момент удара/выпуска (с). Разовый клип по событию боя (урон уже нанесён) начинается
+## за impact_lead секунд до этого момента, чтобы взмах на экране совпал с уроном (tests/hero_impact_probe.gd).
+@export var impact_times := {}
+@export var impact_lead := 0.3
+## Клип → скорость проигрывания разового клипа (длинные клипы магии ускоряются, чтобы не стоять в позе после удара).
+@export var clip_speeds := {}
 
 @export_group("Клипы")
 ## Состояние → клип. Без префикса — клипы самой модели, «ual/», «ual2/» — библиотеки мокапа.
@@ -88,6 +99,8 @@ const MOCAP_LIBRARY := "res://assets/animations/quaternius_ual/UAL1_Standard.glb
 const MOCAP_LIBRARY_2 := "res://assets/animations/quaternius_ual2/UAL2_Standard.glb"
 ## Разовый выпуск сразу после каста — продолжение каста, позже — мгновенное умение.
 const CAST_TAIL_MS := 400
+## Повторный удар по герою перезапускает вздрагивание не раньше, чем через столько секунд клипа.
+const HIT_RETRIGGER_S := 0.45
 
 var anim: AnimationPlayer
 var springs: Node
@@ -119,8 +132,17 @@ func _ready() -> void:
 	anim = found[0]
 	anim.animation_finished.connect(_on_finished)
 	if use_mocap and ResourceLoader.exists(MOCAP_LIBRARY):
+		# библиотеки Quaternius подключаются, только если сцена ссылается на их клипы (у героев Mixamo свои MX_*)
+		var used_libs := {}
+		for clip in loops_mocap.values() + one_shots_mocap.values():
+			if String(clip).contains("/"):
+				used_libs[String(clip).get_slice("/", 0)] = true
+		for c in composites:
+			for k in [1, 2]:
+				if String(c[k]).contains("/"):
+					used_libs[String(c[k]).get_slice("/", 0)] = true
 		for pair in [[&"ual", MOCAP_LIBRARY], [&"ual2", MOCAP_LIBRARY_2]]:
-			if not ResourceLoader.exists(pair[1]) or anim.has_animation_library(pair[0]):
+			if not used_libs.has(String(pair[0])) or not ResourceLoader.exists(pair[1]) or anim.has_animation_library(pair[0]):
 				continue
 			var lib: AnimationLibrary = load(pair[1])
 			if lib:
@@ -134,6 +156,10 @@ func _ready() -> void:
 		_loops = loops_mocap
 		_one_shots = one_shots_mocap
 		_death = one_shots_mocap.get("death", "Death")
+	# фоновые клипы самой модели крутятся по кругу, даже если при импорте им не задан цикл
+	for clip in _loops.values():
+		if anim.has_animation(clip) and anim.get_animation(clip).loop_mode == Animation.LOOP_NONE:
+			anim.get_animation(clip).loop_mode = Animation.LOOP_LINEAR
 	var skels := find_children("*", "Skeleton3D", true, false)
 	_skel = skels[0] if not skels.is_empty() else null
 	if secondary_motion:
@@ -143,7 +169,18 @@ func _ready() -> void:
 	if fist_clip != "":
 		_setup_fist()
 	play_state("idle")
+	# поза первого кадра сразу, иначе свежая модель один кадр стоит в T-позе
+	anim.advance(0.0)
 	_upright = _upright_target
+
+
+## Клип фонового состояния; если его нет — idle, если нет и его — любой клип модели (T-позы не бывает).
+func _loop_clip(state: String) -> String:
+	for st in [state, "idle"]:
+		if _loops.has(st) and anim.has_animation(_loops[st]):
+			return _loops[st]
+	var list := anim.get_animation_list()
+	return String(list[0]) if not list.is_empty() else ""
 
 
 func play_state(state: String) -> void:
@@ -151,9 +188,14 @@ func play_state(state: String) -> void:
 		return
 	if _base_state == "cast" and state != "cast":
 		_cast_end_ms = Time.get_ticks_msec()
+	if not _loops.has(state) and not _has_clip(state) and state != "cast_release":
+		# неизвестное состояние: ничего не меняем, но и не оставляем модель без клипа
+		if not anim.is_playing() and not _fallen:
+			anim.play(_base, blend_time)
+		return
 	if _loops.has(state):
 		var entering_cast := state == "cast" and _base_state != "cast"
-		_base = _loops[state]
+		_base = _loop_clip(state)
 		_base_state = state
 		# разовый клип (удар, выстрел) доигрывает до конца, фон включится после него
 		if _one_shot_playing():
@@ -164,14 +206,36 @@ func play_state(state: String) -> void:
 			_play_one_shot("cast_start")
 			return
 		if anim.current_animation != _base:
+			if state not in ["walk", "run"]:
+				anim.speed_scale = 1.0
 			anim.play(_base, blend_time)
 		return
 	if state == "cast_release" and Time.get_ticks_msec() - _cast_end_ms > CAST_TAIL_MS and _has_clip("quick_release"):
 		state = "quick_release"
+	if state in ["hit", "block_hit"] and not _hit_allowed():
+		return
 	_upright_target = prop_upright.get(state, 1.0)
 	_fallen = state == "death"
 	if _has_clip(state):
 		_play_one_shot(state)
+
+
+## Вздрагивание от удара не перебивает атаку или умение и не начинается заново на каждом ударе по герою.
+func _hit_allowed() -> bool:
+	if not anim.is_playing():
+		return true
+	var cur := String(anim.current_animation)
+	if cur == _death:
+		return false
+	var hit_clips := [_one_shots.get("hit", ""), _one_shots.get("block_hit", "")]
+	if cur in hit_clips:
+		return anim.current_animation_position > HIT_RETRIGGER_S
+	return not (cur in _one_shots.values())
+
+
+## Есть ли у модели клип для этого состояния (например "skill_bash" у Марека).
+func has_state(state: String) -> bool:
+	return anim != null and (_loops.has(state) or _has_clip(state))
 
 
 func _has_clip(state: String) -> bool:
@@ -179,26 +243,53 @@ func _has_clip(state: String) -> bool:
 
 
 func _play_one_shot(state: String) -> void:
-	anim.play(_one_shots[state], blend_time)
-	anim.seek(0.0, true)
+	var clip: String = _one_shots[state]
+	anim.speed_scale = 1.0
+	anim.play(clip, blend_time, float(clip_speeds.get(clip, 1.0)))
+	var from := 0.0
+	if impact_times.has(clip) and state not in ["cast_start", "hit", "block_hit", "death", "dodge"]:
+		# не дальше середины клипа: замах умения не должен пропасть целиком
+		from = clampf(float(impact_times[clip]) - impact_lead, 0.0, anim.get_animation(clip).length * 0.5)
+	anim.seek(from, true)
 
 
 func _one_shot_playing() -> bool:
 	return anim.is_playing() and anim.current_animation != _death and anim.current_animation in _one_shots.values()
 
 
-## Скорость шага: клип ходьбы рассчитан примерно на 0,6 м/с.
+## Темп шага под скорость движения (м/с): стопа стоит на земле, а не скользит.
 func set_walk_speed(mps: float) -> void:
-	if anim and anim.current_animation == _loops["walk"]:
-		anim.speed_scale = clampf(mps / 0.6, 0.5, 2.0)
-	elif anim:
+	if anim == null:
+		return
+	var k := _model_scale()
+	var cur := String(anim.current_animation)
+	if cur == _loops.get("walk", "") and walk_clip_mps > 0.0:
+		anim.speed_scale = clampf(mps / (walk_clip_mps * k), 0.5, 2.0)
+	elif cur == _loops.get("run", "") and run_clip_mps > 0.0:
+		anim.speed_scale = clampf(mps / (run_clip_mps * k), 0.6, 1.6)
+	else:
 		anim.speed_scale = 1.0
+
+
+## Во сколько раз модель в сцене больше файла модели (масштаб узла Model).
+func _model_scale() -> float:
+	if _skel == null or not is_inside_tree():
+		return 1.0
+	return _skel.global_basis.get_scale().x / maxf(0.001, global_basis.get_scale().x)
 
 
 func _on_finished(clip: StringName) -> void:
 	if String(clip) != _death:
+		if _base_state not in ["walk", "run"]:
+			anim.speed_scale = 1.0
 		anim.play(_base, blend_time)
 		_upright_target = prop_upright.get(_base_state, 1.0)
+
+
+## Страховка: если клип почему-то остановился (не смерть), снова включается фоновый.
+func _process(_delta: float) -> void:
+	if anim != null and not anim.is_playing() and not _fallen and _base != "":
+		anim.play(_base, blend_time)
 
 
 func _setup_springs() -> void:

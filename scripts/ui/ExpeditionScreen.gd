@@ -11,9 +11,13 @@ const ROAD_SHOP := preload("res://scenes/expedition/RoadShopDialog.tscn")
 const LEVELS := {
 	"c1": "res://scenes/levels/c1.tscn", "c2": "res://scenes/levels/c2.tscn", "c3": "res://scenes/levels/c3.tscn",
 	"c4": "res://scenes/levels/c4.tscn", "c5": "res://scenes/levels/c5.tscn", "c6": "res://scenes/levels/c6.tscn",
-	"c7": "res://scenes/levels/c7.tscn", "s1": "res://scenes/levels/s1.tscn",
+	"c7": "res://scenes/levels/c7.tscn",
+	"sc1": "res://scenes/levels/sc1.tscn", "sc2": "res://scenes/levels/sc2.tscn", "sc3": "res://scenes/levels/sc3.tscn",
 }
-const WALK_SPEED := 260.0
+## Отряд идёт обычным шагом (~1,25 м/с у 3D-героев). Отрезок пути между узлами WALK_SPEED × walk_dur = 676 px
+## не меняется (на нём стоят декорации уровней), поэтому при медленном шаге отрезок идёт дольше.
+const WALK_SPEED := 150.0
+const SEGMENT_PX := 676.0
 const REGROUP_SPEED := 90.0
 
 var main
@@ -27,7 +31,7 @@ var paused := false
 var menu_hero := ""
 var targeting: Dictionary = {}  # {hero, ab} или {hero, potion}
 var autosave_t := 0.0
-var walk_dur := 2.6
+var walk_dur := SEGMENT_PX / WALK_SPEED  # ≈4,5 с
 var finished := false
 var banner_t := 0.0
 var victory_hold := 0.0
@@ -53,6 +57,7 @@ const CINE_RIGHT_PX := 930.0
 @onready var obj_panel: ObjectivePanel = %ObjPanel
 @onready var prep_panel: OutpostPrepPanel = %PrepPanel
 @onready var repair_hero_opt: OptionButton = obj_panel.get_node("%RepairHero")
+@onready var cutscene: Cutscene = %Cutscene
 @onready var cards := {"aiden": %Card_aiden, "marek": %Card_marek, "elira": %Card_elira, "neris": %Card_neris}
 
 func _ready() -> void:
@@ -70,7 +75,8 @@ func _ready() -> void:
 	cmd_menu.potion_chosen.connect(_choose_potion)
 	cmd_menu.attack_chosen.connect(_choose_attack)
 	for id in cards.keys():
-		cards[id].pressed.connect(_open_menu)
+		cards[id].pressed.connect(_on_card_pressed)
+		cards[id].hover_changed.connect(_on_card_hover)
 	obj_panel.task_requested.connect(func(kind: String, _h: String): _obj_task(kind))
 	obj_panel.cancel_requested.connect(func(h: String):
 		if sim != null:
@@ -83,6 +89,10 @@ func _ready() -> void:
 	prep_panel.save_pressed.connect(func():
 		_save_battle()
 		Game.notify("Сохранено."))
+	cutscene.screen = self
+	cutscene.view = view
+	cutscene.fight_requested.connect(_story_fight)
+	cutscene.finished.connect(_story_done)
 	_set_speed(1.0)
 	top_bar.set_paused(false)
 	top_bar.set_order("hold", false)
@@ -127,8 +137,15 @@ func _load_level(cid: String) -> void:
 ## Пройденный путь в пикселях: узел k достигается при (k + 1) отрезках ходьбы.
 func _route_px() -> float:
 	var e := Game.ex()
-	var p := float(e.get("walk_t", 0.0)) / walk_dur if e.get("phase", "") == "walk" else 1.0
+	var p := _walk_frac() if _mid_walk() else 1.0
 	return (float(e["node"]) + p) * WALK_SPEED * walk_dur
+
+## Отряд между пунктами: идёт по дороге или остановлен кат-сценой (и её боем) посреди отрезка.
+func _mid_walk() -> bool:
+	return Game.ex().get("phase", "") == "walk" or not Game.story().is_empty()
+
+func _walk_frac() -> float:
+	return float(Game.ex().get("walk_t", 0.0)) / walk_dur
 
 func _sync_level() -> void:
 	if level == null or arena:
@@ -166,12 +183,16 @@ func _resume() -> void:
 			_show_road_shop()
 		_:
 			_begin_walk()
+			var st := Game.story()
+			if not st.is_empty():
+				view.walking = false
+				cutscene.play(st["id"], int(st["step"]))
 
 func _update_route() -> void:
 	if arena:
 		return
 	var e := Game.ex()
-	var prog := float(e.get("walk_t", 0.0)) / walk_dur if e["phase"] == "walk" else 0.0
+	var prog := _walk_frac() if _mid_walk() else 0.0
 	route_bar.set_route(e["route"], int(e["node"]), prog, Game.ex_times())
 	_update_daylight()
 
@@ -184,9 +205,9 @@ func _update_daylight() -> void:
 	var to := Game.time_at(k)
 	var from := to
 	var t := 1.0
-	if e.get("phase", "") == "walk" and k > 0 and not Game.route_finished():
+	if _mid_walk() and k > 0 and not Game.route_finished():
 		from = Game.time_at(k - 1)
-		t = smoothstep(0.15, 0.85, float(e.get("walk_t", 0.0)) / walk_dur)
+		t = smoothstep(0.15, 0.85, _walk_frac())
 	var p := DayTime.mix(from, to, t)
 	if level != null:
 		level.set_daylight(p)
@@ -222,7 +243,12 @@ func _begin_walk() -> void:
 	view.walking = true
 	Game.ex()["phase"] = "walk"
 	if Game.route_finished():
-		_finish("victory")
+		# Сцена-итог поручения (DB.CUTSCENES, node = длина маршрута), потом итоги
+		var cs := Game.cutscene_due()
+		if cs != "" and Game.story().is_empty():
+			_start_story(cs)
+		elif Game.story().is_empty():
+			_finish("victory")
 		return
 	obj_panel.visible = false
 	prep_panel.visible = false
@@ -315,9 +341,18 @@ func _process(delta: float) -> void:
 	if finished:
 		return
 	if sim == null:
-		if not arena and Game.ex().get("phase", "") == "walk" and overlay.get_child_count() == 0 and not Game.route_finished():
+		if not arena and Game.ex().get("phase", "") == "walk" and overlay.get_child_count() == 0 and not Game.route_finished() 				and Game.story().is_empty():
 			var e := Game.ex()
 			e["walk_t"] = float(e.get("walk_t", 0.0)) + delta
+			# Кат-сцена отрезка: отряд останавливается на её месте пути
+			var cs := Game.cutscene_due()
+			if cs != "" and e["walk_t"] >= float(DB.CUTSCENES[cs]["at"]) * walk_dur:
+				e["walk_t"] = float(DB.CUTSCENES[cs]["at"]) * walk_dur
+				_sync_level()
+				_update_route()
+				_start_story(cs)
+				_update_cards_walk()
+				return
 			view.scroll += delta * WALK_SPEED
 			view.shift_corpses(delta * WALK_SPEED)
 			_regroup(delta)
@@ -343,6 +378,11 @@ func _process(delta: float) -> void:
 		sim.step(st)
 		dt -= st
 	for ev in sim.events:
+		if ev["type"] == "death" and level != null:
+			var du = sim.unit(int(ev["uid"]))
+			if du != null and du.has("anchor_x"):
+				level.break_obelisk()
+				view.shake = 0.4
 		if ev["type"] == "wave" and int(ev["n"]) > 1:
 			_show_banner("Волна %d из %d" % [ev["n"], ev["of"]], 1.8)
 	view.consume_events(sim.events)
@@ -430,6 +470,9 @@ func _on_battle_won() -> void:
 	if arena:
 		_arena_end(true)
 		return
+	if Game.ex()["battle_ctx"].get("source", "") == "story":
+		_story_battle_won()
+		return
 	var c: Dictionary = sim.s["counters"]
 	var e := Game.ex()
 	Game.absorb_battle(sim)
@@ -440,7 +483,7 @@ func _on_battle_won() -> void:
 	for u in sim.s["units"]:
 		if u["side"] == "hero":
 			view.walk_units.append({"look": u["key"], "x": u["x"]})
-		else:
+		elif not "phantom" in u["tags"]:
 			view.corpses.append({"look": u["look"], "x": u["x"], "facing": u["facing"], "big": u["key"] in ["brute", "captain"], "tier": u.get("tier", 1)})
 	_show_banner(msg, 2.5)
 	sim = null
@@ -452,9 +495,7 @@ func _on_battle_won() -> void:
 	_update_route()
 	if Game.route_finished():
 		await get_tree().create_timer(1.6).timeout
-		_finish("victory")
-	else:
-		_begin_walk()
+	_begin_walk()
 
 func _on_battle_lost() -> void:
 	_close_menu()
@@ -504,6 +545,23 @@ func _toggle_pause() -> void:
 	if paused:
 		_show_banner("Пауза", 1.2)
 
+## Выбор цели с клавиатуры: Tab / Shift+Tab — следующая цель, Enter — выбрать подсвеченную.
+## В _input, а не в _unhandled_input: иначе Tab перехватит переключение фокуса кнопок.
+func _input(ev: InputEvent) -> void:
+	if not (ev is InputEventKey) or not ev.pressed or finished or sim == null:
+		return
+	if targeting.is_empty() or not (view.target_mode in ["enemy", "ally"]) or overlay.get_child_count() > 0:
+		return
+	var k: int = ev.keycode
+	if k == KEY_TAB:
+		view.cycle_target(-1 if ev.shift_pressed else 1)
+		get_viewport().set_input_as_handled()
+	elif (k == KEY_ENTER or k == KEY_KP_ENTER) and not ev.echo and view.hover_uid >= 0:
+		var t = sim.unit(view.hover_uid)
+		if t != null and view.can_target(t):
+			_apply_target(t)
+		get_viewport().set_input_as_handled()
+
 func _unhandled_input(ev: InputEvent) -> void:
 	if not (ev is InputEventKey) or not ev.pressed or ev.echo or finished:
 		return
@@ -525,7 +583,7 @@ func _unhandled_input(ev: InputEvent) -> void:
 	elif k == KEY_N:
 		_set_order("hold")
 	elif k >= KEY_1 and k <= KEY_4:
-		_open_menu(_card_order()[k - KEY_1])
+		_on_card_pressed(_card_order()[k - KEY_1])
 	get_viewport().set_input_as_handled()
 
 func _on_unit_clicked(uid: int, button: int) -> void:
@@ -549,6 +607,30 @@ func _on_unit_clicked(uid: int, button: int) -> void:
 			sim._float(u, "Фокус", Color(1, 0.5, 0.4))
 	else:
 		_open_menu(u["key"])
+
+## Карточка героя внизу: при выборе союзника — применить на этого героя, иначе — открыть его команды.
+func _on_card_pressed(hid: String) -> void:
+	if sim != null and view.target_mode == "ally" and not targeting.is_empty():
+		var u = sim.hero_unit(hid)
+		if u != null:
+			_apply_target(u)
+		return
+	_open_menu(hid)
+
+## Курсор над карточкой во время выбора союзника — подсветить этого героя и на поле.
+func _on_card_hover(hid: String, on: bool) -> void:
+	if sim == null:
+		return
+	var u = sim.hero_unit(hid)
+	if on and u != null:
+		view.hover_card_uid = int(u["uid"])
+	elif u != null and view.hover_card_uid == int(u["uid"]):
+		view.hover_card_uid = -1
+
+func _sync_card_targets() -> void:
+	for id in cards.keys():
+		var u = sim.hero_unit(id) if sim != null else null
+		cards[id].set_target_hint(view.target_mode == "ally" and u != null and u["alive"])
 
 # ---------------------------------------------------------------- Меню команд
 func _open_menu(hid: String) -> void:
@@ -597,6 +679,7 @@ func _choose_ability(ab: String) -> void:
 		view.target_ab = ab
 	else:
 		view.target_mode = "enemy" if a["target"] == "enemy" else "ally"
+	_sync_card_targets()
 	cmd_menu.visible = false
 	_set_status("%s: %s" % ["Область" if a["target"] == "ground" else "Цель", a["name"]])
 
@@ -605,12 +688,14 @@ func _choose_attack() -> void:
 		return
 	targeting = {"hero": menu_hero, "attack": true}
 	view.target_mode = "enemy"
+	_sync_card_targets()
 	cmd_menu.visible = false
 	_set_status("Цель: Автоатака")
 
 func _choose_potion(kind: String) -> void:
 	targeting = {"hero": menu_hero, "potion": kind}
 	view.target_mode = "ally"
+	_sync_card_targets()
 	cmd_menu.visible = false
 	_set_status("Кому: %s" % DB.CONSUMABLES[kind]["name"])
 
@@ -653,6 +738,8 @@ func _cancel_target() -> void:
 		if menu_hero != "":
 			cmd_menu.visible = true
 	view.target_mode = ""
+	view.hover_card_uid = -1
+	_sync_card_targets()
 
 func _set_status(t: String) -> void:
 	%StatusLabel.text = t
@@ -934,6 +1021,90 @@ func camp_leave() -> void:
 	_update_route()
 	_show_banner("+40% ОЗ, +50% МП", 2.0)
 	_begin_walk()
+
+# ---------------------------------------------------------------- Кат-сцена
+func _start_story(id: String) -> void:
+	view.walking = false
+	Game.set_story(id, 0)
+	cutscene.play(id, 0)
+
+## Бой из кат-сцены: актёры-звери становятся врагами там, где стоят, отряд дерётся с того места, где остановился.
+func _story_fight(step: Dictionary) -> void:
+	var e := Game.ex()
+	_cine_out()
+	e["battle_ctx"] = {"groups": step["fight"].duplicate(true), "ambush": [], "boss": false, "chest": false, "source": "story"}
+	var xs: Array = []
+	for aid in step.get("actors", []):
+		var a := view.actor(aid)
+		if not a.is_empty():
+			xs.append(float(a["x"]))
+	_start_battle_from_ctx()
+	var k := 0
+	for u in sim.s["units"]:
+		if u["side"] == "enemy" and k < xs.size():
+			u["x"] = xs[k]
+			k += 1
+	view.actors = view.actors.filter(func(a): return not (a["id"] in step.get("actors", [])))
+	e["battle"] = sim.save_state()
+	Game.save()
+
+func _story_battle_won() -> void:
+	var e := Game.ex()
+	# Пусть проекция дотает и рассыплется пеплом на глазах
+	await get_tree().create_timer(BattleView.ASH_FADE + 0.15).timeout
+	if sim == null or finished:
+		return
+	Game.absorb_battle(sim)
+	view.walk_units = []
+	view.corpses = []
+	for u in sim.s["units"]:
+		if u["side"] == "hero":
+			view.walk_units.append({"look": u["key"], "x": u["x"]})
+		elif not "phantom" in u["tags"]:
+			view.corpses.append({"look": u["look"], "x": u["x"], "facing": u["facing"], "big": false, "tier": u.get("tier", 1)})
+	sim = null
+	view.sim = null
+	view.walking = false
+	e["battle"] = null
+	e["phase"] = "walk"
+	Game.save()
+	victory_hold = 0.0
+	obj_panel.visible = false
+	_update_route()
+	var st := Game.story()
+	cutscene.play(st["id"], int(st["step"]))
+
+func _story_done() -> void:
+	Game.end_story()
+	_cine_out()
+	_begin_walk()
+
+## Наезд камеры кат-сцены: отряд и актёры крупнее в zoom раз; 0 — обычный вид.
+func story_cam(zoom: float) -> void:
+	if level == null or zoom <= 0.0:
+		_cine_out()
+		return
+	if level.cine == 0.0:
+		var hx := 735.0
+		if not view.walk_units.is_empty():
+			hx = 0.0
+			for w in view.walk_units:
+				hx += float(w["x"])
+			hx /= view.walk_units.size()
+		var ax := hx + 450.0
+		if not view.actors.is_empty():
+			ax = 0.0
+			for a in view.actors:
+				ax += float(a.get("to", a["x"]))
+			ax /= view.actors.size()
+		level.plan_cine(Vector3((view.scroll + hx) / RoadLevel.PX_PER_M, 0.0, 0.0), Vector3((view.scroll + ax) / RoadLevel.PX_PER_M, 0.0, 0.0),
+			zoom, 0.5, Vector2(800, 610), false)
+	cine_target = 1.0
+
+## Во время кат-сцены панели похода прячутся за чёрными полосами.
+func set_hud_shown(on: bool) -> void:
+	for n in [top_bar, %Goals, %Cards, %LogLabel, %WavePill]:
+		create_tween().tween_property(n, "modulate:a", 1.0 if on else 0.0, 0.3)
 
 # ---------------------------------------------------------------- Пауза и выход
 func _show_pause_menu() -> void:

@@ -28,9 +28,10 @@ func setup(cfg: Dictionary) -> void:
 		"wave": 0, "waves": cfg.get("waves", []), "kits": int(cfg.get("kits", 0)), "materials": int(cfg.get("materials", 0)),
 		"potions": cfg.get("potions", {"potion_hp": 0, "potion_mp": 0}).duplicate(),
 		"formation": cfg.get("formation", DB.HERO_IDS).duplicate(), "night": cfg.get("night", false),
+		"outpost_amb": cfg.get("outpost_ambush", ["wolf"]).duplicate(), "shade_k": float(cfg.get("shade_k", 1.0)),
 		"log": [], "loss": "", "boss": cfg.get("boss", false), "boss_time": 0.0, "boss_alive": false,
 		"counters": {"potions": 0, "ko": {}, "dmg_taken": {}, "healing": 0, "wards": 0, "taunts": 0, "kills": {},
-			"interrupts": 0, "curses": 0, "spell_dmg": 0, "xp": 0, "coins": 0, "heal_by": {}, "champions": 0},
+			"interrupts": 0, "curses": 0, "spell_dmg": 0, "xp": 0, "coins": 0, "heal_by": {}, "champions": 0, "by_hero": {}},
 		"used": {},
 		"rng_seed": 0, "rng_state": 0,
 		"hp_mult": float(cfg.get("hp_pct", 100)) / 100.0, "dmg_mult": float(cfg.get("dmg_pct", 100)) / 100.0,
@@ -159,6 +160,8 @@ func _spawn_group(types: Array, x0: float, left: bool) -> void:
 		var e: Dictionary = DB.ENEMIES[t]
 		var es := DB.enemy_stats(t, lvl)
 		es["hp"] = max(1.0, round(es["hp"] * hp_k))
+		if "phantom" in e["tags"] and not e.has("fixed_x"):
+			es["hp"] = max(1.0, round(es["hp"] * float(s.get("shade_k", 1.0))))
 		es["dmg_min"] = round(es["dmg_min"] * dmg_k)
 		es["dmg_max"] = round(es["dmg_max"] * dmg_k)
 		var x := x0 + i * 70.0 if not left else x0 - i * 45.0
@@ -184,6 +187,12 @@ func _spawn_group(types: Array, x0: float, left: bool) -> void:
 		if left:
 			u["speed"] = max(u["speed"], 220.0)
 			u["facing"] = 1
+		# Неподвижный враг (обелиск пещеры): стоит на своём месте поля, никуда не идёт
+		if e.has("fixed_x"):
+			u["x"] = float(e["fixed_x"])
+			u["anchor_x"] = u["x"]
+			u["lane"] = 0
+			u["summon"] = e.get("summon", "shade_wolf")
 		# Рысь подкрадывается невидимой и бросается на задний ряд
 		if pas.has("stalk"):
 			u["effects"].append({"id": "hidden"})
@@ -209,8 +218,11 @@ func start_next_wave() -> void:
 	for g in Balance.wave_groups(wd):
 		_spawn_group(g, SPAWN_X + i * 260.0, false)
 		i += 1
+	# Чемпион волны (поле champion у волны-словаря) выходит следом за её группами
+	if wd is Dictionary and DB.ENEMIES.has(wd.get("champion", {}).get("type", "")):
+		_spawn_champion(wd["champion"], SPAWN_X + i * 260.0)
 	if s["wave"] >= 2:
-		s["pending"].append({"t": s["t"] + rng.randf_range(5.0, 8.0), "types": ["wolf"], "left": true, "warned": false})
+		s["pending"].append({"t": s["t"] + rng.randf_range(5.0, 8.0), "types": s.get("outpost_amb", ["wolf"]).duplicate(), "left": true, "warned": false})
 	s["phase"] = "fight"
 	_log("Волна %d из %d!" % [s["wave"], waves.size()])
 
@@ -365,6 +377,10 @@ func _float_obj(obj: String, text: String, col: Color) -> void:
 
 # ================================================================ Шаг симуляции
 func step(dt: float) -> void:
+	for h in s["units"]:
+		if h["alive"]:
+			h["prev_goal"] = float(h.get("goal_x", h["x"]))
+			h["goal_x"] = h["x"]
 	if s["phase"] == "prep":
 		# Передышка между волнами: герои спокойно возвращаются на свои места
 		for u in alive_of("hero"):
@@ -418,6 +434,9 @@ func step(dt: float) -> void:
 			_enemy_ai(u, dt)
 	_separate_enemies()
 	_separate_heroes()
+	for u in s["units"]:
+		if u.has("anchor_x"):
+			u["x"] = u["anchor_x"]
 	# Горение объектов
 	for k in s["objects"].keys():
 		var o: Dictionary = s["objects"][k]
@@ -427,6 +446,9 @@ func step(dt: float) -> void:
 
 func _tick_effects(u: Dictionary, dt: float) -> void:
 	for i in range(u["effects"].size() - 1, -1, -1):
+		# Урон от яда может снять другой эффект (щит) — список укорачивается прямо в цикле
+		if i >= u["effects"].size():
+			continue
 		var e: Dictionary = u["effects"][i]
 		if e.has("t"):
 			e["t"] -= dt
@@ -447,7 +469,10 @@ func _tick_effects(u: Dictionary, dt: float) -> void:
 		if not u["alive"]:
 			return
 		if e.has("t") and e["t"] <= 0.0:
-			u["effects"].remove_at(i)
+			for j in u["effects"].size():
+				if is_same(u["effects"][j], e):
+					u["effects"].remove_at(j)
+					break
 			if e["id"] == "doom":
 				var ds = unit(int(e.get("src", -1)))
 				var sp: float = ds["sp"] if ds != null else 20.0
@@ -516,6 +541,7 @@ func formation_x(u: Dictionary) -> float:
 	return FORMATION_X[clamp(slot, 0, 3)]
 
 func _move_to(u: Dictionary, x: float, dt: float) -> bool:
+	u["goal_x"] = x
 	if has_effect(u, "root"):
 		return abs(u["x"] - x) < 4.0
 	var sp: float = u["speed"] * slow_factor(u)
@@ -597,7 +623,7 @@ func _hero_ai(u: Dictionary, dt: float) -> void:
 				desired = u["x"] if abs(u["x"] - home) < 95.0 else home
 			# Стрелок в строю не подшагивает к цели: стоит на месте и ждёт, пока враг войдёт в дальность
 		u["facing"] = int(dir)
-	_move_to(u, desired, dt)
+	_move_to(u, _free_spot(u, desired), dt)
 	if t != null and dist(u, t) <= u["range"] + 10.0:
 		u["atk_t"] -= dt * slow_factor(u)
 		if u["atk_t"] <= 0.0:
@@ -693,6 +719,13 @@ func _enemy_ai(u: Dictionary, dt: float) -> void:
 	var dir: float = sign(tx - u["x"])
 	if dir == 0:
 		dir = -1.0
+	if u.has("anchor_x"):
+		# Неподвижный: только свои приёмы, без шага и автоатаки
+		if u["skill_cd"] <= 0.0:
+			for sk in u["skills"]:
+				if not sk.get("passive", false) and float(u["cds"].get(sk["id"], 0.0)) <= 0.0 and _try_enemy_skill(u, sk, tg, abs(tx - u["x"])):
+					return
+		return
 	u["facing"] = int(dir)
 	if u["melee"] and tg["unit"] != null:
 		_take_lane(u, tg["unit"], dir)
@@ -741,9 +774,13 @@ func _melee_on(h: Dictionary, except: Dictionary) -> int:
 
 ## Раздвигает врагов: в каждой полосе по каждую сторону от героев соседние фигуры держат зазор ENEMY_GAP,
 ## задний отступает назад (от героев), передний стоит на месте.
+## Кому надо дальше вперёд (рубака за лучником), тот обходит соседа сбоку, а не упирается в него.
 func _separate_enemies() -> void:
 	var rows := {}
-	for e in alive_of("enemy"):
+	var all_e := alive_of("enemy")
+	for e in all_e:
+		e["passing"] = 0
+	for e in all_e:
 		e["crowd"] = false
 		var key := "%d:%d" % [1 if int(e["facing"]) > 0 else -1, int(e.get("lane", 0))]
 		if not rows.has(key):
@@ -756,7 +793,24 @@ func _separate_enemies() -> void:
 			row.sort_custom(func(a, b): return a["x"] > b["x"])
 		else:
 			row.sort_custom(func(a, b): return a["x"] < b["x"])
+		var fwd := 1.0 if from_left else -1.0
 		for i in range(1, row.size()):
+			var front: Dictionary = row[i - 1]
+			var back: Dictionary = row[i]
+			# Обход: задний рвётся дальше, а передний стоит (лучник на дистанции);
+			# или передний уже ушёл вперёд от стоящего — не отпихиваем стоящего назад.
+			# Идущих вместе толпой по-прежнему держит зазор.
+			var front_walks := _leaving(front, fwd)
+			var back_walks := _leaving(back, fwd)
+			if fwd * (float(back["x"]) - float(front["x"])) > -ENEMY_GAP and \
+					((not front_walks and _wants_past(back, front, fwd)) or (front_walks and not back_walks)):
+				# Проходящий (тот, кто идёт) шагает к камере, стоящий — вглубь
+				var mover: Dictionary = front if front_walks else back
+				var other: Dictionary = back if front_walks else front
+				mover["passing"] = 1
+				if int(other["passing"]) == 0:
+					other["passing"] = -1
+				continue
 			if from_left:
 				var lim2: float = row[i - 1]["x"] - ENEMY_GAP
 				if row[i]["x"] > lim2:
@@ -767,21 +821,32 @@ func _separate_enemies() -> void:
 				if row[i]["x"] < lim:
 					row[i]["x"] = lim
 					row[i]["crowd"] = true
+	_ease_side_steps(all_e)
 
 ## Не даёт героям стоять друг на друге: соседи по дороге держат зазор HERO_GAP.
 ## Расталкиваются оба; обездвиженный не сдвигается, занятый (подготовка, ремонт) — неохотно.
+## Кому нужно пройти за соседа (цель движения дальше него), тот обходит его сбоку:
+## проходящий шагает к камере, уступающий — чуть вглубь дороги (side_step для BattleView).
 func _separate_heroes() -> void:
 	var hs := alive_of("hero")
+	for h in hs:
+		h["passing"] = 0
 	if hs.size() < 2:
+		_ease_side_steps(hs)
 		return
 	hs.sort_custom(func(a, b): return a["x"] < b["x"] or (a["x"] == b["x"] and a["uid"] < b["uid"]))
-	for _pass in 3:
+	# Проходы попеременно слева и справа: цепочка прижатых друг к другу героев расходится за пару проходов
+	for p in 16:
 		var moved := false
-		for i in range(1, hs.size()):
+		for j in range(1, hs.size()):
+			var i: int = j if p % 2 == 0 else hs.size() - j
 			var a: Dictionary = hs[i - 1]
 			var b: Dictionary = hs[i]
 			var gap: float = b["x"] - a["x"]
 			if gap >= HERO_GAP - 0.01:
+				continue
+			# Обходящего не толкаем — ни пока он идёт мимо, ни пока уходит от соседа дальше
+			if _wants_past(a, b, 1.0) or _wants_past(b, a, -1.0) or _leaving(a, -1.0) or _leaving(b, 1.0):
 				continue
 			var wa := _push_weight(a)
 			var wb := _push_weight(b)
@@ -794,6 +859,72 @@ func _separate_heroes() -> void:
 			moved = true
 		if not moved:
 			break
+	# Отмечаем обход уже после расталкивания: пара могла сблизиться, когда соседа сдвинули к ней
+	for i in range(1, hs.size()):
+		var a: Dictionary = hs[i - 1]
+		var b: Dictionary = hs[i]
+		if b["x"] - a["x"] >= HERO_GAP - 0.01:
+			continue
+		if _wants_past(a, b, 1.0) or _leaving(a, -1.0):
+			a["passing"] = 1
+			if int(b["passing"]) == 0:
+				b["passing"] = -1
+		if _wants_past(b, a, -1.0) or _leaving(b, 1.0):
+			# Меняются местами: один обходит ближе к камере, другой — вглубь
+			if int(a["passing"]) > 0:
+				b["passing"] = -1
+			else:
+				b["passing"] = 1
+				if int(a["passing"]) == 0:
+					a["passing"] = -1
+	_ease_side_steps(hs)
+
+## Точка остановки без толкотни: если желанное место вплотную к стоящему соседу впереди по ходу,
+## герой встаёт перед ним на HERO_GAP, а не вдавливается в него (и не расталкивает весь строй).
+## Если цель дальше соседа — обходит его (см. _separate_heroes).
+func _free_spot(u: Dictionary, x: float) -> float:
+	var dir: float = sign(x - float(u["x"]))
+	if absf(x - float(u["x"])) < 1.0:
+		return x
+	for _i in 2:
+		for o in alive_of("hero"):
+			if o["uid"] == u["uid"]:
+				continue
+			var ox: float = float(o["x"])
+			if (ox - float(u["x"])) * dir <= 0.0:
+				continue
+			# Сосед сам куда-то идёт — он уйдёт с дороги
+			if absf(float(o.get("prev_goal", ox)) - ox) > BODY * 0.5:
+				continue
+			if absf(x - ox) < HERO_GAP:
+				x = ox - dir * HERO_GAP
+		if (x - float(u["x"])) * dir < 0.0:
+			return float(u["x"])
+	return x
+
+## Герой `u` идёт в сторону `dir` и его цель — за соседом `o`: соседа надо обойти, а не толкать.
+func _wants_past(u: Dictionary, o: Dictionary, dir: float) -> bool:
+	if has_effect(u, "root") or is_stunned(u):
+		return false
+	var g: float = float(u.get("goal_x", u["x"]))
+	return (g - float(o["x"])) * dir > BODY * 0.5
+
+## Герой `u` сам уходит в сторону `dir` (прочь от соседа) — расталкивать их незачем.
+func _leaving(u: Dictionary, dir: float) -> bool:
+	if has_effect(u, "root") or is_stunned(u):
+		return false
+	return (float(u.get("goal_x", u["x"])) - float(u["x"])) * dir > BODY * 0.5
+
+## Плавный шаг в сторону при обходе: 1 — проходящий (ближе к камере), -1 — уступающий.
+func _ease_side_steps(hs: Array) -> void:
+	for h in hs:
+		var want := 0.0
+		if int(h["passing"]) > 0:
+			want = 1.0
+		elif int(h["passing"]) < 0:
+			want = -0.6
+		var cur: float = float(h.get("side_step", 0.0))
+		h["side_step"] = move_toward(cur, want, 0.08)
 
 func _push_weight(u: Dictionary) -> float:
 	if has_effect(u, "root") or is_stunned(u):
@@ -881,6 +1012,8 @@ func _try_enemy_skill(u: Dictionary, sk: Dictionary, tg: Dictionary, d: float) -
 				target_uid = low["uid"]
 		"ignite":
 			ok = tg["obj"] != "" and d <= 70.0
+		"pulse":
+			ok = not alive_of("hero").is_empty() and alive_of("enemy").size() < 6
 	if not ok:
 		return false
 	u["cast"] = {"ab": sk["id"], "name": sk["name"], "t": 0.0, "total": float(sk["cast"]), "target": target_uid, "obj": tg["obj"]}
@@ -893,6 +1026,12 @@ func _try_enemy_skill(u: Dictionary, sk: Dictionary, tg: Dictionary, d: float) -
 
 func _resolve_enemy_skill(u: Dictionary, c: Dictionary) -> void:
 	match c["ab"]:
+		"pulse":
+			# Обелиск выпускает двух духов того зверя, что живёт в этой пещере
+			var lv: int = u["level"]
+			var kind: String = u.get("summon", "shade_wolf")
+			s["spawn_q"] = s.get("spawn_q", []) + [{"types": [[kind, lv], [kind, max(1, lv - 1)]], "x": u["x"] + 260.0}]
+			_log("%s пульсирует — из тьмы выходят духи!" % u["name"])
 		"howl":
 			for e in alive_of("enemy"):
 				if "beast" in e["tags"]:
@@ -902,7 +1041,8 @@ func _resolve_enemy_skill(u: Dictionary, c: Dictionary) -> void:
 					_float(e, "Ярость", Color(1, 0.5, 0.3))
 		"call":
 			var lv: int = u["level"]
-			s["spawn_q"] = s.get("spawn_q", []) + [{"types": [["wolf", lv], ["wolf", max(1, lv - 1)]], "x": SPAWN_X}]
+			var kind := "shade_wolf" if u["key"] == "captain" else "wolf"
+			s["spawn_q"] = s.get("spawn_q", []) + [{"types": [[kind, lv], [kind, max(1, lv - 1)]], "x": SPAWN_X}]
 			_log("%s зовёт стаю! Из чащи выходят волки." % u["name"])
 		"charge":
 			var tc = unit(int(c["target"]))
@@ -1144,6 +1284,8 @@ func _direct_hit(a: Dictionary, t: Dictionary, mult: float, school: String, opt:
 		dmg *= 1.75
 	var outcome := "crit" if crit else "hit"
 	if phys and t["block"] > 0.0 and rng.randf() * 100.0 < t["block"]:
+		if t["side"] == "hero":
+			_bh(t["key"])["absorbed"] += minf(dmg, float(t["block_val"]))
 		dmg = max(0.0, dmg - t["block_val"])
 		_float(t, "Блок", Color(0.75, 0.85, 1.0))
 		_on_defended(t)
@@ -1155,6 +1297,13 @@ func _direct_hit(a: Dictionary, t: Dictionary, mult: float, school: String, opt:
 		_float(t, "Ответный удар", Color(1, 0.85, 0.4))
 		_direct_hit(t, a, 0.6, "phys", {"no_dodge": true})
 	return outcome
+
+## Счётчики героя для итогов похода: урон, лечение, поглощено (броня, блок, щиты), прерывания
+func _bh(key: String) -> Dictionary:
+	var bh: Dictionary = s["counters"]["by_hero"]
+	if not bh.has(key):
+		bh[key] = {"dmg": 0.0, "heal": 0.0, "absorbed": 0.0, "int": 0}
+	return bh[key]
 
 func _on_defended(t: Dictionary) -> void:
 	if t["side"] == "hero" and t["key"] == "marek":
@@ -1212,8 +1361,12 @@ func _apply_damage(t: Dictionary, dmg: float, school: String, src, opt: Dictiona
 			_float(t, "Щит разбит", Color(1.0, 0.8, 0.4))
 			if b.get("radiance", false):
 				_heal(t, b["orig"] * 0.5, unit(int(b.get("src", -1))), false)
+	if t["side"] == "hero":
+		_bh(t["key"])["absorbed"] += maxf(0.0, raw - maxf(0.0, dmg))
 	if dmg <= 0.0:
 		return
+	if src != null and src["side"] == "hero" and t["side"] == "enemy":
+		_bh(src["key"])["dmg"] += minf(dmg, maxf(0.0, t["hp"]))
 	t["hp"] -= dmg
 	t["hurt"] = 0.18
 	if t["side"] == "enemy":
@@ -1248,6 +1401,16 @@ func _apply_damage(t: Dictionary, dmg: float, school: String, src, opt: Dictiona
 	if t["hp"] <= 0.0:
 		_kill(t)
 
+## Средний уровень героев боя — от него считается урезание опыта за слабых врагов
+func party_level() -> float:
+	var n := 0
+	var sum := 0.0
+	for u in s["units"]:
+		if u["side"] == "hero":
+			n += 1
+			sum += float(u.get("level", 1))
+	return sum / n if n > 0 else 1.0
+
 func _kill(t: Dictionary) -> void:
 	if t["side"] == "hero" and not s["used"].has("lastrite"):
 		var ai = hero_unit("aiden")
@@ -1278,7 +1441,10 @@ func _kill(t: Dictionary) -> void:
 				if dist(h, t) <= 120.0:
 					add_effect(h, {"id": "burn", "t": 4.0, "dps": max(2.0, t["dmg_max"] * 0.3), "school": "fire", "src": -1})
 					_float(h, "Горит", Color(1, 0.55, 0.2))
-		s["counters"]["xp"] += int(t["xp"])
+		var xp_full := int(t["xp"])
+		var xp_got := int(round(xp_full * DB.xp_factor(party_level(), int(t.get("level", s["level"])))))
+		s["counters"]["xp"] += xp_got
+		s["counters"]["xp_cut"] = int(s["counters"].get("xp_cut", 0)) + xp_full - xp_got
 		s["counters"]["coins"] += int(t["coins"])
 		var k: String = t.get("last_hit", "")
 		if k != "":
@@ -1286,6 +1452,16 @@ func _kill(t: Dictionary) -> void:
 		if "boss" in t["tags"]:
 			s["boss_alive"] = false
 			_log("%s повержен!" % t["name"])
+		if t.has("anchor_x"):
+			# Обелиск разбит: все духи боя рассыпаются вместе с ним
+			_log("%s рассыпается! Духи теряют опору." % t["name"])
+			for o in alive_of("enemy"):
+				if "phantom" in o["tags"] and o != t:
+					o["hp"] = 0.0
+					o["alive"] = false
+					o["cast"] = null
+					o["effects"] = []
+					events.append({"type": "death", "uid": o["uid"]})
 		if "champion" in t["tags"]:
 			s["counters"]["champions"] = int(s["counters"].get("champions", 0)) + 1
 			_log("Чемпион %s повержен!" % t["name"])
@@ -1325,6 +1501,7 @@ func _heal(t: Dictionary, amt: float, src, crit_ok: bool) -> void:
 		_float(t, "+%d%s" % [int(real), "!" if crit else ""], Color(0.45, 1.0, 0.5), crit)
 	if src != null and src["side"] == "hero" and t["side"] == "hero":
 		s["counters"]["healing"] += int(real)
+		_bh(src["key"])["heal"] += real
 		if src["key"] == "aiden" and t["key"] != "aiden":
 			s["counters"]["heal_by"][t["key"]] = s["counters"]["heal_by"].get(t["key"], 0) + int(real)
 
@@ -1656,6 +1833,8 @@ func _interrupt(t: Dictionary, by: Dictionary) -> void:
 		_float(t, "Прервано!", Color(1, 1, 0.3), true)
 		t["cast"] = null
 		s["counters"]["interrupts"] += 1
+		if by["side"] == "hero":
+			_bh(by["key"])["int"] += 1
 
 func set_focus(uid: int) -> void:
 	var t = unit(uid)

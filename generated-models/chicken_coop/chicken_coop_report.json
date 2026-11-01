@@ -1,0 +1,101 @@
+{
+  "id": "chicken_coop",
+  "category": "prologue/farm",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/farm\\chicken_coop.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\chicken_coop\\chicken_coop.blend",
+  "target_size_m": [
+    2.8,
+    2.0,
+    1.9
+  ],
+  "glb_size_m": [
+    2.653,
+    1.999,
+    1.848
+  ],
+  "size_deviation": [
+    -0.052,
+    -0.0,
+    -0.027
+  ],
+  "bounds_min": [
+    -1.268,
+    -1.024,
+    0.0
+  ],
+  "bounds_max": [
+    1.385,
+    0.975,
+    1.848
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 448,
+  "source_triangles": 448,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_iron",
+    "env_roof_red",
+    "env_rope",
+    "env_window_glow",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "chicken_coop_coop_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 470,
+  "glb_materials": [
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_window_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_roof_red",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 7,
+  "empties": [
+    "chicken_coop.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "chicken_coop_house",
+    "chicken_coop_roof",
+    "chicken_coop_run"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

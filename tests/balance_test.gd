@@ -143,7 +143,7 @@ func run_contract(cid: String, use_bot := true) -> Dictionary:
 func _ready() -> void:
 	Game.slot = -1
 	Game.state = Game._fresh_state()
-	for cid in (OS.get_environment("CIDS").split(",") if OS.get_environment("CIDS") != "" else DB.STORY_ORDER + ["s1"]):
+	for cid in (OS.get_environment("CIDS").split(",") if OS.get_environment("CIDS") != "" else DB.STORY_ORDER + DB.SIDE_ORDER):
 		Game.state["potions"]["potion_hp"] = max(4, Game.state["potions"]["potion_hp"])
 		var afk := OS.get_environment("AFK") != ""
 		if afk:

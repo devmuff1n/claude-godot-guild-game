@@ -1,0 +1,70 @@
+{
+  "id": "charred_fence",
+  "category": "prologue/ruins",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/ruins\\charred_fence.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\charred_fence\\charred_fence.blend",
+  "target_size_m": [
+    3.0,
+    0.8,
+    1.3
+  ],
+  "glb_size_m": [
+    3.004,
+    1.077,
+    1.31
+  ],
+  "size_deviation": [
+    0.001,
+    0.346,
+    0.008
+  ],
+  "bounds_min": [
+    -1.512,
+    -0.907,
+    -0.01
+  ],
+  "bounds_max": [
+    1.492,
+    0.17,
+    1.3
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 212,
+  "source_triangles": 212,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_burnt_wood",
+    "env_ember"
+  ],
+  "collision_nodes": [
+    "charred_fence_fence_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 578,
+  "glb_materials": [
+    [
+      "env_ember",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_burnt_wood",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "charred_fence.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "charred_fence_embers",
+    "charred_fence_planks"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

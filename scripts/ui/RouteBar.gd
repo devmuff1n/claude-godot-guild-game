@@ -34,7 +34,7 @@ static func type_name(nd: Dictionary) -> String:
 		"event": return "дорожная ситуация"
 		"camp": return "привал"
 		"shop": return "придорожная торговля"
-		"outpost": return "оборона заставы"
+		"outpost": return "оборона"
 		"talk": return "переговоры"
 	return ""
 

@@ -224,6 +224,16 @@ func view_xform() -> Vector3:
 
 
 ## Затемнение створки ворот по урону (0 — целы, 1 — разбиты).
+## Обелиск пещеры разбит: модель и её свет гаснут.
+func break_obelisk() -> void:
+	var o := get_node_or_null("SetPieces/Obelisk") as Node3D
+	if o != null:
+		o.visible = false
+	var l := get_node_or_null("FireLights/obelisk_glow") as Light3D
+	if l != null:
+		l.visible = false
+
+
 func set_gate_damage(dmg: float) -> void:
 	var gate := get_node_or_null("SetPieces/Gate")
 	if gate == null:

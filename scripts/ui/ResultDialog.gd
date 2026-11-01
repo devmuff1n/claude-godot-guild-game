@@ -7,6 +7,7 @@ signal closed
 const LEDGER_ROW := preload("res://scenes/ui/LedgerRow.tscn")
 const LOOT_CARD := preload("res://scenes/ui/LootCard.tscn")
 const GROWTH_CHIP := preload("res://scenes/ui/GrowthChip.tscn")
+const SUMMARY_ROW := preload("res://scenes/ui/HeroSummaryRow.tscn")
 const UNLOCK_CHIP := preload("res://scenes/ui/UnlockChip.tscn")
 const UNLOCK_ICON := {"perks": "perk", "skills": "sword", "contract": "board", "social": "friend"}
 const KIND_CAPTION := {"victory": "ПОРУЧЕНИЕ ВЫПОЛНЕНО", "defeat": "ПОРАЖЕНИЕ", "abandon": "ПОХОД ПРЕРВАН"}
@@ -31,9 +32,40 @@ func setup(res: Dictionary) -> ResultDialog:
 	%Total.text = "+%d" % (coins + purse)
 	%TotalNote.text = "награды %d · кошелёк %d" % [coins, purse] if kind == "victory" else "возврат кошелька"
 	%MoneyBox.visible = coins + purse > 0
+	# Итоги по героям (как в Details!): урон, лечение, поглощено, прерывания; лучший в столбце — золотом
+	UIK.clear(%SummaryRows)
+	var bh: Dictionary = res.get("by_hero", {})
+	%SummaryBox.visible = not bh.is_empty()
+	if not bh.is_empty():
+		var head: HBoxContainer = SUMMARY_ROW.instantiate()
+		%SummaryRows.add_child(head)
+		head.get_node("%Name").text = ""
+		for f in [["Dmg", "Урон"], ["Heal", "Лечение"], ["Absorbed", "Поглощено"], ["Int", "Прервано"]]:
+			var l: Label = head.get_node("%" + f[0])
+			l.text = f[1]
+			l.theme_type_variation = &"CaptionLabel"
+		var best := {}
+		for f in ["dmg", "heal", "absorbed", "int"]:
+			var m := 0
+			for hid in bh.keys():
+				m = maxi(m, int(bh[hid].get(f, 0)))
+			best[f] = m
+		for hid in DB.HERO_IDS:
+			var v: Dictionary = bh.get(hid, {})
+			var row: HBoxContainer = SUMMARY_ROW.instantiate()
+			%SummaryRows.add_child(row)
+			row.get_node("%Portrait").texture = UIK.portrait(hid)
+			row.get_node("%Name").text = DB.hero_name(hid)
+			for f in [["Dmg", "dmg"], ["Heal", "heal"], ["Absorbed", "absorbed"], ["Int", "int"]]:
+				var l2: Label = row.get_node("%" + f[0])
+				var val := int(v.get(f[1], 0))
+				l2.text = str(val) if val > 0 else "—"
+				if val > 0 and val == int(best[f[1]]):
+					l2.add_theme_color_override("font_color", UIK.GOLD_HI)
 	# Добыча
 	UIK.clear(%Loot)
 	%LootBox.visible = res["items"].size() > 0
+	%LootBox.get_node("Caption").text = "УТЕШИТЕЛЬНЫЙ ПРИЗ" if res.get("consolation", false) else "ДОБЫЧА"
 	for it in res["items"]:
 		var card: PanelContainer = LOOT_CARD.instantiate()
 		%Loot.add_child(card)
@@ -109,7 +141,7 @@ func _ledger(line: String) -> void:
 	else:
 		name_l.text = line
 		val_l.text = ""
-	var lost := "упущена" in line or "не выполнено" in line or "не возвращается" in line or "Наград за победу нет" in line
+	var lost := "урезан" in line or "упущена" in line or "не выполнено" in line or "не возвращается" in line or "Наград за победу нет" in line
 	if lost:
 		name_l.add_theme_color_override("font_color", UIK.MUTED)
 	if right.begins_with("+"):

@@ -1,0 +1,84 @@
+{
+  "id": "glow_mushrooms",
+  "category": "prologue/cave",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/cave\\glow_mushrooms.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\glow_mushrooms\\glow_mushrooms.blend",
+  "target_size_m": [
+    1.3,
+    1.2,
+    1.3
+  ],
+  "glb_size_m": [
+    1.075,
+    1.025,
+    1.718
+  ],
+  "size_deviation": [
+    -0.173,
+    -0.146,
+    0.322
+  ],
+  "bounds_min": [
+    -0.52,
+    -0.511,
+    -0.167
+  ],
+  "bounds_max": [
+    0.555,
+    0.514,
+    1.55
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 970,
+  "source_triangles": 970,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_cave_rock_ref",
+    "env_limestone",
+    "env_moss",
+    "env_mushroom_glow"
+  ],
+  "collision_nodes": [
+    "glow_mushrooms_mush_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 835,
+  "glb_materials": [
+    [
+      "env_limestone",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_mushroom_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_cave_rock_ref",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 4,
+  "empties": [
+    "glow_mushrooms.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "glow_mushrooms_mushrooms: 5 degenerate faces"
+  ],
+  "motion_test": [],
+  "parts": [
+    "glow_mushrooms_mushrooms",
+    "glow_mushrooms_rock"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

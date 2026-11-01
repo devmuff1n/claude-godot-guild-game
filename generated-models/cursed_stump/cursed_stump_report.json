@@ -1,0 +1,97 @@
+{
+  "id": "cursed_stump",
+  "category": "prologue/forest",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/forest\\cursed_stump.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\cursed_stump\\cursed_stump.blend",
+  "target_size_m": [
+    2.2,
+    2.0,
+    1.1
+  ],
+  "glb_size_m": [
+    2.2,
+    2.0,
+    1.1
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bounds_min": [
+    -1.1,
+    -1.0,
+    0.0
+  ],
+  "bounds_max": [
+    1.1,
+    1.0,
+    1.1
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1242,
+  "source_triangles": 1242,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_bark_oak",
+    "env_limestone",
+    "env_moss",
+    "env_rune_glow",
+    "env_stone_grey",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "cursed_stump_stump_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 639,
+  "glb_materials": [
+    [
+      "env_moss",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_limestone",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rune_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark_oak",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 6,
+  "empties": [
+    "cursed_stump.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [
+    "cursed_stump_moss_shrooms: 3 degenerate faces"
+  ],
+  "motion_test": [],
+  "parts": [
+    "cursed_stump_moss_shrooms",
+    "cursed_stump_runes",
+    "cursed_stump_stump"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

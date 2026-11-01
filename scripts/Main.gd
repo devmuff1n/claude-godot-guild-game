@@ -26,7 +26,7 @@ func _ready() -> void:
 		add_child(dn)
 	if OS.get_environment("GUILD_UITEST") != "":
 		var tn := Node.new()
-		var tests := {"extra": "res://tests/ui_extra.gd", "jitter": "res://tests/ui_jitter.gd", "balance": "res://tests/balance_ui.gd", "video": "res://tests/autoplay_video.gd"}
+		var tests := {"extra": "res://tests/ui_extra.gd", "jitter": "res://tests/ui_jitter.gd", "sizes": "res://tests/ui_sizes.gd", "balance": "res://tests/balance_ui.gd", "video": "res://tests/autoplay_video.gd", "anim": "res://tests/anim_rec.gd", "cutscene": "res://tests/cutscene_check.gd", "cutshots": "res://tests/cutscene_shots.gd"}
 		tn.set_script(load(tests.get(OS.get_environment("GUILD_UITEST"), "res://tests/ui_smoke.gd")))
 		add_child(tn)
 		return
@@ -180,7 +180,7 @@ func _debug_start(mode: String) -> void:
 			if mode == "journal":
 				current.show_tab("party", {"sub": "journal"})
 		"battle", "escort", "outpost", "camp", "event", "fight", "fight3", "fight7":
-			var cid: String = {"battle": "c1", "escort": "c3", "outpost": "s1", "camp": "c1", "event": "c1", "fight": "c1", "fight3": "c3", "fight7": "c7"}[mode]
+			var cid: String = {"battle": "c1", "escort": "c4", "outpost": "c3", "camp": "c1", "event": "c1", "fight": "c1", "fight3": "c4", "fight7": "c7"}[mode]
 			for c in (DB.STORY_ORDER.slice(0, 6) if mode == "fight7" else ["c1", "c2", "c3"]):
 				if mode != "battle":
 					Game.state["completed"][c] = 1

@@ -4,9 +4,18 @@ extends RefCounted
 
 static var flash: float = 0.0
 static var alpha: float = 1.0
+## Дух зверя (враг с тегом phantom): фигура темнеет, светлые детали (глаза, клыки) горят красным
+static var shade := false
+const SHADE_BODY := Color(0.13, 0.09, 0.14)
+const SHADE_GLOW := Color(1.0, 0.22, 0.12)
 
 static func c(col: Color) -> Color:
-	var r := col.lerp(Color(1, 1, 1), flash)
+	var r := col
+	if shade:
+		var lum := col.get_luminance()
+		var glow := lum > 0.88 or (lum > 0.6 and col.s > 0.45)
+		r = Color(SHADE_GLOW, col.a) if glow else col.lerp(Color(SHADE_BODY, col.a), 0.72)
+	r = r.lerp(Color(1, 1, 1), flash)
 	r.a *= alpha
 	return r
 
@@ -34,6 +43,11 @@ static func rect(ci: CanvasItem, r: Rect2, col: Color) -> void:
 static func draw_unit(ci: CanvasItem, pos: Vector2, look: String, facing: int, st: Dictionary, sc := 1.0) -> void:
 	flash = float(st.get("flash", 0.0))
 	alpha = 0.55 if st.get("dead", false) else float(st.get("alpha", 1.0))
+	if look == "wolf_shade":
+		look = "wolf"
+		st = st.duplicate()
+		st["shade"] = true
+	shade = st.get("shade", false)
 	var t: float = st.get("t", 0.0)
 	var rot := 0.0
 	var off := Vector2.ZERO
@@ -53,6 +67,8 @@ static func draw_unit(ci: CanvasItem, pos: Vector2, look: String, facing: int, s
 		alpha = 0.35
 		ell(ci, Vector2(0, 0), shadow_w(look), 7, Color(0, 0, 0))
 		alpha = a0
+	if shade:
+		_shade_smoke(ci, look, t)
 	var walk := sin(t * 11.0) if st.get("moving", false) else 0.0
 	var bob = abs(walk) * 2.0 if st.get("moving", false) else sin(t * 2.5) * 0.8
 	var sw: float = float(st.get("swing", 0.0))
@@ -61,6 +77,12 @@ static func draw_unit(ci: CanvasItem, pos: Vector2, look: String, facing: int, s
 	match look:
 		"wolf", "wolf_alpha":
 			_wolf(ci, look == "wolf_alpha", walk, t, sw, tier)
+		"wolf_shade":
+			_wolf(ci, false, walk, t, sw, 1)
+		"obelisk":
+			# сам обелиск — 3D-модель уровня; здесь только пульсирующее свечение у основания
+			var k := 0.5 + 0.5 * sin(t * 3.0)
+			ell(ci, Vector2(0, -4), 60, 14, Color(0.9, 0.2, 0.8, 0.18 + 0.15 * k))
 		"boar":
 			_boar(ci, walk, t, sw, tier)
 		"spider", "spiderling":
@@ -74,13 +96,27 @@ static func draw_unit(ci: CanvasItem, pos: Vector2, look: String, facing: int, s
 	ci.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	flash = 0.0
 	alpha = 1.0
+	shade = false
 
-const BEASTS := ["wolf", "wolf_alpha", "boar", "spider", "spiderling", "lynx", "bear"]
+## Тёмная дымка над духом: клочья поднимаются со спины и тают
+static func _shade_smoke(ci: CanvasItem, look: String, t: float) -> void:
+	var w := shadow_w(look)
+	var h := top_h(look) * 0.6
+	var s0 := shade
+	shade = false
+	for k in 9:
+		var ph := fmod(t * 0.55 + k * 0.37, 1.0)
+		var wx := -w * 0.8 + k * w * 0.2 + sin(k * 2.3) * 7.0 - ph * 16.0
+		var fade := (1.0 - ph) * minf(1.0, ph * 4.0)
+		ell(ci, Vector2(wx, -h - ph * 50.0 + sin(t * 1.7 + k) * 3.0), 5.0 + ph * 11.0, 3.5 + ph * 7.0, Color(0.06, 0.03, 0.08, 0.38 * fade))
+	shade = s0
+
+const BEASTS := ["wolf", "wolf_alpha", "wolf_shade", "boar", "spider", "spiderling", "lynx", "bear"]
 
 ## Ширина тени и высота головы/верха фигуры (в пикселях до масштаба) для разных обликов.
 static func shadow_w(look: String) -> float:
 	match look:
-		"wolf", "wolf_alpha", "boar": return 40.0
+		"wolf", "wolf_alpha", "wolf_shade", "boar": return 40.0
 		"spider": return 46.0
 		"spiderling": return 22.0
 		"lynx": return 36.0
@@ -89,7 +125,8 @@ static func shadow_w(look: String) -> float:
 
 static func head_h(look: String) -> float:
 	match look:
-		"wolf": return 52.0
+		"wolf", "wolf_shade": return 52.0
+		"obelisk": return 200.0
 		"wolf_alpha": return 66.0
 		"boar": return 36.0
 		"spider": return 36.0
@@ -100,7 +137,8 @@ static func head_h(look: String) -> float:
 
 static func top_h(look: String) -> float:
 	match look:
-		"wolf": return 70.0
+		"wolf", "wolf_shade": return 70.0
+		"obelisk": return 230.0
 		"wolf_alpha": return 91.0
 		"boar": return 66.0
 		"spider": return 70.0
@@ -128,6 +166,8 @@ const LOOKS := {
 	"brute": {"skin": Color(0.8, 0.6, 0.45), "hair": Color(0.35, 0.22, 0.12), "body": Color(0.38, 0.28, 0.2), "trim": Color(0.25, 0.2, 0.18), "pants": Color(0.28, 0.22, 0.17), "boots": Color(0.18, 0.13, 0.1)},
 	"healer": {"skin": Color(0.85, 0.7, 0.55), "hair": Color(0.5, 0.5, 0.45), "body": Color(0.3, 0.42, 0.28), "trim": Color(0.55, 0.45, 0.25), "pants": Color(0.25, 0.25, 0.2), "boots": Color(0.2, 0.16, 0.1)},
 	"arsonist": {"skin": Color(0.78, 0.58, 0.44), "hair": Color(0.15, 0.1, 0.1), "body": Color(0.3, 0.18, 0.15), "trim": Color(0.55, 0.1, 0.12), "pants": Color(0.2, 0.15, 0.13), "boots": Color(0.15, 0.1, 0.08)},
+	"farmer": {"skin": Color(0.9, 0.72, 0.56), "hair": Color(0.55, 0.4, 0.22), "body": Color(0.62, 0.55, 0.38), "trim": Color(0.82, 0.72, 0.38), "pants": Color(0.32, 0.3, 0.42), "boots": Color(0.3, 0.2, 0.12)},
+	"druid": {"skin": Color(0.62, 0.55, 0.45), "hair": Color(0.2, 0.18, 0.12), "body": Color(0.16, 0.24, 0.14), "trim": Color(0.3, 0.2, 0.12), "pants": Color(0.12, 0.14, 0.1), "boots": Color(0.12, 0.1, 0.08)},
 	"captain": {"skin": Color(0.88, 0.68, 0.52), "hair": Color(0.78, 0.28, 0.1), "body": Color(0.45, 0.12, 0.12), "trim": Color(0.8, 0.62, 0.25), "pants": Color(0.2, 0.15, 0.12), "boots": Color(0.15, 0.1, 0.08)},
 }
 
@@ -142,7 +182,7 @@ static func _humanoid(ci: CanvasItem, look: String, walk: float, bob: float, sw:
 	_legs(ci, walk, L["pants"], L["boots"], -36.0, 7.0 * w)
 	var y0 := -bob
 	# Плащ сзади
-	if look in ["elira", "raider", "arsonist", "healer", "archer"]:
+	if look in ["elira", "raider", "arsonist", "healer", "archer", "druid"]:
 		poly(ci, [Vector2(-12, -76 + y0), Vector2(6, -76 + y0), Vector2(-4, -26), Vector2(-24 - walk * 3, -24)], L["trim"] if look == "elira" else L["body"].darkened(0.25))
 		if look == "elira":
 			poly(ci, [Vector2(-12, -76 + y0), Vector2(6, -76 + y0), Vector2(-4, -30), Vector2(-26 - walk * 3, -30)], Color(0.2, 0.42, 0.24))
@@ -156,7 +196,7 @@ static func _humanoid(ci: CanvasItem, look: String, walk: float, bob: float, sw:
 	# Туловище
 	var tw := 15.0 * w
 	var body := [Vector2(-tw, -72 + y0), Vector2(tw, -72 + y0), Vector2(tw + 3, -34), Vector2(-tw - 3, -34)]
-	if look in ["aiden", "neris", "healer"]:
+	if look in ["aiden", "neris", "healer", "druid"]:
 		body = [Vector2(-tw, -72 + y0), Vector2(tw, -72 + y0), Vector2(tw + 8, -14), Vector2(-tw - 8, -14)]
 	poly(ci, body, L["body"])
 	match look:
@@ -233,6 +273,18 @@ static func _humanoid(ci: CanvasItem, look: String, walk: float, bob: float, sw:
 				poly(ci, [Vector2(-2, hy + 4), Vector2(19, hy + 3), Vector2(16, hy + 13), Vector2(2, hy + 16)], L["trim"])
 		"brute":
 			ell(ci, Vector2(6, hy + 10), 12, 9, L["hair"])
+		"farmer":
+			# Соломенная шляпа
+			ell(ci, Vector2(0, hy - 10), 28, 6, L["trim"])
+			ell(ci, Vector2(0, hy - 16), 14, 9, L["trim"])
+			ell(ci, Vector2(6, hy + 12), 9, 5, L["hair"])
+		"druid":
+			# Капюшон из листьев и корона из рогов
+			poly(ci, [Vector2(-20, hy + 16), Vector2(-18, hy - 12), Vector2(0, hy - 22), Vector2(16, hy - 14), Vector2(20, hy - 2), Vector2(12, hy - 6), Vector2(-6, hy - 2), Vector2(-8, hy + 16)], L["body"].darkened(0.2))
+			for sx in [-1.0, 1.0]:
+				line(ci, Vector2(2 + sx * 6, hy - 18), Vector2(2 + sx * 18, hy - 42), Color(0.78, 0.7, 0.56), 4.5)
+				line(ci, Vector2(2 + sx * 13, hy - 31), Vector2(2 + sx * 26, hy - 36), Color(0.78, 0.7, 0.56), 3.5)
+				line(ci, Vector2(2 + sx * 16, hy - 38), Vector2(2 + sx * 12, hy - 50), Color(0.78, 0.7, 0.56), 3.5)
 		"captain":
 			poly(ci, [Vector2(-19, hy + 8), Vector2(-16, hy - 14), Vector2(2, hy - 22), Vector2(17, hy - 12), Vector2(19, hy - 2), Vector2(8, hy - 9)], L["hair"])
 			poly(ci, [Vector2(-6, hy + 6), Vector2(18, hy + 4), Vector2(12, hy + 22), Vector2(0, hy + 20)], L["hair"])
@@ -245,6 +297,9 @@ static func _humanoid(ci: CanvasItem, look: String, walk: float, bob: float, sw:
 			circ(ci, Vector2(9, hy + 1), 1.6, Color(0.2, 0.6, 0.35))
 		elif look == "neris":
 			circ(ci, Vector2(9, hy + 1), 1.6, Color(0.95, 0.75, 0.2))
+		elif look == "druid":
+			circ(ci, Vector2(9, hy + 1), 6.0, Color(1.0, 0.15, 0.08, 0.3))
+			circ(ci, Vector2(9, hy + 1), 2.4, Color(1.0, 0.25, 0.12))
 	else:
 		circ(ci, Vector2(10, hy), 2.2, Color(1, 0.6, 0.2))
 	# Оружие и передняя рука
@@ -259,6 +314,14 @@ static func _humanoid(ci: CanvasItem, look: String, walk: float, bob: float, sw:
 			_staff(ci, front_sh, sw, casting, Color(0.3, 0.2, 0.28), "crystal", t)
 		"healer":
 			_staff(ci, front_sh, sw, casting, Color(0.45, 0.32, 0.18), "leaf", t)
+		"druid":
+			_staff(ci, front_sh, sw, casting, Color(0.3, 0.22, 0.14), "seed", t)
+		"farmer":
+			# Вилы
+			line(ci, front_sh + Vector2(4, 30), front_sh + Vector2(10, -46), Color(0.5, 0.36, 0.2), 3.5)
+			for dx in [-5.0, 0.0, 5.0]:
+				line(ci, front_sh + Vector2(10 + dx, -46), front_sh + Vector2(10 + dx, -60), Color(0.6, 0.6, 0.62), 2.0)
+			line(ci, front_sh + Vector2(4, -46), front_sh + Vector2(16, -46), Color(0.6, 0.6, 0.62), 2.0)
 		"elira", "archer":
 			_bow(ci, front_sh, sw, look == "elira")
 		"bandit":
@@ -273,7 +336,7 @@ static func _humanoid(ci: CanvasItem, look: String, walk: float, bob: float, sw:
 		"captain":
 			_sword(ci, front_sh, sw, 44.0)
 	# Ступени: II — кожаный наплечник, III — железный
-	if tier >= 2 and not look in ["aiden", "marek", "elira", "neris"]:
+	if tier >= 2 and not look in ["aiden", "marek", "elira", "neris", "farmer", "druid"]:
 		var pc := Color(0.66, 0.46, 0.24) if tier == 2 else Color(0.62, 0.64, 0.68)
 		var pp := Vector2(-2, -62 + y0)
 		poly(ci, [pp + Vector2(-13, 2) * w, pp + Vector2(-9, -8) * w, pp + Vector2(9, -8) * w, pp + Vector2(13, 2) * w, pp + Vector2(0, 6) * w], pc)
@@ -340,6 +403,9 @@ static func _staff(ci: CanvasItem, sh: Vector2, sw: float, casting: bool, col: C
 		"leaf":
 			ell(ci, tip + Vector2(4, -4), 6, 3, Color(0.4, 0.7, 0.3))
 			ell(ci, tip + Vector2(-4, -2), 6, 3, Color(0.35, 0.6, 0.25))
+		"seed":
+			circ(ci, tip, 9.0 + sin(t * 4.0), Color(1.0, 0.15, 0.08, 0.25))
+			circ(ci, tip, 4.5, Color(1.0, 0.25, 0.12))
 
 static func _bow(ci: CanvasItem, sh: Vector2, sw: float, elf: bool) -> void:
 	var hand := sh + Vector2(20, 6)
@@ -413,7 +479,7 @@ static func _wolf(ci: CanvasItem, alpha_w: bool, walk: float, t: float, sw: floa
 	var eye := Color(1.0, 0.2, 0.15) if alpha_w else Color(0.95, 0.8, 0.2)
 	if tier >= 3:
 		eye = ICE_EYE if not alpha_w else Color(1.0, 0.35, 0.2)
-	circ(ci, hp + Vector2(6, -3) * s, 2.4 * s, eye)
+	circ(ci, hp + Vector2(6, -3) * s, (3.0 if shade else 2.4) * s, eye)
 	if tier == 2:
 		# Шрам через морду
 		line(ci, hp + Vector2(2, -9) * s, hp + Vector2(12, 5) * s, Color(0.75, 0.55, 0.5), 2.0)

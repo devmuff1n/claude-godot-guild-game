@@ -93,6 +93,13 @@ tooltip_text = "Рекомендуемый уровень отряда"
 icon_kind = "sword"
 value_width = 16.0
 
+[node name="PartyLevel" parent="Columns/DetailsPanel/Details/Header" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+icon_kind = "friend"
+value_width = 16.0
+
 [node name="Threat" parent="Columns/DetailsPanel/Details/Header" instance=ExtResource("6_rank")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(52, 52)
@@ -108,6 +115,7 @@ theme_type_variation = &"BodyLabel"
 autowrap_mode = 3
 
 [node name="Twists" type="HFlowContainer" parent="Columns/DetailsPanel/Details"]
+custom_minimum_size = Vector2(0, 32)
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 8

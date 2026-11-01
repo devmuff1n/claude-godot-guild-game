@@ -53,9 +53,6 @@ func refresh() -> void:
 	%Name.text = "%s · %s" % [hd["full"], hd["cls"]]
 	%Role.text = String(hd["role"]).to_upper()
 	%Bio.text = hd["bio"]
-	var bo := int(Game.hero(id)["burnout"])
-	%Burnout.text = "Выгорание: %d/10 — %s" % [bo, "спокоен(на)" if bo < 3 else ("устал(а)" if bo < 6 else "на пределе")]
-	%Burnout.add_theme_color_override("font_color", UIK.GREEN if bo < 3 else (UIK.GOLD if bo < 6 else UIK.RED))
 	var companion := id != "aiden"
 	%CompanionBox.visible = companion
 	%AidenBox.visible = not companion

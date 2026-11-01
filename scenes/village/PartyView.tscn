@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://scripts/ui/Bar.gd" id="4_bar"]
 [ext_resource type="PackedScene" path="res://scenes/ui/JournalView.tscn" id="5_journal"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="6_icon"]
-[ext_resource type="Script" path="res://scripts/ui/PipBar.gd" id="7_pips"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="8_pill"]
 [ext_resource type="PackedScene" path="res://scenes/ui/SocialPanel.tscn" id="9_social"]
 
@@ -58,7 +57,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 16
 
 [node name="RosterPanel" type="PanelContainer" parent="Box/HeroesPage"]
-custom_minimum_size = Vector2(270, 0)
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 theme_type_variation = &"PanelDark"
 
@@ -105,27 +104,6 @@ layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"TitleLabel"
 
-[node name="Burnout" type="HBoxContainer" parent="Box/HeroesPage/CenterPanel/Box/Header"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 0
-theme_override_constants/separation = 6
-
-[node name="Flame" parent="Box/HeroesPage/CenterPanel/Box/Header/Burnout" instance=ExtResource("6_icon")]
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-kind = "burnout"
-
-[node name="Pips" type="Control" parent="Box/HeroesPage/CenterPanel/Box/Header/Burnout"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(130, 9)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-script = ExtResource("7_pips")
-
 [node name="Progress" type="HBoxContainer" parent="Box/HeroesPage/CenterPanel/Box"]
 layout_mode = 2
 theme_override_constants/separation = 12
@@ -154,7 +132,7 @@ text_size = 12
 
 [node name="Body" type="HBoxContainer" parent="Box/HeroesPage/CenterPanel/Box"]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 12
 
 [node name="Doll" parent="Box/HeroesPage/CenterPanel/Box/Body" instance=ExtResource("2_doll")]
 unique_name_in_owner = true
@@ -190,6 +168,15 @@ text = "Очередь выдачи"
 [node name="Spacer" type="Control" parent="Box/HeroesPage/CenterPanel/Box/StorageHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="BestButton" type="Button" parent="Box/HeroesPage/CenterPanel/Box/StorageHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Надеть из кладовой вещи, отмеченные зелёной стрелкой (заметно усиливают героя)."
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Надеть лучшее"
 
 [node name="SelName" type="Label" parent="Box/HeroesPage/CenterPanel/Box/StorageHeader"]
 unique_name_in_owner = true

@@ -6,6 +6,7 @@ signal clicked(slot: ItemSlot)
 signal right_clicked(slot: ItemSlot)
 
 const ITEM_TOOLTIP := preload("res://scenes/ui/ItemTooltip.tscn")
+const ITEM_COMPARE := preload("res://scenes/ui/ItemCompareTooltip.tscn")
 
 var item = null:            # Dictionary или null
 	set(v):
@@ -36,6 +37,10 @@ var can_drag := true
 var dim := false:
 	set(v):
 		dim = v
+		queue_redraw()
+var upgrade := false:      # зелёная стрелка «улучшение для выбранного героя»
+	set(v):
+		upgrade = v
 		queue_redraw()
 
 func _init(sz: float = 58.0) -> void:
@@ -93,6 +98,13 @@ func _draw() -> void:
 		draw_string(f2, p, "×%d" % count, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color(1, 0.95, 0.8))
 	if dim:
 		_box(r, Color(0, 0, 0, 0.55), Color(0, 0, 0, 0), 0)
+	if upgrade and item != null:
+		# Стрелка вверх в левом верхнем углу, как в Diablo/WoW-аддонах
+		var o := Vector2(5, 4)
+		var pts := PackedVector2Array([o + Vector2(6, 0), o + Vector2(12, 7), o + Vector2(8.5, 7), o + Vector2(8.5, 13), o + Vector2(3.5, 13), o + Vector2(3.5, 7), o + Vector2(0, 7)])
+		draw_colored_polygon(pts, Color(0.35, 0.95, 0.3))
+		pts.append(pts[0])
+		draw_polyline(pts, Color(0, 0, 0, 0.85), 1.0, true)
 
 func _gui_input(ev: InputEvent) -> void:
 	if ev is InputEventMouseButton and ev.pressed:
@@ -104,6 +116,10 @@ func _gui_input(ev: InputEvent) -> void:
 func _make_custom_tooltip(_for_text: String) -> Object:
 	if item != null:
 		var lvl := int(Game.hero(tip_hero)["level"]) if tip_hero != "" else 1
+		var eqd := _equipped_for_compare()
+		if not eqd.is_empty():
+			var ct = ITEM_COMPARE.instantiate()
+			return ct.show_compare(item, _compare_hero(), int(Game.hero(_compare_hero())["level"]), tip_note, eqd)
 		var tt = ITEM_TOOLTIP.instantiate()
 		return tt.show_item(item, tip_hero, lvl, tip_note)
 	var bb := tip_bb
@@ -120,6 +136,35 @@ func _make_custom_tooltip(_for_text: String) -> Object:
 	r.add_theme_font_size_override("normal_font_size", 15)
 	r.add_theme_font_size_override("bold_font_size", 16)
 	return r
+
+## С кем сравнивать: выбранный герой, а без него — единственный, кто может носить такую вещь
+func _compare_hero() -> String:
+	if tip_hero != "":
+		return tip_hero
+	if not Game.state.get("heroes", {}).has("marek"):
+		return ""
+	var who := []
+	for h in DB.HERO_IDS:
+		if Items.hero_can_use_type(h, item):
+			who.append(h)
+	return who[0] if who.size() == 1 else ""
+
+## Надетые вещи того же слота (у колец — оба), кроме самой вещи
+func _equipped_for_compare() -> Array:
+	if ctx.get("kind", "") == "equip":
+		return []
+	var hid := _compare_hero()
+	if hid == "" or not Items.hero_can_use_type(hid, item):
+		return []
+	var eq: Dictionary = Game.hero(hid)["equip"]
+	var bslot: String = Items.base_of(item).get("slot", "")
+	var slots := ["ring1", "ring2"] if bslot == "ring" else [bslot]
+	var out := []
+	for sl in slots:
+		var it = eq.get(sl)
+		if it != null and it.get("uid", -1) != item.get("uid", -2):
+			out.append(it)
+	return out
 
 func _get_drag_data(_pos: Vector2) -> Variant:
 	if item == null or not can_drag or ctx.is_empty():

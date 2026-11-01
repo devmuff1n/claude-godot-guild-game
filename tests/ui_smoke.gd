@@ -54,7 +54,7 @@ func _ready() -> void:
 	await wait(3)
 	press("За работу")
 	await wait(3)
-	for cid in (["c1"] if OS.get_environment("QUICK") != "" else ["c1", "c2", "c3", "s1"]):
+	for cid in (["c1"] if OS.get_environment("QUICK") != "" else ["c1", "c2", "c3", "c4"]):
 		await run_contract(cid)
 	p("DONE treasury=%d story=%d" % [Game.state["treasury"], Game.state["story_stage"]])
 	# Проверка сохранения/загрузки посреди боя
@@ -85,6 +85,9 @@ func run_contract(cid: String) -> void:
 			await wait(2)
 			continue
 		match e["phase"]:
+			"walk":
+				if not Game.story().is_empty():
+					press("Пропустить")
 			"prebattle":
 				press("В бой")
 			"battle":
@@ -229,11 +232,15 @@ func save_load_test() -> void:
 	await wait(1)
 	press("Выступить")
 	await wait(5)
-	for i in 400:
+	for i in 1500:
 		var e := Game.ex()
 		if e.is_empty() or not main.current.get_script().resource_path.ends_with("ExpeditionScreen.gd"):
 			await wait(1)
 			continue
+		if not Game.story().is_empty():
+			press("Пропустить")
+		if main.current.sim != null and main.current.sim.s["phase"] == "prep":
+			press("Следующая волна")
 		if e["phase"] == "prebattle":
 			press("В бой")
 		if e["phase"] == "battle" and main.current.sim != null and main.current.sim.s["t"] > 4.0:

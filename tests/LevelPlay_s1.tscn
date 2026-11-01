@@ -4,4 +4,4 @@
 
 [node name="LevelPlay" type="Node"]
 script = ExtResource("1_play")
-cid = "s1"
+cid = "c3"

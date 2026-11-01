@@ -35,7 +35,7 @@ func refresh() -> void:
 func _fill_list() -> void:
 	UIK.clear(%StoryList)
 	UIK.clear(%SideList)
-	for cid in DB.STORY_ORDER + ["s1"]:
+	for cid in DB.STORY_ORDER + DB.SIDE_ORDER:
 		if not DB.CONTRACTS.has(cid):
 			continue
 		var b: ContractListItem = LIST_ITEM.instantiate()
@@ -76,6 +76,12 @@ func _fill_details() -> void:
 	%Kind.text = ("ГЛАВА %d" % int(c["story"])) if int(c["story"]) > 0 else "ПОБОЧНОЕ ПОРУЧЕНИЕ"
 	%CName.text = c["name"]
 	%Level.set_value(str(int(c["level"])))
+	# Готовность отряда рядом с угрозой (Darkest Dungeon): зелёный — не ниже уровня, жёлтый — на 1 ниже, красный — ещё ниже
+	var pl := int(Game.party_level())
+	var gap := pl - int(c["level"])
+	%PartyLevel.set_value(str(pl), UIK.GREEN if gap >= 0 else (UIK.GOLD_HI if gap == -1 else UIK.RED))
+	%PartyLevel.tooltip_text = "Уровень отряда: %d (поручение: %d)" % [pl, int(c["level"])] + \
+		("\nОтряд ниже уровня: у героев меньше здоровья и урона, а броня хуже держит удары врагов." if gap < 0 else ("\nОтряд выше уровня: опыта за врагов меньше." if gap > 0 else "\nОтряд в уровне поручения."))
 	%Threat.set_rank(Game.contract_threat(sel)["rank"])
 	%Threat.tooltip_text = Game.threat_tip(sel)
 	%CDesc.text = c["desc"]
@@ -89,7 +95,7 @@ func _fill_details() -> void:
 		chip.get_node("%Icon").kind = t.get("icon", "event")
 		chip.get_node("%Text").text = t["title"]
 		chip.tooltip_text = t["tip"]
-	%Twists.visible = %Twists.get_child_count() > 0
+	# Строка остаётся на месте и без условий — описание и награды ниже не прыгают
 	var diplo: bool = c.has("diplomacy")
 	%Mission.visible = diplo and avail
 	%Threat.visible = true

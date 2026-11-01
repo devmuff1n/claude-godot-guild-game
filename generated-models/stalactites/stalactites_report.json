@@ -1,0 +1,63 @@
+{
+  "id": "stalactites",
+  "category": "prologue/cave",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/cave\\stalactites.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\stalactites\\stalactites.blend",
+  "target_size_m": [
+    2.4,
+    1.4,
+    1.6
+  ],
+  "glb_size_m": [
+    2.455,
+    1.33,
+    1.487
+  ],
+  "size_deviation": [
+    0.023,
+    -0.05,
+    -0.071
+  ],
+  "bounds_min": [
+    -1.235,
+    -0.629,
+    0.199
+  ],
+  "bounds_max": [
+    1.22,
+    0.701,
+    1.686
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 314,
+  "source_triangles": 314,
+  "visual_mesh_nodes": 1,
+  "unique_meshes": 1,
+  "materials": [
+    "env_limestone"
+  ],
+  "collision_nodes": [
+    "stalactites_ceiling_col-convcolonly"
+  ],
+  "glb_nodes": 3,
+  "glb_kb": 102,
+  "glb_materials": [
+    [
+      "env_limestone",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 1,
+  "empties": [
+    "stalactites.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "stalactites_stalactites.001"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

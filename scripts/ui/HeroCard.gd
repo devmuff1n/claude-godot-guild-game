@@ -4,14 +4,37 @@ extends PanelContainer
 ## Все подписи фиксированной ширины — карточка не меняет размер, что бы ни происходило в бою.
 
 signal pressed(hero_id: String)
+signal hover_changed(hero_id: String, on: bool)
 
 @export var hero_id := "aiden"
 var active := false
 var alive := true
+var target_hint := false   # идёт выбор союзника: карточку можно нажать, чтобы применить на этого героя
+var hovered := false
 
 func _ready() -> void:
 	%Portrait.texture = UIK.portrait(hero_id)
 	%Name.text = DB.hero_name(hero_id)
+	mouse_entered.connect(func(): _set_hovered(true))
+	mouse_exited.connect(func(): _set_hovered(false))
+
+func _set_hovered(on: bool) -> void:
+	hovered = on
+	hover_changed.emit(hero_id, on)
+	if target_hint:
+		queue_redraw()
+
+## Подсветка карточки как цели союзного умения или зелья (рамка из темы: PanelCardTarget / PanelCardTargetHover).
+func set_target_hint(on: bool) -> void:
+	if on == target_hint:
+		return
+	target_hint = on
+	queue_redraw()
+
+func _draw() -> void:
+	if target_hint:
+		var sb := get_theme_stylebox("panel", &"PanelCardTargetHover" if hovered else &"PanelCardTarget")
+		draw_style_box(sb, Rect2(Vector2.ZERO, size))
 
 func set_num(n: int) -> void:
 	%Num.text = str(n)

@@ -1,0 +1,144 @@
+{
+  "id": "farmhouse_log",
+  "category": "prologue/farm",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/farm\\farmhouse_log.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\farmhouse_log\\farmhouse_log.blend",
+  "target_size_m": [
+    6.6,
+    7.0,
+    6.4
+  ],
+  "glb_size_m": [
+    6.66,
+    7.968,
+    6.14
+  ],
+  "size_deviation": [
+    0.009,
+    0.138,
+    -0.041
+  ],
+  "bounds_min": [
+    -3.33,
+    -4.3,
+    0.0
+  ],
+  "bounds_max": [
+    3.33,
+    3.668,
+    6.14
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 5086,
+  "source_triangles": 5086,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_brass",
+    "env_floor_planks",
+    "env_flower_leaf",
+    "env_iron",
+    "env_lantern_glow",
+    "env_stone_block",
+    "env_stone_grey",
+    "env_thatch_ref",
+    "env_timber",
+    "env_window_glow",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "farmhouse_log_house_col-convcolonly",
+    "farmhouse_log_porch_col-convcolonly"
+  ],
+  "glb_nodes": 6,
+  "glb_kb": 1756,
+  "glb_materials": [
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_window_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_flower_leaf",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_lantern_glow",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_thatch_ref",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_timber",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_brass",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_block",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_floor_planks",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 13,
+  "empties": [
+    "farmhouse_log.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "farmhouse_log_details",
+    "farmhouse_log_roof",
+    "farmhouse_log_walls"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:06"
+}

@@ -1,5 +1,5 @@
 extends Control
-## Лавка Ольги (scenes/village/ShopView.tscn): покупка за казну, продажа, выкуп проданного.
+## Лавка Ольги (scenes/village/ShopView.tscn): покупка за казну, продажа, перековка свойств, выкуп проданного.
 
 const SHOP_CARD := preload("res://scenes/ui/ShopItemCard.tscn")
 const CONS_CARD := preload("res://scenes/ui/ConsCard.tscn")
@@ -15,6 +15,7 @@ func _ready() -> void:
 	%SellButton.pressed.connect(func():
 		Game.sell_storage(sel_sell)
 		sel_sell = -1)
+	%RerollButton.pressed.connect(func(): _msg(Game.reroll_storage(sel_sell)))
 	Game.changed.connect(_on_changed)
 	refresh()
 
@@ -88,6 +89,9 @@ func refresh() -> void:
 	# Строка продажи всегда на месте, чтобы список ниже не прыгал
 	%SellButton.disabled = not has_sel
 	%SellButton.text = "Продать"
+	%RerollButton.disabled = true
+	%RerollButton.text = "Перековать"
+	%RerollButton.tooltip_text = "Новые случайные свойства для необычной и лучшей вещи. Каждая следующая перековка той же вещи дороже."
 	%SellName.text = "—"
 	%SellName.add_theme_color_override("font_color", UIK.MUTED)
 	if has_sel:
@@ -95,6 +99,13 @@ func refresh() -> void:
 		%SellName.text = Items.display_name(it4)
 		%SellName.add_theme_color_override("font_color", Items.rarity_color(it4))
 		%SellButton.text = "Продать · %d мон." % Items.sell_price(it4)
+		if Items.can_reroll(it4):
+			var rp := Items.reroll_price(it4)
+			%RerollButton.text = "Перековать · %d мон." % rp
+			%RerollButton.disabled = int(Game.state["treasury"]) < rp
+			var n := int(it4.get("rerolls", 0))
+			if n > 0:
+				%RerollButton.tooltip_text += "\nУже перекована: %d раз(а)." % n
 	UIK.clear(%ConsSell)
 	for id in ["potion_hp", "potion_mp", "kit"]:
 		if int(Game.state["potions"].get(id, 0)) > 0:

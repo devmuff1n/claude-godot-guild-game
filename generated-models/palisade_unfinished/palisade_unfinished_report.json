@@ -1,0 +1,88 @@
+{
+  "id": "palisade_unfinished",
+  "category": "prologue/hamlet",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/hamlet\\palisade_unfinished.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\palisade_unfinished\\palisade_unfinished.blend",
+  "target_size_m": [
+    3.4,
+    1.4,
+    2.3
+  ],
+  "glb_size_m": [
+    3.276,
+    1.379,
+    2.421
+  ],
+  "size_deviation": [
+    -0.036,
+    -0.015,
+    0.053
+  ],
+  "bounds_min": [
+    -1.642,
+    -1.22,
+    0.0
+  ],
+  "bounds_max": [
+    1.634,
+    0.16,
+    2.421
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 514,
+  "source_triangles": 514,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_bark",
+    "env_rope",
+    "env_steel",
+    "env_wood_mid",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "palisade_unfinished_palisade_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 431,
+  "glb_materials": [
+    [
+      "env_bark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_steel",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 5,
+  "empties": [
+    "palisade_unfinished.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "palisade_unfinished_ground_logs",
+    "palisade_unfinished_logs"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

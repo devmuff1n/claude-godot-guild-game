@@ -23,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(820, 0)
+custom_minimum_size = Vector2(820, 640)
 layout_mode = 2
 theme_type_variation = &"PanelModal"
 
@@ -98,14 +98,25 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Body" type="Label" parent="Center/Panel/Box"]
+[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ScrollBody" type="VBoxContainer" parent="Center/Panel/Box/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="Body" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme_type_variation = &"BodyLabel"
 autowrap_mode = 3
 
-[node name="Accent" type="Label" parent="Center/Panel/Box"]
+[node name="Accent" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2

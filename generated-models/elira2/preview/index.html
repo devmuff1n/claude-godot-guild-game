@@ -1,0 +1,405 @@
+<title>Герои гильдии в 3D</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@500;700&family=Alegreya+Sans:wght@400;500&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: one stage (3D view) with a clip rail beside it; rail drops under the stage on phones. */
+:root{
+  --bg:#eef0e6; --panel:#e2e6d6; --ink:#1f2a1c; --muted:#5d6955; --line:#c7cdb8;
+  --accent:#2f6b3a; --accent-ink:#f3f6ee; --copper:#b5652b; --stage:#d9dfcc;
+  --display:"Alegreya Sans SC",Georgia,serif; --body:"Alegreya Sans",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a13; --panel:#1c241a; --ink:#e6ecdc; --muted:#9aa78f; --line:#2f3a2b;
+  --accent:#6fbf7c; --accent-ink:#0f1a10; --copper:#e08a4c; --stage:#1a2118; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a13; --panel:#1c241a; --ink:#e6ecdc; --muted:#9aa78f; --line:#2f3a2b;
+  --accent:#6fbf7c; --accent-ink:#0f1a10; --copper:#e08a4c; --stage:#1a2118; color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px;box-sizing:border-box}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:16px;max-width:1200px;margin:0 auto;height:100%}
+header{grid-column:1/-1;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+h1{font-family:var(--display);font-weight:700;font-size:26px;margin:0;letter-spacing:.02em;text-wrap:balance}
+.sub{color:var(--muted);font-family:var(--mono);font-size:12px}
+.stage{position:relative;background:var(--stage);border:1px solid var(--line);border-radius:6px;min-height:420px;overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+.hud{position:absolute;left:12px;bottom:12px;right:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;pointer-events:none}
+.hud>*{pointer-events:auto}
+.now{font-family:var(--display);font-size:20px;background:var(--panel);border:1px solid var(--line);padding:4px 10px;border-radius:4px;min-width:200px}
+.time{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:110px}
+.bar{flex:1 1 160px;height:4px;background:var(--line);border-radius:2px;position:relative;min-width:120px}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--copper);border-radius:2px}
+aside{display:flex;flex-direction:column;gap:14px;min-width:0;overflow:auto}
+.group h2{font-family:var(--display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.list{display:flex;flex-direction:column;gap:4px}
+button{font:inherit;color:var(--ink);background:transparent;border:1px solid transparent;border-radius:4px;padding:6px 10px;text-align:left;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+button:hover{background:var(--panel);border-color:var(--line)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+button small{font-family:var(--mono);font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+.row button{flex:1;justify-content:center;text-align:center;border-color:var(--line)}
+[hidden]{display:none!important}
+.loading{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:18px;color:var(--muted)}
+.heroes{display:flex;gap:6px}
+.heroes button{border-color:var(--line);font-family:var(--display);font-size:16px;padding:4px 14px}
+#groups{display:flex;flex-direction:column;gap:14px}
+@media (max-width:760px){.wrap{grid-template-columns:1fr;height:auto}.stage{height:62vh;min-height:340px}aside{overflow:visible}}
+</style>
+<div class="wrap">
+  <header><div class="heroes" role="group" aria-label="Герой"><button type="button" id="hero-elira" aria-pressed="true">Элира</button><button type="button" id="hero-marek" aria-pressed="false">Марек</button><button type="button" id="hero-neris" aria-pressed="false">Нэрис</button><button type="button" id="hero-aiden" aria-pressed="false">Эйден</button></div><h1 id="h1">Элира с луком</h1><span class="sub" id="meta">13 своих клипов + 51 из Mixamo · 30 к/с</span></header>
+  <div class="stage" id="stage">
+    <div class="loading" id="loading">Загрузка модели…</div>
+    <div class="hud"><span class="now" id="now">—</span><span class="time" id="time">0 / 0</span><span class="bar"><i id="prog"></i></span></div>
+  </div>
+  <aside>
+    <div id="groups"></div>
+    <div class="group"><h2>Скорость</h2><div class="row" id="speed"></div></div>
+    <div class="group"><h2>Камера</h2><div class="row" id="cams"></div></div>
+  </aside>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const CLIPS = [
+  ['bow','Combo','Цепочка боя'],
+  ['bow','Ready','Боевая стойка'],['bow','Bow_Draw','Натяжение'],['bow','Bow_Aim','Прицел'],
+  ['bow','Bow_Shoot','Выстрел и перезарядка'],['bow','Bow_Quick','Быстрый выстрел'],['bow','Bow_Sky','Выстрел в небо'],
+  ['move','Idle','Стойка'],['move','Walk','Шаг'],['move','Run','Бег'],
+  ['react','Hit','Урон'],['react','Dodge','Отскок'],['react','Death','Смерть'],['react','Victory','Победа'],
+  ['mxb','ComboMX','Цепочка Mixamo'],
+  ['mxb','MX_DrawArrow','Достать и натянуть'],
+  ['mxb','MX_AimOverdraw','Прицел'],
+  ['mxb','MX_AimRecoil','Выстрел'],
+  ['mxb','MX_StandingAimIdle01','Прицел на месте'],
+  ['mxb','MX_StandingAimIdle02Looking','Прицел, осматривается'],
+  ['mxb','MX_AimWalk','Шаг с прицелом'],
+  ['mxb','MX_AimWalkBack','Назад с прицелом'],
+  ['mxb','MX_AimWalkLeft','Влево с прицелом'],
+  ['mxb','MX_AimWalkRight','Вправо с прицелом'],
+  ['mxb','MX_Equip','Взять лук'],
+  ['mxb','MX_Disarm','Убрать лук'],
+  ['mxb','MX_Block','Блок'],
+  ['mxb','MX_Kick','Удар ногой'],
+  ['mxb','MX_Punch','Удар рукой'],
+  ['mxm','MX_Idle','Стойка'],
+  ['mxm','MX_IdleLook','Осматривается'],
+  ['mxm','MX_IdleExamine','Разглядывает лук'],
+  ['mxm','MX_IdleUnarmed','Стойка без оружия'],
+  ['mxm','MX_Walk','Шаг'],
+  ['mxm','MX_WalkBack','Шаг назад'],
+  ['mxm','MX_WalkLeft','Шаг влево'],
+  ['mxm','MX_WalkRight','Шаг вправо'],
+  ['mxm','MX_Run','Бег'],
+  ['mxm','MX_RunBack','Бег назад'],
+  ['mxm','MX_RunLeft','Бег влево'],
+  ['mxm','MX_RunRight','Бег вправо'],
+  ['mxm','MX_StandingSprintForward','Спринт'],
+  ['mxm','MX_RunStop','Остановка с бега'],
+  ['mxm','MX_TurnLeft','Поворот влево'],
+  ['mxm','MX_TurnRight','Поворот вправо'],
+  ['mxm','MX_StandingJump','Прыжок'],
+  ['mxm','MX_StandingJumpRunningToRunForward','Прыжок с разбега'],
+  ['mxm','MX_FallLoop','Падение'],
+  ['mxm','MX_FallLand','Приземление'],
+  ['mxm','MX_FallLandRun','Приземление в бег'],
+  ['mxm','MX_StandingToCrouch','Присесть'],
+  ['mxm','MX_CrouchIdle01','Присед'],
+  ['mxm','MX_CrouchWalkForward','Шаг в приседе'],
+  ['mxm','MX_CrouchToStanding','Встать'],
+  ['mxr','MX_DodgeBack','Отскок назад'],
+  ['mxr','MX_DodgeForward','Рывок вперёд'],
+  ['mxr','MX_DodgeLeft','Отскок влево'],
+  ['mxr','MX_DodgeRight','Отскок вправо'],
+  ['mxr','MX_Dive','Кувырок'],
+  ['mxr','MX_Hit','Урон'],
+  ['mxr','MX_HitHead','Урон в голову'],
+  ['mxr','MX_StandingReactLargeFromFront','Сильный удар'],
+  ['mxr','MX_Death','Смерть назад'],
+  ['mxr','MX_DeathForward','Смерть вперёд'],
+  ['mxr','MX_StandingDeathLeft01','Смерть влево'],
+  ['mxr','MX_StandingDeathRight01','Смерть вправо'],
+];
+const LOOP = new Set(['Idle', 'Ready', 'Walk', 'Run', 'Bow_Aim', 'MX_Idle', 'MX_IdleLook', 'MX_IdleExamine', 'MX_IdleUnarmed', 'MX_Walk', 'MX_WalkBack', 'MX_WalkLeft', 'MX_WalkRight', 'MX_Run', 'MX_RunBack', 'MX_RunLeft', 'MX_RunRight', 'MX_StandingSprintForward', 'MX_AimWalk', 'MX_AimWalkBack', 'MX_AimWalkLeft', 'MX_AimWalkRight', 'MX_AimOverdraw', 'MX_StandingAimIdle01', 'MX_StandingAimIdle02Looking', 'MX_FallLoop', 'MX_CrouchIdle01', 'MX_CrouchWalkForward']);
+const COMBOS = {Combo:['Ready','Bow_Draw','Bow_Aim','Bow_Shoot','Bow_Quick','Bow_Sky'], ComboMX:['MX_DrawArrow','MX_AimOverdraw','MX_AimRecoil']};
+const MAREK_CLIPS = [
+  ['game','Combo','Цепочка боя'],
+  ['game','MX_Idle4','Стойка'],
+  ['game','MX_Walk','Шаг'],
+  ['game','MX_Run','Бег'],
+  ['game','MX_Slash','Удар мечом'],
+  ['game','MX_Casting2','Сбивающий удар щитом'],
+  ['game','MX_Slash3','Размашистый удар'],
+  ['game','MX_PowerUp','Провокация'],
+  ['game','MX_Block','Стена щитов'],
+  ['game','MX_Casting','Знамя гильдии и победа'],
+  ['game','MX_BlockIdle','Подготовка за щитом'],
+  ['game','MX_Impact2','Урон'],
+  ['game','MX_Impact','Удар в щит'],
+  ['game','MX_StepBackward','Шаг назад'],
+  ['game','MX_Death','Смерть'],
+  ['fight','MX_Slash2','Серия ударов'],
+  ['fight','MX_Slash4','Удар в прыжке'],
+  ['fight','MX_Slash5','Удар из приседа'],
+  ['fight','MX_Attack','Атака с прыжком'],
+  ['fight','MX_Attack2','Атака с разворотом'],
+  ['fight','MX_Attack3','Атака в выпаде'],
+  ['fight','MX_Attack4','Короткий удар'],
+  ['fight','MX_Kick','Удар ногой'],
+  ['fight','MX_Block2','Опустить щит'],
+  ['fight','MX_CrouchBlock','Присесть за щит'],
+  ['fight','MX_CrouchBlockIdle','За щитом в приседе'],
+  ['fight','MX_CrouchBlock2','Блок в приседе'],
+  ['fight','MX_DrawSword1','Выхватить меч'],
+  ['fight','MX_DrawSword2','Выхватить меч, вариант 2'],
+  ['fight','MX_SheathSword1','Убрать меч'],
+  ['fight','MX_SheathSword2','Убрать меч, вариант 2'],
+  ['move','MX_Idle','Стойка, осматривается'],
+  ['move','MX_Idle2','Стойка, играет мечом'],
+  ['move','MX_Idle3','Стойка, разминается'],
+  ['move','MX_Walk2','Шаг назад'],
+  ['move','MX_Run2','Бег назад'],
+  ['move','MX_Strafe','Бег вбок'],
+  ['move','MX_Strafe2','Бег вбок, вариант 2'],
+  ['move','MX_Strafe3','Шаг вбок'],
+  ['move','MX_Strafe4','Шаг вбок, вариант 2'],
+  ['move','MX_Turn','Поворот'],
+  ['move','MX_Turn2','Поворот, вариант 2'],
+  ['move','MX_180Turn','Разворот'],
+  ['move','MX_180Turn2','Разворот, вариант 2'],
+  ['move','MX_Jump','Прыжок с разбега'],
+  ['move','MX_Jump2','Прыжок на месте'],
+  ['move','MX_Crouch','Присесть'],
+  ['move','MX_CrouchIdle','Присед'],
+  ['move','MX_Crouching','Встать'],
+  ['move','MX_Crouching2','Присесть, вариант 2'],
+  ['move','MX_Crouching3','Встать, вариант 2'],
+  ['react','MX_Impact3','Удар в голову'],
+  ['react','MX_DodgingBack','Отскок назад'],
+  ['react','MX_Death2','Смерть вперёд'],
+];
+const NERIS_CLIPS = [
+  ['game','Combo','Цепочка боя'],
+  ['game','MX_Idle','Стойка с посохом'],
+  ['game','MX_WalkForward','Шаг'],
+  ['game','MX_RunForward','Бег'],
+  ['game','MX_Idle03','Подготовка заклинания'],
+  ['game','MX_2hMagicAttack04','Удар магией из посоха'],
+  ['game','MX_1hMagicAttack02','Стрела тьмы'],
+  ['game','MX_2hMagicAreaAttack02','Проклятие слабости'],
+  ['game','MX_2hCastSpell01','Пламя бездны'],
+  ['game','MX_2hMagicAttack01','Похищение жизни'],
+  ['game','MX_1hCastSpell01','Рок'],
+  ['game','MX_1hMagicAttack01','Быстрое заклинание'],
+  ['game','MX_SmallFromFront','Урон'],
+  ['game','MX_StepBackward','Шаг назад'],
+  ['game','MX_DeathBackward','Смерть'],
+  ['game','MX_Victory','Победа'],
+  ['cast','MX_1hMagicAttack03','Удар одной рукой'],
+  ['cast','MX_2hMagicAttack02','Удар двумя руками'],
+  ['cast','MX_2hMagicAttack03','Серия ударов'],
+  ['cast','MX_2hMagicAttack05','Удар с разворотом'],
+  ['cast','MX_BlockStart','Поднять защиту'],
+  ['cast','MX_BlockIdle','Защита'],
+  ['cast','MX_BlockLarge','Удар в защиту'],
+  ['cast','MX_BlockEnd','Опустить защиту'],
+  ['move','MX_Idle02','Стойка, осматривается'],
+  ['move','MX_Idle04','Стойка, разминается'],
+  ['move','MX_WalkBack','Шаг назад'],
+  ['move','MX_WalkLeft','Шаг влево'],
+  ['move','MX_WalkRight','Шаг вправо'],
+  ['move','MX_RunBack','Бег назад'],
+  ['move','MX_RunLeft','Бег влево'],
+  ['move','MX_RunRight','Бег вправо'],
+  ['move','MX_SprintForward','Спринт'],
+  ['move','MX_TurnLeft90','Поворот влево'],
+  ['move','MX_TurnRight90','Поворот вправо'],
+  ['react','MX_SmallFromBack','Урон сзади'],
+  ['react','MX_SmallFromLeft','Урон слева'],
+  ['react','MX_SmallFromRight','Урон справа'],
+  ['react','MX_LargeFromFront','Сильный удар'],
+  ['react','MX_LargeFromBack','Сильный удар сзади'],
+  ['react','MX_LargeFromLeft','Сильный удар слева'],
+  ['react','MX_LargeFromRight','Сильный удар справа'],
+  ['react','MX_DodgingBack','Отскок назад'],
+  ['react','MX_DeathLeft','Смерть влево'],
+];
+const AIDEN_CLIPS = [
+  ['game','Combo','Цепочка боя'],
+  ['game','MX_Idle','Стойка с посохом'],
+  ['game','MX_WalkForward','Шаг'],
+  ['game','MX_RunForward','Бег'],
+  ['game','MX_Idle03','Подготовка заклинания'],
+  ['game','MX_1hMagicAttack01','Удар магией из посоха'],
+  ['game','MX_1hCastSpell01','Исцеление'],
+  ['game','MX_2hMagicAttack04','Щит света'],
+  ['game','MX_1hMagicAttack03','Обновление'],
+  ['game','MX_2hCastSpell01','Молитва исцеления'],
+  ['game','MX_2hMagicAreaAttack02','Заступничество'],
+  ['game','MX_1hMagicAttack02','Быстрое заклинание'],
+  ['game','MX_BlockIdle','Защита'],
+  ['game','MX_BlockLarge','Удар в защиту'],
+  ['game','MX_SmallFromFront','Урон'],
+  ['game','MX_StepBackward','Шаг назад'],
+  ['game','MX_DeathBackward','Смерть'],
+  ['game','MX_Victory','Победа'],
+  ['cast','MX_2hMagicAttack01','Удар двумя руками'],
+  ['cast','MX_2hMagicAttack02','Удар с замахом'],
+  ['cast','MX_2hMagicAttack03','Серия ударов'],
+  ['cast','MX_2hMagicAttack05','Удар с разворотом'],
+  ['cast','MX_2hMagicAreaAttack01','Удар по площади'],
+  ['cast','MX_BlockStart','Поднять защиту'],
+  ['cast','MX_BlockEnd','Опустить защиту'],
+  ['move','MX_Idle02','Стойка, осматривается'],
+  ['move','MX_Idle04','Стойка, разминается'],
+  ['move','MX_WalkBack','Шаг назад'],
+  ['move','MX_WalkLeft','Шаг влево'],
+  ['move','MX_WalkRight','Шаг вправо'],
+  ['move','MX_RunBack','Бег назад'],
+  ['move','MX_RunLeft','Бег влево'],
+  ['move','MX_RunRight','Бег вправо'],
+  ['move','MX_SprintForward','Спринт'],
+  ['move','MX_TurnLeft90','Поворот влево'],
+  ['move','MX_TurnRight90','Поворот вправо'],
+  ['react','MX_SmallFromBack','Урон сзади'],
+  ['react','MX_SmallFromLeft','Урон слева'],
+  ['react','MX_SmallFromRight','Урон справа'],
+  ['react','MX_LargeFromFront','Сильный удар'],
+  ['react','MX_LargeFromBack','Сильный удар сзади'],
+  ['react','MX_LargeFromLeft','Сильный удар слева'],
+  ['react','MX_LargeFromRight','Сильный удар справа'],
+  ['react','MX_DodgingBack','Отскок назад'],
+  ['react','MX_DeathLeft','Смерть влево'],
+];
+const HEROES = {
+  elira: {name:'Элира', title:'Элира с луком', meta:'13 своих клипов + 51 из Mixamo · 30 к/с', src:'elira2_glb.js', glb:'ELIRA_GLB',
+    groups:[['bow','Бой'],['move','Движение'],['react','Реакции'],['mxb','Mixamo · бой'],['mxm','Mixamo · движение'],['mxr','Mixamo · реакции']],
+    clips:CLIPS, loop:LOOP, combos:COMBOS, start:'Combo', repeat:{Bow_Aim:2}, target:0.78, zoom:1},
+  marek: {name:'Марек', title:'Марек с мечом и щитом', meta:'53 клипа Mixamo · 30 к/с · рост 1,75 м', src:'marek2_glb.js', glb:'MAREK_GLB',
+    groups:[['game','В игре'],['fight','Ещё бой'],['move','Движение'],['react','Реакции']],
+    clips:MAREK_CLIPS,
+    loop:new Set(['MX_Idle','MX_Idle2','MX_Idle3','MX_Idle4','MX_Walk','MX_Walk2','MX_Run','MX_Run2','MX_Strafe','MX_Strafe2','MX_Strafe3','MX_Strafe4','MX_BlockIdle','MX_CrouchIdle','MX_CrouchBlockIdle']),
+    combos:{Combo:['MX_Idle4','MX_Slash','MX_Casting2','MX_Slash3','MX_Block','MX_Impact','MX_PowerUp','MX_Slash']},
+    start:'Combo', repeat:{}, target:0.9, zoom:1.15},
+  neris: {name:'Нэрис', title:'Нэрис с посохом', meta:'43 клипа Mixamo · 30 к/с · рост 1,62 м', src:'neris2_glb.js', glb:'NERIS_GLB',
+    groups:[['game','В игре'],['cast','Ещё магия'],['move','Движение'],['react','Реакции']],
+    clips:NERIS_CLIPS,
+    loop:new Set(['MX_Idle','MX_Idle02','MX_Idle03','MX_Idle04','MX_WalkForward','MX_WalkBack','MX_WalkLeft','MX_WalkRight','MX_RunForward','MX_RunBack','MX_RunLeft','MX_RunRight','MX_SprintForward','MX_BlockIdle']),
+    combos:{Combo:['MX_Idle','MX_2hMagicAttack04','MX_1hMagicAttack02','MX_2hMagicAreaAttack02','MX_2hCastSpell01','MX_2hMagicAttack01','MX_1hCastSpell01','MX_SmallFromFront']},
+    start:'Combo', repeat:{}, target:0.82, zoom:1.1},
+  aiden: {name:'Эйден', title:'Эйден с посохом', meta:'44 клипа Mixamo · 30 к/с · рост 1,72 м', src:'aiden2_glb.js', glb:'AIDEN_GLB',
+    groups:[['game','В игре'],['cast','Ещё магия'],['move','Движение'],['react','Реакции']],
+    clips:AIDEN_CLIPS,
+    loop:new Set(['MX_Idle','MX_Idle02','MX_Idle03','MX_Idle04','MX_WalkForward','MX_WalkBack','MX_WalkLeft','MX_WalkRight','MX_RunForward','MX_RunBack','MX_RunLeft','MX_RunRight','MX_SprintForward','MX_BlockIdle']),
+    combos:{Combo:['MX_Idle','MX_1hMagicAttack01','MX_1hCastSpell01','MX_2hMagicAttack04','MX_1hMagicAttack03','MX_2hCastSpell01','MX_2hMagicAreaAttack02','MX_SmallFromFront']},
+    start:'Combo', repeat:{}, target:0.86, zoom:1.12},
+};
+let H = null, COMBO = [], comboId = 'Combo';
+const stage = document.getElementById('stage');
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.shadowMap.enabled = true;
+stage.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+const cam = new THREE.PerspectiveCamera(32,1,0.05,50);
+const controls = new THREE.OrbitControls(cam, renderer.domElement);
+controls.target.set(0,0.75,0); controls.enableDamping = true; controls.minDistance=1.2; controls.maxDistance=8;
+scene.add(new THREE.HemisphereLight(0xf2f5ea,0x4a5a40,0.85));
+const sun = new THREE.DirectionalLight(0xfff1dd,1.05); sun.position.set(2.5,4,3); sun.castShadow=true;
+sun.shadow.mapSize.set(1024,1024); Object.assign(sun.shadow.camera,{left:-2,right:2,top:2,bottom:-2}); scene.add(sun);
+const ground = new THREE.Mesh(new THREE.CircleGeometry(2.6,48), new THREE.ShadowMaterial({opacity:0.22}));
+ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
+const ring = new THREE.Mesh(new THREE.RingGeometry(0.62,0.64,64), new THREE.MeshBasicMaterial({transparent:true,opacity:0.35}));
+ring.rotation.x=-Math.PI/2; ring.position.y=0.002; scene.add(ring);
+function theme(){ scene.background = new THREE.Color(css('--stage')); ring.material.color = new THREE.Color(css('--accent')); }
+theme(); matchMedia('(prefers-color-scheme: dark)').addEventListener('change',theme);
+new MutationObserver(theme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+const VIEWS = {'Спереди':[0,1.0,3.6],'Сбоку':[3.4,1.0,0.6],'Три четверти':[2.4,1.3,2.8],'Сзади':[-1.6,1.3,-3.0]};
+function view(k){ const p=VIEWS[k], z=H?H.zoom:1, ty=H?H.target:0.78; cam.position.set(p[0]*z,p[1]*z,p[2]*z); controls.target.set(0,ty,0); controls.update(); }
+function resize(){ const r=stage.getBoundingClientRect(); renderer.setSize(r.width,r.height,false); cam.aspect=r.width/r.height; cam.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(stage); resize();
+
+let mixer=null, root=null, actions = {}, current = null, comboIdx = -1, speed = 1, label = {}, buttons = {};
+const $now=document.getElementById('now'), $time=document.getElementById('time'), $prog=document.getElementById('prog');
+const $groups=document.getElementById('groups'), $loading=document.getElementById('loading');
+for (const s of [0.25,0.5,1]){ const b=document.createElement('button'); b.type='button'; b.id='sp-'+s; b.textContent='×'+s;
+  b.setAttribute('aria-pressed', s===1?'true':'false');
+  b.onclick=()=>{speed=s; if(mixer) mixer.timeScale=s; document.querySelectorAll('#speed button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));};
+  document.getElementById('speed').append(b); }
+for (const k of Object.keys(VIEWS)){ const b=document.createElement('button'); b.type='button'; b.textContent=k; b.onclick=()=>view(k); document.getElementById('cams').append(b); }
+function buildList(){
+  $groups.textContent=''; buttons={};
+  label = Object.fromEntries(H.clips.map(c=>[c[1],c[2]]));
+  for (const [g,head] of H.groups){
+    const d=document.createElement('div'); d.className='group';
+    d.innerHTML=`<h2>${head}</h2><div class="list" id="g-${g}"></div>`; $groups.append(d);
+  }
+  for (const [g,id,name] of H.clips){
+    const b=document.createElement('button'); b.id='clip-'+id; b.type='button'; b.setAttribute('aria-pressed','false');
+    b.innerHTML=`<span>${name}</span><small></small>`; b.onclick=()=> H.combos[id]?startCombo(id):play(id,false);
+    document.getElementById('g-'+g).append(b); buttons[id]=b;
+  }
+}
+function mark(id){ for (const k in buttons) buttons[k].setAttribute('aria-pressed', k===id?'true':'false'); }
+function play(id, inCombo){
+  if(!inCombo){ comboIdx=-1; mark(id); }
+  const a=actions[id]; if(!a) return;
+  const once=!H.loop.has(id) || inCombo;
+  a.reset(); a.setLoop(THREE.LoopRepeat, Infinity);
+  if(once){ a.clampWhenFinished=true; a.setLoop(THREE.LoopRepeat, inCombo?(H.repeat[id]||1):1); }
+  if(current && current!==a) a.crossFadeFrom(current, inCombo?0.12:0.2, false);
+  a.play(); current=a; $now.textContent = inCombo ? label[comboId]+' · '+label[id] : label[id];
+}
+function startCombo(cid){ comboId=cid; COMBO=H.combos[cid]; mark(cid); comboIdx=0; play(COMBO[0], true); }
+const loader = new THREE.GLTFLoader();
+function need(h){
+  return new Promise((ok,fail)=>{
+    if(window[h.glb]) return ok();
+    const s=document.createElement('script'); s.src=h.src; s.onload=()=>ok(); s.onerror=fail; document.head.append(s);
+  });
+}
+let loadSeq=0;
+function setHero(key){
+  const h=HEROES[key]||HEROES.elira, seq=++loadSeq;
+  for (const k in HEROES) document.getElementById('hero-'+k).setAttribute('aria-pressed', HEROES[k]===h?'true':'false');
+  try{ localStorage.setItem('hero3d', key); }catch(e){}
+  H=h; document.getElementById('h1').textContent=h.title; document.getElementById('meta').textContent=h.meta;
+  if(root){ mixer.stopAllAction(); scene.remove(root); root=null; mixer=null; }
+  actions={}; current=null; comboIdx=-1; $now.textContent='—'; $prog.style.width='0';
+  buildList(); view('Три четверти');
+  $loading.textContent='Загрузка модели…'; $loading.hidden=false;
+  need(h).then(()=>{
+    if(seq!==loadSeq) return;
+    const bin=Uint8Array.from(atob(window[h.glb]),c=>c.charCodeAt(0)).buffer;
+    loader.parse(bin, '', g=>{
+      if(seq!==loadSeq) return;
+      root=g.scene; root.traverse(o=>{ if(o.isMesh){o.castShadow=true; o.frustumCulled=false;} });
+      scene.add(root); mixer=new THREE.AnimationMixer(root); mixer.timeScale=speed;
+      for (const c of g.animations){ actions[c.name]=mixer.clipAction(c);
+        const b=buttons[c.name]; if(b) b.querySelector('small').textContent=c.duration.toFixed(1)+' с'; }
+      for (const cid in h.combos) if(buttons[cid]) buttons[cid].querySelector('small').textContent=h.combos[cid].length+' клипов';
+      mixer.addEventListener('finished', e=>{
+        if(comboIdx<0) return;
+        comboIdx=(comboIdx+1)%COMBO.length; play(COMBO[comboIdx], true);
+      });
+      $loading.hidden=true;
+      startCombo(h.start);
+    }, err=>{ $loading.textContent='Модель не загрузилась'; console.error(err); });
+  }, ()=>{ $loading.textContent='Модель не загрузилась'; });
+}
+for (const k in HEROES) document.getElementById('hero-'+k).onclick=()=>setHero(k);
+let first='elira';
+try{ first=localStorage.getItem('hero3d')||first; }catch(e){}
+if(location.hash.slice(1) in HEROES) first=location.hash.slice(1);
+setHero(first);
+const clock=new THREE.Clock();
+renderer.setAnimationLoop(()=>{
+  const dt=clock.getDelta(); if(mixer) mixer.update(dt);
+  if(current){ const d=current.getClip().duration, t=Math.min(current.time,d);
+    $time.textContent=`${Math.round(t*30)} / ${Math.round(d*30)} к`; $prog.style.width=(100*t/d).toFixed(1)+'%'; }
+  controls.update(); renderer.render(scene,cam);
+});
+</script>

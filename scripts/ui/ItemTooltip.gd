@@ -13,9 +13,17 @@ func _enter_tree() -> void:
 	if p is PopupPanel:
 		p.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 
-func show_item(item: Dictionary, hero_id: String = "", level: int = 1, note: String = "") -> Control:
+## header — серая строка над названием («Сейчас надето»); compare — строки Items.compare_rows внизу.
+func show_item(item: Dictionary, hero_id: String = "", level: int = 1, note: String = "", header := "", compare: Array = []) -> Control:
 	UIK.clear(%Lines)
-	for r in Items.tooltip_lines(item, hero_id, level, note):
+	var rows := Items.tooltip_lines(item, hero_id, level, note)
+	if header != "":
+		rows.insert(0, Items._row(header, Color(0.5, 0.5, 0.5)))
+	if not compare.is_empty():
+		rows.append(Items._row(" "))
+		rows.append(Items._row("Если вы замените этот предмет, произойдут следующие изменения характеристик:"))
+		rows.append_array(compare)
+	for r in rows:
 		var row: HBoxContainer = LINE.instantiate()
 		%Lines.add_child(row)
 		var l: Label = row.get_node("%Left")

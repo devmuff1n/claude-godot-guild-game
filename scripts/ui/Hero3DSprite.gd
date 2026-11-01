@@ -3,11 +3,11 @@ extends SubViewport
 ## 3D-модель героя для 2D-поля боя: свой маленький 3D-мир с прозрачным фоном.
 ## BattleView каждый кадр передаёт сюда состояние юнита (drive) и рисует get_texture() на месте фигурки.
 
-const PX_PER_M := 128.0      # масштаб под нарисованных героев: Нэрис по росту как остальные в отряде
+const PX_PER_M := 115.0      # пикселей на метр. Рост в полный рост (масштаб узла Model в сценах героев): Марек 1,85 м, Эйден 1,72, Элира 1,63, Нэрис 1,6 (с рогами 1,65)
 const FRAME := 384           # сторона кадра в пикселях
 const FOOT_PAD_M := 0.3      # запас под ногами внутри кадра, м
 const TURN := 0.7           # насколько герой довёрнут к зрителю, рад (в профиль видны только волосы)
-const RUN_FROM := 1.2        # с какой скорости (м/с) вместо шага включается бег
+const RUN_FROM := 1.9        # с какой скорости (м/с) вместо шага включается бег (обычный шаг героя в бою ~1,2 м/с)
 
 var hero: HeroModel3D
 var _facing := 1
@@ -19,6 +19,7 @@ var _prev_ms := 0
 var _speed := 0.0
 var _flash := 0.0
 var _moving := ""
+var _still_ms := 0           # когда герой перестал двигаться (шаг не гаснет от одного кадра без движения)
 var used := false            # рисовался ли в этом кадре (BattleView гасит неиспользуемые)
 var unused_t := 0.0
 var _last_shot := ""
@@ -79,6 +80,10 @@ func drive(st: Dictionary, facing: int) -> void:
 	if st.has("speed_mps"):
 		_speed = st["speed_mps"]
 	_facing = facing
+	if _yaw == 0.0:
+		# первый кадр новой модели — сразу лицом по ходу, а не к зрителю
+		_yaw = _facing * (PI * 0.5 - TURN)
+		hero.rotation.y = _yaw
 	var dead: bool = st.get("dead", false)
 	if dead:
 		if not _was_dead:
@@ -100,11 +105,14 @@ func drive(st: Dictionary, facing: int) -> void:
 	if not cast:
 		var mv := ""
 		if st.get("moving", false):
-			mv = "run" if _speed > RUN_FROM else "walk"
+			mv = st.get("gait", "run" if _speed > RUN_FROM else "walk")
+			_still_ms = now
+		elif _moving != "" and now - _still_ms < 150:
+			mv = _moving
 		if mv != _moving:
 			_moving = mv
 			hero.play_state(mv if mv != "" else "idle")
-		if mv == "walk":
+		if mv != "":
 			hero.set_walk_speed(_speed)
 	var fl: float = st.get("flash", 0.0)
 	if fl > _flash + 0.3 and not cast:

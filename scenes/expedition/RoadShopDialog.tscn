@@ -20,7 +20,7 @@ offset_top = 70.0
 offset_bottom = -110.0
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(980, 0)
+custom_minimum_size = Vector2(980, 384)
 layout_mode = 2
 theme_type_variation = &"PanelDialog"
 
@@ -78,6 +78,11 @@ layout_mode = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
 columns = 3
+
+[node name="Spacer" type="Control" parent="Center/Panel/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="Footer" type="HBoxContainer" parent="Center/Panel/Box"]
 layout_mode = 2

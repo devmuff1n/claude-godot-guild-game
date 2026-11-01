@@ -4,30 +4,45 @@
   "enemy_types": {
     "wolf": {"name": "Волк", "hp_k": 0.9, "dmg_k": 1.0, "armor_k": 0.8, "interval": 1.6, "xp": 6, "coins": 2},
     "wolf_alpha": {"name": "Вожак стаи", "hp_k": 1.0, "dmg_k": 1.2, "armor_k": 1.2, "interval": 1.7, "xp": 24, "coins": 8},
+    "red_wolf": {"name": "Красноглазый волк", "hp_k": 1.6, "dmg_k": 0.9, "armor_k": 0.8, "interval": 1.5, "xp": 10, "coins": 0},
+    "boar": {"name": "Кабан", "hp_k": 1.7, "dmg_k": 1.2, "armor_k": 1.6, "interval": 2.2, "xp": 12, "coins": 4},
+    "spider": {"name": "Лесной паук", "hp_k": 0.8, "dmg_k": 0.8, "armor_k": 0.9, "interval": 2.2, "xp": 9, "coins": 3},
+    "spiderling": {"name": "Паучок", "hp_k": 0.3, "dmg_k": 0.45, "armor_k": 0.5, "interval": 1.4, "xp": 1, "coins": 0},
+    "lynx": {"name": "Рысь", "hp_k": 0.85, "dmg_k": 1.2, "armor_k": 1.0, "interval": 1.5, "xp": 10, "coins": 3},
+    "bear": {"name": "Медведь", "hp_k": 1.15, "dmg_k": 1.05, "armor_k": 1.6, "interval": 2.6, "xp": 26, "coins": 6},
     "bandit": {"name": "Разбойник", "hp_k": 1.0, "dmg_k": 1.0, "armor_k": 1.8, "interval": 2.0, "xp": 8, "coins": 4},
     "raider": {"name": "Налётчик", "hp_k": 0.9, "dmg_k": 1.0, "armor_k": 1.4, "interval": 1.8, "xp": 8, "coins": 4},
     "archer": {"name": "Лучник-разбойник", "hp_k": 0.85, "dmg_k": 0.9, "armor_k": 1.0, "interval": 2.4, "xp": 9, "coins": 4},
     "brute": {"name": "Громила", "hp_k": 1.0, "dmg_k": 1.0, "armor_k": 2.4, "interval": 2.6, "xp": 18, "coins": 8},
     "healer": {"name": "Знахарь банды", "hp_k": 0.85, "dmg_k": 0.6, "armor_k": 0.9, "interval": 2.6, "xp": 11, "coins": 5},
     "arsonist": {"name": "Поджигатель", "hp_k": 0.9, "dmg_k": 0.8, "armor_k": 1.2, "interval": 2.0, "xp": 11, "coins": 5},
-    "captain": {"name": "Ганс Рыжий", "hp_k": 1.0, "dmg_k": 1.0, "armor_k": 2.4, "interval": 2.0, "xp": 90, "coins": 45}
+    "captain": {"name": "Ганс Рыжий", "hp_k": 1.0, "dmg_k": 1.0, "armor_k": 2.4, "interval": 2.0, "xp": 90, "coins": 45},
+    "shade_wolf": {"name": "Призрачный волк", "hp_k": 0.9, "dmg_k": 1.0, "armor_k": 0.8, "interval": 1.6, "xp": 6, "coins": 1},
+    "shade_alpha": {"name": "Призрачный вожак", "hp_k": 1.0, "dmg_k": 1.2, "armor_k": 1.2, "interval": 1.7, "xp": 24, "coins": 4},
+    "shade_boar": {"name": "Призрачный кабан", "hp_k": 1.7, "dmg_k": 1.2, "armor_k": 1.6, "interval": 2.2, "xp": 12, "coins": 2},
+    "shade_lynx": {"name": "Призрачная рысь", "hp_k": 0.85, "dmg_k": 1.2, "armor_k": 1.0, "interval": 1.5, "xp": 10, "coins": 1},
+    "shade_spider": {"name": "Призрачный паук", "hp_k": 0.8, "dmg_k": 0.8, "armor_k": 0.9, "interval": 2.2, "xp": 9, "coins": 1},
+    "shade_bear": {"name": "Призрачный медведь", "hp_k": 1.15, "dmg_k": 1.05, "armor_k": 1.6, "interval": 2.6, "xp": 26, "coins": 3},
+    "obelisk_wolf": {"name": "Обелиск", "hp_k": 5.0, "dmg_k": 0.4, "armor_k": 1.5, "interval": 99.0, "xp": 40, "coins": 20},
+    "obelisk_spider": {"name": "Обелиск", "hp_k": 5.0, "dmg_k": 0.4, "armor_k": 1.5, "interval": 99.0, "xp": 40, "coins": 20},
+    "obelisk_bear": {"name": "Обелиск", "hp_k": 5.0, "dmg_k": 0.4, "armor_k": 1.5, "interval": 99.0, "xp": 40, "coins": 20}
   },
   "contracts": {
     "c1": {
-      "name": "Первый лесной тракт", "level": 1,
+      "name": "Тревожные вести", "level": 1,
       "points": [
         {
           "node": 0, "name": "Опушка", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
             [["wolf", 1], ["wolf", 1]],
-            [["wolf", 1], ["wolf", 1], ["wolf", 1]]
+            [["wolf", 1], ["shade_wolf", 1], ["wolf", 1]]
           ],
           "ambush": []
         },
         {
           "node": 2, "name": "Бурелом", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["wolf", 1], ["wolf", 1], ["wolf", 1]],
+            [["wolf", 1], ["wolf", 1], ["shade_wolf", 1]],
             [["boar", 1]],
             [["wolf", 2], ["wolf", 2]]
           ],
@@ -36,231 +51,279 @@
         {
           "node": 5, "name": "Логово", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["wolf", 1], ["wolf", 1], ["wolf", 1]],
-            [["wolf", 2], ["wolf", 1], ["wolf", 2]],
-            [["wolf", 2], ["wolf_alpha", 2], ["wolf", 2]]
+            [["wolf", 1], ["wolf", 1], ["shade_wolf", 1]],
+            [["wolf", 2], ["shade_wolf", 1], ["wolf", 2]],
+            [["shade_wolf", 2], ["shade_alpha", 2], ["wolf", 2]]
           ],
           "ambush": []
         }
       ]
     },
     "c2": {
-      "name": "Запасы для Ольховки", "level": 2,
+      "name": "Дорога к хутору", "level": 2,
       "points": [
         {
-          "node": 0, "name": "Мост", "hp_pct": 100, "dmg_pct": 100,
+          "node": 0, "name": "Тёмный ельник", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["bandit", 2], ["bandit", 2], ["archer", 2]],
-            [["bandit", 2], ["bandit", 2]]
+            [["shade_wolf", 2], ["wolf", 2], ["wolf", 2]],
+            [["shade_boar", 2]]
           ],
           "ambush": []
         },
         {
-          "node": 3, "name": "Овраг", "hp_pct": 100, "dmg_pct": 100,
+          "node": 3, "name": "Ручей", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["bandit", 2], ["archer", 2], ["bandit", 2]],
-            [["bandit", 2], ["archer", 2], ["bandit", 2]]
+            [["lynx", 2], ["shade_wolf", 2]],
+            [["shade_spider", 2], ["shade_spider", 2]]
           ],
-          "ambush": [["wolf", 2], ["wolf", 2]]
+          "ambush": [["shade_wolf", 2], ["wolf", 2]]
         },
         {
-          "node": 6, "name": "Ольховка", "hp_pct": 100, "dmg_pct": 100,
+          "node": 6, "name": "Хутор Тимофея", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["bandit", 2], ["archer", 2], ["bandit", 2]],
-            [["brute", 2], ["bandit", 2], ["archer", 2]]
+            [["shade_wolf", 2], ["shade_lynx", 2], ["wolf", 2]],
+            [["shade_wolf", 2], ["shade_wolf", 2]]
           ],
           "ambush": []
         }
       ]
     },
     "c3": {
-      "name": "Последний обоз", "level": 3,
+      "name": "Оборона хутора", "level": 3,
+      "points": [
+        {
+          "wave": 1, "name": "Волна 1", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 3], ["bandit", 3], ["archer", 3]]
+          ]
+        },
+        {
+          "wave": 2, "name": "Волна 2", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["shade_wolf", 3], ["shade_wolf", 3], ["wolf", 3]]
+          ]
+        },
+        {
+          "wave": 3, "name": "Волна 3", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 3], ["archer", 3], ["arsonist", 3]],
+            [["raider", 3], ["raider", 3]]
+          ]
+        },
+        {
+          "wave": 4, "name": "Волна 4", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["shade_boar", 3], ["shade_wolf", 3]],
+            [["bandit", 3], ["bandit", 3], ["archer", 3]]
+          ]
+        },
+        {
+          "wave": 5, "name": "Волна 5", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["brute", 3], ["bandit", 3], ["archer", 3]],
+            [["shade_wolf", 3], ["shade_wolf", 3], ["arsonist", 3]]
+          ]
+        }
+      ]
+    },
+    "c4": {
+      "name": "Обоз Тимофея", "level": 4,
       "points": [
         {
           "node": 0, "name": "Лес", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["raider", 3], ["wolf", 3], ["raider", 3]],
-            [["boar", 3]]
+            [["raider", 4], ["shade_wolf", 4], ["raider", 4]],
+            [["shade_boar", 4]]
           ],
-          "ambush": [["wolf", 3], ["wolf", 3]]
+          "ambush": [["shade_wolf", 4], ["shade_wolf", 4]]
         },
         {
           "node": 2, "name": "Развилка", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["raider", 3], ["raider", 3], ["archer", 3]],
-            [["raider", 3], ["bandit", 3], ["archer", 3]]
+            [["raider", 4], ["raider", 4], ["archer", 4]],
+            [["raider", 4], ["bandit", 4], ["shade_lynx", 4]]
           ],
           "ambush": []
         },
         {
           "node": 6, "name": "Ущелье", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["raider", 3], ["arsonist", 3], ["raider", 3]],
-            [["brute", 3], ["archer", 3], ["raider", 3]]
-          ],
-          "ambush": []
-        }
-      ]
-    },
-    "c4": {
-      "name": "Спасение возчиков", "level": 4,
-      "points": [
-        {
-          "node": 0, "name": "Брод", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["bandit", 4], ["archer", 4], ["raider", 4]],
-            [["bandit", 4], ["bandit", 4], ["archer", 4]]
-          ],
-          "ambush": []
-        },
-        {
-          "node": 2, "name": "Посты", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["bandit", 4], ["bandit", 4], ["archer", 4]],
-            [["archer", 4], ["bandit", 4]]
-          ],
-          "ambush": [["boar", 4], ["wolf", 4]]
-        },
-        {
-          "node": 6, "name": "Клетки", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["bandit", 4], ["archer", 4], ["bandit", 4]],
-            [["brute", 4], ["bandit", 4], ["bandit", 4], ["archer", 4]]
+            [["raider", 4], ["arsonist", 4], ["shade_wolf", 4]],
+            [["brute", 4], ["archer", 4], ["raider", 4]],
+            [["shade_alpha", 4], ["shade_wolf", 4]]
           ],
           "ambush": []
         }
       ]
     },
     "c5": {
-      "name": "Ночной дозор", "level": 5,
-      "points": [
-        {
-          "node": 0, "name": "Окраина", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["arsonist", 5], ["bandit", 5], ["bandit", 5]],
-            [["arsonist", 5], ["archer", 5]]
-          ],
-          "ambush": [["wolf", 5], ["wolf", 5]]
-        },
-        {
-          "node": 2, "name": "Мельница", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["wolf", 5], ["wolf", 5], ["wolf", 5]],
-            [["wolf", 5], ["wolf_alpha", 5], ["wolf", 5]]
-          ],
-          "ambush": [["wolf", 5]]
-        },
-        {
-          "node": 5, "name": "Овчарня", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["arsonist", 5], ["archer", 5], ["bandit", 5]],
-            [["brute", 5], ["archer", 5], ["bandit", 5]]
-          ],
-          "ambush": [["wolf", 5], ["wolf", 5]]
-        }
-      ]
-    },
-    "c6": {
-      "name": "След сборщика", "level": 6,
-      "points": [
-        {
-          "node": 1, "name": "Чаща", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["raider", 6], ["archer", 6], ["arsonist", 6]],
-            [["raider", 6], ["raider", 6], ["bandit", 6]]
-          ],
-          "ambush": [["boar", 6], ["wolf", 6]]
-        },
-        {
-          "node": 4, "name": "Старый тракт", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["bandit", 6], ["arsonist", 6], ["archer", 6]],
-            [["brute", 6], ["bandit", 6], ["archer", 6], ["bandit", 6]]
-          ],
-          "ambush": []
-        },
-        {
-          "node": 7, "name": "Ущелье Ганса", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["raider", 6], ["archer", 6], ["raider", 6]],
-            [["brute", 6], ["arsonist", 6], ["raider", 6], ["archer", 6]]
-          ],
-          "ambush": []
-        }
-      ]
-    },
-    "c7": {
-      "name": "Долговая книга", "level": 7,
-      "points": [
-        {
-          "node": 0, "name": "Частокол", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["bandit", 7], ["archer", 7], ["arsonist", 7]],
-            [["bandit", 7], ["bandit", 7], ["archer", 7]]
-          ],
-          "ambush": [["wolf", 7], ["wolf", 7]]
-        },
-        {
-          "node": 2, "name": "Двор логова", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["bandit", 7], ["raider", 7], ["archer", 7]],
-            [["brute", 7], ["archer", 7], ["bandit", 7], ["raider", 7]]
-          ],
-          "ambush": []
-        },
-        {
-          "node": 5, "name": "Шатёр главаря", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["bandit", 7], ["archer", 7], ["arsonist", 7]],
-            [["captain", 7], ["archer", 7], ["bandit", 7]]
-          ],
-          "ambush": []
-        }
-      ]
-    },
-    "c8": {"name": "Слово в столице", "level": 7, "points": []},
-    "s1": {
-      "name": "Оборона лесной заставы", "level": 4,
+      "name": "Штурм на закате", "level": 5,
       "points": [
         {
           "wave": 1, "name": "Волна 1", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["raider", 4], ["raider", 4], ["raider", 4]]
+            [["bandit", 4], ["bandit", 4], ["archer", 4]]
           ]
         },
         {
           "wave": 2, "name": "Волна 2", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["boar", 4], ["wolf", 4], ["wolf", 4], ["arsonist", 4]]
+            [["raider", 4], ["raider", 4], ["bandit", 4]]
           ]
         },
         {
           "wave": 3, "name": "Волна 3", "hp_pct": 100, "dmg_pct": 100,
-          "groups": [
-            [["bandit", 4], ["archer", 4], ["arsonist", 4]],
-            [["raider", 4], ["raider", 4]]
-          ]
-        },
-        {
-          "wave": 4, "name": "Волна 4", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
             [["brute", 4], ["raider", 4], ["raider", 4]],
             [["archer", 4], ["bandit", 4]]
           ]
         },
         {
-          "wave": 5, "name": "Волна 5", "hp_pct": 100, "dmg_pct": 100,
+          "wave": 4, "name": "Волна 4", "hp_pct": 90, "dmg_pct": 100,
           "groups": [
-            [["brute", 4], ["bandit", 4], ["arsonist", 4], ["archer", 4]],
-            [["raider", 4], ["raider", 4]]
+            [["brute", 4], ["bandit", 4], ["archer", 4]],
+            [["bandit", 4], ["bandit", 4]]
           ]
         },
         {
-          "wave": 6, "name": "Волна 6", "hp_pct": 100, "dmg_pct": 100,
+          "wave": 5, "name": "Волна 5", "hp_pct": 90, "dmg_pct": 100,
           "groups": [
-            [["brute", 4], ["arsonist", 4], ["wolf_alpha", 4], ["raider", 4]],
-            [["archer", 4], ["bandit", 4], ["raider", 4]]
+            [["brute", 4], ["arsonist", 4], ["bandit", 4]],
+            [["archer", 4], ["bandit", 4]]
           ]
+        }
+      ]
+    },
+    "c6": {
+      "name": "Контратака", "level": 6,
+      "points": [
+        {
+          "node": 1, "name": "Чаща", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["raider", 6], ["archer", 6], ["shade_wolf", 6]],
+            [["raider", 6], ["raider", 6], ["bandit", 6]]
+          ],
+          "ambush": [["shade_boar", 6], ["shade_wolf", 6]]
+        },
+        {
+          "node": 4, "name": "Старый тракт", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 6], ["arsonist", 6], ["archer", 6]],
+            [["brute", 6], ["bandit", 6], ["shade_lynx", 6], ["bandit", 6]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 7, "name": "Овраг у посёлка", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["raider", 6], ["archer", 6], ["raider", 6]],
+            [["brute", 6], ["arsonist", 6], ["shade_wolf", 6], ["archer", 6]]
+          ],
+          "ambush": []
+        }
+      ]
+    },
+    "c7": {
+      "name": "Пепелище", "level": 7,
+      "points": [
+        {
+          "node": 0, "name": "Частокол", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 7], ["archer", 7], ["arsonist", 7]],
+            [["bandit", 7], ["bandit", 7], ["shade_wolf", 7]]
+          ],
+          "ambush": [["shade_wolf", 7], ["shade_wolf", 7]]
+        },
+        {
+          "node": 3, "name": "Помост вожака", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["bandit", 7], ["archer", 7], ["arsonist", 7]],
+            [["captain", 7], ["archer", 7], ["shade_alpha", 7]]
+          ],
+          "ambush": []
+        }
+      ]
+    },
+    "c8": {"name": "Слово в столице", "level": 7, "points": []},
+    "sc1": {
+      "name": "Волчья нора", "level": 3,
+      "points": [
+        {
+          "node": 0, "name": "Вход в нору", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["shade_wolf", 3], ["shade_wolf", 3]],
+            [["shade_wolf", 3], ["wolf", 3], ["shade_wolf", 3]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 1, "name": "Кости", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["shade_wolf", 3], ["shade_alpha", 3]]
+          ],
+          "ambush": [["shade_wolf", 3]]
+        },
+        {
+          "node": 2, "name": "Обелиск", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["obelisk_wolf", 3], ["shade_wolf", 3], ["shade_wolf", 3]]
+          ],
+          "ambush": []
+        }
+      ]
+    },
+    "sc2": {
+      "name": "Паучий грот", "level": 5,
+      "points": [
+        {
+          "node": 0, "name": "Паутина", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["shade_spider", 5], ["shade_spider", 5]],
+            [["shade_lynx", 5], ["shade_spider", 5]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 1, "name": "Гнездо", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["shade_spider", 5], ["spider", 5], ["shade_spider", 5]],
+            [["shade_lynx", 5], ["shade_lynx", 5]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 2, "name": "Обелиск", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["obelisk_spider", 5], ["shade_spider", 5], ["shade_lynx", 5]]
+          ],
+          "ambush": []
+        }
+      ]
+    },
+    "sc3": {
+      "name": "Медвежий разлом", "level": 7,
+      "points": [
+        {
+          "node": 0, "name": "Разлом", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["shade_alpha", 7], ["shade_wolf", 7], ["shade_wolf", 7]],
+            [["shade_bear", 7]]
+          ],
+          "ambush": []
+        },
+        {
+          "node": 1, "name": "Логово хозяина", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["shade_bear", 7], ["shade_lynx", 7]]
+          ],
+          "ambush": [["shade_wolf", 7], ["shade_wolf", 7]]
+        },
+        {
+          "node": 2, "name": "Обелиск", "hp_pct": 100, "dmg_pct": 100,
+          "groups": [
+            [["obelisk_bear", 7], ["shade_wolf", 7], ["shade_wolf", 7]]
+          ],
+          "ambush": []
         }
       ]
     }

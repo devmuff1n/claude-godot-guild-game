@@ -59,7 +59,7 @@ fog_density = 0.007
 
 [node name="Level_c1" type="Node3D"]
 script = ExtResource("script")
-metadata/title = "Первый лесной тракт"
+metadata/title = "Тревожные вести"
 metadata/nodes = PackedStringArray("Опушка", "Волчий родник", "Бурелом", "Привал", "Развилка", "Логово")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

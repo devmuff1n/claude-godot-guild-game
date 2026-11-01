@@ -1,0 +1,89 @@
+{
+  "id": "burnt_house",
+  "category": "prologue/ruins",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/ruins\\burnt_house.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\burnt_house\\burnt_house.blend",
+  "target_size_m": [
+    5.0,
+    4.6,
+    4.2
+  ],
+  "glb_size_m": [
+    4.7,
+    4.1,
+    4.09
+  ],
+  "size_deviation": [
+    -0.06,
+    -0.109,
+    -0.026
+  ],
+  "bounds_min": [
+    -2.35,
+    -2.05,
+    0.0
+  ],
+  "bounds_max": [
+    2.35,
+    2.05,
+    4.09
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 2984,
+  "source_triangles": 2984,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_burnt_wood",
+    "env_ember",
+    "env_fire",
+    "env_stone_block",
+    "env_stone_grey"
+  ],
+  "collision_nodes": [
+    "burnt_house_ruin_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 916,
+  "glb_materials": [
+    [
+      "env_ember",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_fire",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_burnt_wood",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_block",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_stone_grey",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 5,
+  "empties": [
+    "burnt_house.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "burnt_house_embers",
+    "burnt_house_rafters",
+    "burnt_house_walls"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

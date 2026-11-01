@@ -2,7 +2,7 @@ extends Control
 ## Отдельная проверочная сцена: проходит 3D-уровни поручений, ставит камеру на каждый узел маршрута,
 ## рисует поверх настоящий BattleView с отрядом и сохраняет кадры в generated-models/_demo/levels/.
 
-const LEVELS := ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "s1"]
+const LEVELS := ["c1", "c2", "c3", "c4", "c5", "c6", "c7"]
 const NIGHT := ["c5"]
 const SEG_PX := 260.0 * 2.6
 const OUT := "res://generated-models/_demo/levels/"

@@ -17,7 +17,7 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -590.0
+offset_left = -624.0
 offset_top = 86.0
 offset_right = -24.0
 offset_bottom = -130.0
@@ -25,7 +25,7 @@ grow_horizontal = 0
 alignment = 2
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(540, 0)
+custom_minimum_size = Vector2(600, 560)
 layout_mode = 2
 theme_type_variation = &"PanelDialog"
 
@@ -54,6 +54,7 @@ theme_type_variation = &"CaptionLabel"
 text = "ДОРОЖНАЯ СИТУАЦИЯ"
 
 [node name="Title" type="Label" parent="Center/Panel/Box/Head/Titles"]
+text_overrun_behavior = 3
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
@@ -90,7 +91,18 @@ value_width = 14.0
 [node name="Sep" type="HSeparator" parent="Center/Panel/Box"]
 layout_mode = 2
 
-[node name="Text" type="Label" parent="Center/Panel/Box"]
+[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ScrollBody" type="VBoxContainer" parent="Center/Panel/Box/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="Text" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
@@ -98,13 +110,14 @@ theme_type_variation = &"BodyLabel"
 theme_override_constants/line_spacing = 3
 autowrap_mode = 3
 
-[node name="Choices" type="VBoxContainer" parent="Center/Panel/Box"]
+[node name="Choices" type="VBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 6
 
 [node name="Footer" type="HBoxContainer" parent="Center/Panel/Box"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 alignment = 2
 

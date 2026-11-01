@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[node name="LevelUpCard" type="PanelContainer"]
+custom_minimum_size = Vector2(300, 0)
+theme_type_variation = &"PanelInset"
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Head" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Portrait" type="TextureRect" parent="Box/Head"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Info" type="VBoxContainer" parent="Box/Head"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="Box/Head/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "Герой"
+
+[node name="Level" type="Label" parent="Box/Head/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"GoldLabel"
+text = "Уровень 1 → 2"
+
+[node name="Sep" type="HSeparator" parent="Box"]
+layout_mode = 2
+
+[node name="Rows" type="VBoxContainer" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Sep2" type="HSeparator" parent="Box"]
+layout_mode = 2
+
+[node name="Skills" type="Label" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"GoodLabel"
+text = "Новое умение"
+autowrap_mode = 3

@@ -4,18 +4,19 @@ extends RefCounted
 
 const PRIMARY := ["sta", "str", "agi", "int"]
 
-static func natural(hero_id: String, level: int) -> Dictionary:
+## Собственные атрибуты: рост за уровень (DB.HEROES → grow). alloc — бонус сверху, игрой не используется (для тестов)
+static func natural(hero_id: String, level: int, alloc: Dictionary = {}) -> Dictionary:
 	var h: Dictionary = DB.HEROES.get(hero_id, {})
 	var res := {}
 	if h.is_empty():
 		return res
 	for k in PRIMARY:
-		res[k] = int(floor(h["base"][k] + h["grow"][k] * float(level - 1)))
+		res[k] = int(floor(h["base"][k] + h["grow"][k] * float(level - 1))) + int(alloc.get(k, 0))
 	return res
 
 ## equip: slot -> item или null; perks не влияют на числа (меняют поведение умений)
-static func derive(hero_id: String, level: int, equip: Dictionary) -> Dictionary:
-	var nat := natural(hero_id, level)
+static func derive(hero_id: String, level: int, equip: Dictionary, alloc: Dictionary = {}) -> Dictionary:
+	var nat := natural(hero_id, level, alloc)
 	var gear := {}
 	for slot in DB.SLOTS:
 		var it = equip.get(slot)
@@ -61,7 +62,7 @@ static func derive(hero_id: String, level: int, equip: Dictionary) -> Dictionary
 	var bonus := 0.0
 	var school := "phys"
 	match wtype:
-		"sword", "mace", "dagger", "fist":
+		"sword", "mace", "axe", "dagger", "fist":
 			bonus = p["str"] * 0.45
 		"bow":
 			bonus = p["agi"] * 0.45
@@ -72,9 +73,9 @@ static func derive(hero_id: String, level: int, equip: Dictionary) -> Dictionary
 	d["school"] = school
 	d["dmg_min"] = int(round(dmin + bonus))
 	d["dmg_max"] = int(round(dmax + bonus))
-	d["melee"] = wtype in ["sword", "mace", "dagger", "fist"]
+	d["melee"] = wtype in ["sword", "mace", "axe", "dagger", "fist"]
 	# Парирование: только с подходящим оружием ближнего боя
-	if wtype in ["sword", "mace", "dagger"]:
+	if wtype in ["sword", "mace", "axe", "dagger"]:
 		d["parry"] = 5.0 + p["str"] * 0.05 + gear.get("parry", 0.0)
 	else:
 		d["parry"] = 0.0
@@ -87,6 +88,21 @@ static func derive(hero_id: String, level: int, equip: Dictionary) -> Dictionary
 		d["block"] = 0.0
 		d["block_val"] = 0
 	return d
+
+## Грубая «сила» героя для сравнения снаряжения (стрелка улучшения, «Надеть лучшее»).
+## Защитник — живучесть и немного урона, лучница — урон из лука, заклинатели — сила заклинаний и мана.
+static func power(hero_id: String, level: int, equip: Dictionary, alloc: Dictionary = {}) -> float:
+	var d := derive(hero_id, level, equip, alloc)
+	var red := armor_reduction(float(d["armor"]), level)
+	var ehp: float = d["max_hp"] / (1.0 - red) * (1.0 + (d["dodge"] + d["parry"] + d["block"] * 0.5) / 100.0)
+	var dps: float = (d["dmg_min"] + d["dmg_max"]) * 0.5 / d["interval"] * (1.0 + d["crit"] / 100.0 * 0.75)
+	var res: float = (d["res_fire"] + d["res_shadow"] + d["res_nature"]) * 0.5
+	var hero: Dictionary = DB.HEROES[hero_id]
+	if "shield" in hero["weapons"]:
+		return ehp + 12.0 * dps + res
+	if "bow" in hero["weapons"]:
+		return ehp * 0.4 + 40.0 * dps * d["hit"] / 100.0 + res
+	return ehp * 0.4 + d["sp"] * 9.0 + d["max_mp"] * 0.4 + d["crit"] * 6.0 + res
 
 ## Формула Classic WoW: броня / (броня + 400 + 85 × уровень атакующего), уровень по шкале WoW
 static func armor_reduction(armor: float, attacker_level: int) -> float:

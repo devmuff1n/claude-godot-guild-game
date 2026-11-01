@@ -115,7 +115,7 @@ layout_mode = 2
 
 [node name="EveningHeader" type="Label" parent="LeftPanel/Box"]
 layout_mode = 2
-tooltip_text = "Подходящий подарок сближает сильнее и снимает выгорание."
+tooltip_text = "Подходящий подарок сближает сильнее."
 mouse_filter = 1
 theme_type_variation = &"CaptionLabel"
 text = "ЛИЧНЫЙ ВЕЧЕР"
@@ -174,7 +174,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -1120.0
-offset_top = -290.0
+offset_top = -320.0
 offset_right = -20.0
 offset_bottom = -20.0
 grow_horizontal = 0
@@ -223,16 +223,21 @@ theme_type_variation = &"BodyLabel"
 theme_override_constants/line_spacing = 3
 autowrap_mode = 3
 
-[node name="DlgChoices" type="VBoxContainer" parent="DialogPanel/Box/DialogBox"]
+[node name="Actions" type="VBoxContainer" parent="DialogPanel/Box/DialogBox"]
+custom_minimum_size = Vector2(0, 104)
+layout_mode = 2
+alignment = 2
+
+[node name="DlgChoices" type="VBoxContainer" parent="DialogPanel/Box/DialogBox/Actions"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Footer" type="HBoxContainer" parent="DialogPanel/Box/DialogBox"]
+[node name="Footer" type="HBoxContainer" parent="DialogPanel/Box/DialogBox/Actions"]
 layout_mode = 2
 alignment = 2
 
-[node name="DlgOk" type="Button" parent="DialogPanel/Box/DialogBox/Footer"]
+[node name="DlgOk" type="Button" parent="DialogPanel/Box/DialogBox/Actions/Footer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 40)
 layout_mode = 2
@@ -250,9 +255,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -1090.0
-offset_top = -306.0
+offset_top = -336.0
 offset_right = -900.0
-offset_bottom = -276.0
+offset_bottom = -306.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_type_variation = &"PanelNamePlate"

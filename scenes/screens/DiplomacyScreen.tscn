@@ -145,7 +145,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Dialog" type="PanelContainer" parent="Box/Body/Center"]
-custom_minimum_size = Vector2(860, 0)
+custom_minimum_size = Vector2(860, 540)
 layout_mode = 2
 theme_type_variation = &"PanelDialog"
 
@@ -171,7 +171,18 @@ text_overrun_behavior = 3
 [node name="Sep" type="HSeparator" parent="Box/Body/Center/Dialog/Box"]
 layout_mode = 2
 
-[node name="Text" type="Label" parent="Box/Body/Center/Dialog/Box"]
+[node name="Scroll" type="ScrollContainer" parent="Box/Body/Center/Dialog/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ScrollBody" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="Text" type="Label" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
@@ -179,41 +190,41 @@ theme_type_variation = &"BodyLabel"
 theme_override_constants/line_spacing = 3
 autowrap_mode = 3
 
-[node name="Options" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box"]
+[node name="Options" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Result" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box"]
+[node name="Result" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Said" type="Label" parent="Box/Body/Center/Dialog/Box/Result"]
+[node name="Said" type="Label" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme_type_variation = &"QuoteLabel"
 autowrap_mode = 3
 
-[node name="Roll" type="HBoxContainer" parent="Box/Body/Center/Dialog/Box/Result"]
+[node name="Roll" type="HBoxContainer" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Die" type="PanelContainer" parent="Box/Body/Center/Dialog/Box/Result/Roll"]
+[node name="Die" type="PanelContainer" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result/Roll"]
 custom_minimum_size = Vector2(92, 92)
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"PanelInset"
 
-[node name="DieBox" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box/Result/Roll/Die"]
+[node name="DieBox" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result/Roll/Die"]
 layout_mode = 2
 alignment = 1
 theme_override_constants/separation = -6
 
-[node name="DieValue" type="Label" parent="Box/Body/Center/Dialog/Box/Result/Roll/Die/DieBox"]
+[node name="DieValue" type="Label" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result/Roll/Die/DieBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
@@ -222,30 +233,30 @@ theme_override_font_sizes/font_size = 44
 text = "20"
 horizontal_alignment = 1
 
-[node name="DieCaption" type="Label" parent="Box/Body/Center/Dialog/Box/Result/Roll/Die/DieBox"]
+[node name="DieCaption" type="Label" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result/Roll/Die/DieBox"]
 layout_mode = 2
 theme_type_variation = &"TinyLabel"
 text = "d20"
 horizontal_alignment = 1
 
-[node name="Info" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box/Result/Roll"]
+[node name="Info" type="VBoxContainer" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result/Roll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/separation = 2
 
-[node name="Verdict" type="Label" parent="Box/Body/Center/Dialog/Box/Result/Roll/Info"]
+[node name="Verdict" type="Label" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result/Roll/Info"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
 
-[node name="Formula" type="Label" parent="Box/Body/Center/Dialog/Box/Result/Roll/Info"]
+[node name="Formula" type="Label" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result/Roll/Info"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"ValueLabel"
 
-[node name="Outcome" type="Label" parent="Box/Body/Center/Dialog/Box/Result"]
+[node name="Outcome" type="Label" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
@@ -253,16 +264,16 @@ theme_type_variation = &"BodyLabel"
 theme_override_constants/line_spacing = 3
 autowrap_mode = 3
 
-[node name="Effects" type="HBoxContainer" parent="Box/Body/Center/Dialog/Box/Result"]
+[node name="Effects" type="HBoxContainer" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Footer" type="HBoxContainer" parent="Box/Body/Center/Dialog/Box/Result"]
+[node name="Footer" type="HBoxContainer" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result"]
 layout_mode = 2
 alignment = 2
 
-[node name="NextButton" type="Button" parent="Box/Body/Center/Dialog/Box/Result/Footer"]
+[node name="NextButton" type="Button" parent="Box/Body/Center/Dialog/Box/Scroll/ScrollBody/Result/Footer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 46)
 layout_mode = 2

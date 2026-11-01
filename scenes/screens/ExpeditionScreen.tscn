@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/expedition/OutpostPrepPanel.tscn" id="7_prep"]
 [ext_resource type="PackedScene" path="res://scenes/expedition/CommandMenu.tscn" id="8_cmd"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="9_pill"]
+[ext_resource type="PackedScene" path="res://scenes/expedition/Cutscene.tscn" id="10_cut"]
 
 [node name="ExpeditionScreen" type="Control"]
 layout_mode = 3
@@ -187,6 +188,10 @@ hero_id = "marek"
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
+
+[node name="Cutscene" parent="." instance=ExtResource("10_cut")]
+unique_name_in_owner = true
+layout_mode = 1
 
 [node name="Overlay" type="Control" parent="."]
 unique_name_in_owner = true

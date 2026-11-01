@@ -1,0 +1,107 @@
+{
+  "id": "covered_wagon",
+  "category": "prologue/yard",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/yard\\covered_wagon.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\covered_wagon\\covered_wagon.blend",
+  "target_size_m": [
+    2.0,
+    3.8,
+    2.6
+  ],
+  "glb_size_m": [
+    1.42,
+    2.87,
+    1.931
+  ],
+  "size_deviation": [
+    -0.29,
+    -0.245,
+    -0.257
+  ],
+  "bounds_min": [
+    -0.71,
+    -1.98,
+    -0.016
+  ],
+  "bounds_max": [
+    0.71,
+    0.89,
+    1.915
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 3452,
+  "source_triangles": 3452,
+  "visual_mesh_nodes": 3,
+  "unique_meshes": 3,
+  "materials": [
+    "env_burlap",
+    "env_canvas_dirty",
+    "env_canvas_patch",
+    "env_iron",
+    "env_rope",
+    "env_wood_dark",
+    "env_wood_light",
+    "env_wood_mid"
+  ],
+  "collision_nodes": [
+    "covered_wagon_wagon_col-convcolonly"
+  ],
+  "glb_nodes": 5,
+  "glb_kb": 779,
+  "glb_materials": [
+    [
+      "env_wood_dark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_canvas_dirty",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_canvas_patch",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_wood_mid",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_light",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_iron",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_burlap",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_rope",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 8,
+  "empties": [
+    "covered_wagon.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "covered_wagon_canvas",
+    "covered_wagon_cart",
+    "covered_wagon_load"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 08:47"
+}

@@ -1,0 +1,70 @@
+{
+  "id": "thorn_bush",
+  "category": "prologue/forest",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/forest\\thorn_bush.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\thorn_bush\\thorn_bush.blend",
+  "target_size_m": [
+    1.9,
+    1.6,
+    1.3
+  ],
+  "glb_size_m": [
+    1.9,
+    1.6,
+    1.3
+  ],
+  "size_deviation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bounds_min": [
+    -0.95,
+    -0.8,
+    0.0
+  ],
+  "bounds_max": [
+    0.95,
+    0.8,
+    1.3
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 1344,
+  "source_triangles": 1344,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_berry_red",
+    "env_thorn_stem"
+  ],
+  "collision_nodes": [
+    "thorn_bush_bush_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 206,
+  "glb_materials": [
+    [
+      "env_berry_red",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_thorn_stem",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 2,
+  "empties": [
+    "thorn_bush.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "thorn_bush_berries",
+    "thorn_bush_stems"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

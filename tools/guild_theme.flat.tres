@@ -1442,6 +1442,29 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 anti_aliasing = true
 
+[sub_resource type="StyleBoxFlat" id="StyleBox_speech"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.11, 0.085, 0.055, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.62, 0.48, 0.24, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_letterbox"]
+content_margin_left = 40.0
+content_margin_top = 14.0
+content_margin_right = 40.0
+content_margin_bottom = 14.0
+bg_color = Color(0.02, 0.015, 0.01, 0.94)
+
 [resource]
 default_font = SubResource("FontVariation_001")
 default_font_size = 16
@@ -1597,6 +1620,17 @@ PanelPortrait/base_type = &"PanelContainer"
 PanelPortrait/styles/panel = SubResource("StyleBoxFlat_091")
 PanelDialog/base_type = &"PanelContainer"
 PanelDialog/styles/panel = SubResource("StyleBoxFlat_092")
+PanelSpeech/base_type = &"PanelContainer"
+PanelSpeech/styles/panel = SubResource("StyleBox_speech")
+PanelLetterbox/base_type = &"PanelContainer"
+PanelLetterbox/styles/panel = SubResource("StyleBox_letterbox")
+SpeakerLabel/base_type = &"Label"
+SpeakerLabel/colors/font_color = Color(0.84, 0.66, 0.29, 1)
+SpeakerLabel/font_sizes/font_size = 15
+SpeakerLabel/fonts/font = SubResource("FontVariation_002")
+SpeechLabel/base_type = &"Label"
+SpeechLabel/colors/font_color = Color(0.95, 0.91, 0.82, 1)
+SpeechLabel/font_sizes/font_size = 18
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_093")
 TooltipLabel/colors/font_color = Color(0.93, 0.89, 0.8, 1)
 TooltipLabel/font_sizes/font_size = 14

@@ -17,6 +17,22 @@ CAT = {"ground_road_tile": "landscape", "stream_channel": "landscape", "field_ro
        "low_stone_wall": "road_defense", "wooden_garden_fence": "road_defense", "wooden_barricade": "road_defense",
        "checkpoint_barrier": "road_defense", "forest_defense_gate": "road_defense", "timber_footbridge": "road_defense",
        "toll_sign": "road_defense", "decorative_spear": "road_defense", "round_watch_shield": "road_defense"}
+# prologue kit (build_prologue_kit.py) and town kit assets: aid -> folder under assets/models
+PRO = {}
+for _g, _ids in {"forest": ["cursed_oak", "dead_spruce", "cursed_stump", "thorn_bush"],
+                 "farm": ["farmhouse_log", "haystack", "chicken_coop", "wattle_fence", "farm_gate"],
+                 "yard": ["training_dummy", "covered_wagon"],
+                 "hamlet": ["plank_shack", "patched_tent", "drying_rack", "antler_totem", "palisade_unfinished"],
+                 "ruins": ["burnt_house", "charred_fence", "broken_cart", "bone_shrine", "dead_tree_burnt"],
+                 "cave": ["cave_rock_wall", "stalactites", "glow_mushrooms", "obelisk", "cave_path_tile"]}.items():
+    for _k in _ids:
+        PRO[_k] = "prologue/" + _g
+for _k in ("guild_hall_exterior", "village_cottage"):
+    PRO[_k] = "town/buildings"
+for _k in ("wooden_barrel", "wooden_crate", "burlap_sack", "stone_well", "street_lamp"):
+    PRO[_k] = "town/props"
+# ground texture per biome
+GROUND_TEX = {"forest": "grass_ground", "cursed": "forest_floor_cursed", "ash": "ash_ground", "cave": "cave_floor_ref"}
 # route-event dioramas (generated-models/_tools/build_event_kit.py): origin on the far road edge, scene extends into -Z
 EV_CAT = {k: "dioramas" for k in ("ev01_spring", "ev02_peddler", "ev03_toll", "ev04_smithy", "ev05_captive", "ev06_cage",
                                   "ev07_barn", "ev08_tower", "ev09_cache", "ev10_turncoat", "ev11_idol",
@@ -24,8 +40,9 @@ EV_CAT = {k: "dioramas" for k in ("ev01_spring", "ev02_peddler", "ev03_toll", "e
 
 
 class Level:
-    def __init__(self, cid, title, nodes, night=False, pine=0.75, density=1.0, seed=1):
+    def __init__(self, cid, title, nodes, night=False, pine=0.75, density=1.0, seed=1, biome="forest"):
         self.cid, self.title, self.nodes, self.night = cid, title, nodes, night
+        self.biome = biome
         self.pine, self.density = pine, density
         self.rng = random.Random(seed)
         self.items = []       # (group, name, id, x, y, z, rx, ry, rz, s)
@@ -104,6 +121,9 @@ class Level:
 
     # ---------------------------------------------------------------- dressing
     def dress(self):
+        if self.biome == "cave":
+            self.dress_cave()
+            return
         r = self.rng
         placed = []
 
@@ -132,12 +152,26 @@ class Level:
             if g in ("SetPieces", "Creek") and aid not in ("grass_tuft", "flower_patch", "stream_channel"):
                 placed.append((x, z, 1.4))
 
+        bio = self.biome
+
         def tree():
+            if bio == "cave":
+                return r.choice([("cave_rock_wall", r.uniform(0.8, 1.2)), ("cave_rock_wall", r.uniform(1.0, 1.4)), ("stalactites", r.uniform(1.0, 1.5))])
+            if bio == "cursed" and r.random() < 0.55:
+                return r.choice([("cursed_oak", r.uniform(0.8, 1.05)), ("dead_spruce", r.uniform(0.8, 1.1))])
+            if bio == "ash" and r.random() < 0.7:
+                return "dead_tree_burnt", r.uniform(0.8, 1.15)
             if r.random() < self.pine:
                 return "pine_tree", r.uniform(0.8, 1.15)
             return "oak_tree", r.uniform(0.75, 1.0)
 
         def wall_tree():
+            if bio == "cave":
+                return "cave_rock_wall", r.uniform(1.6, 2.4)
+            if bio == "cursed" and r.random() < 0.35:
+                return "dead_spruce", r.uniform(1.1, 1.4)
+            if bio == "ash" and r.random() < 0.45:
+                return "dead_tree_burnt", r.uniform(1.1, 1.4)
             if r.random() < max(self.pine, 0.85):
                 return "pine_tree", r.uniform(1.1, 1.6)
             return "oak_tree", r.uniform(1.0, 1.25)
@@ -148,11 +182,61 @@ class Level:
         verge = lambda: r.choices([("roadside_bush", r.uniform(.8, 1.2)), ("grass_tuft", r.uniform(1.0, 1.6)),
                                    ("flower_patch", r.uniform(.9, 1.3)), ("field_rock", r.uniform(.35, .8))],
                                   weights=[3, 6, 2, 1.2])[0]
+        if bio == "cursed":
+            verge = lambda: r.choices([("thorn_bush", r.uniform(.7, 1.0)), ("grass_tuft", r.uniform(1.0, 1.4)),
+                                       ("cursed_stump", r.uniform(.6, .9)), ("field_rock", r.uniform(.35, .8))],
+                                      weights=[3, 4, 1, 1.2])[0]
+        elif bio == "cave":
+            verge = lambda: r.choices([("glow_mushrooms", r.uniform(.5, .9)), ("field_rock", r.uniform(.4, .9)),
+                                       ("cave_rock_wall", r.uniform(.35, .5))], weights=[2, 3, 1])[0]
+        elif bio == "ash":
+            verge = lambda: r.choices([("charred_fence", r.uniform(.6, .9)), ("field_rock", r.uniform(.35, .8)),
+                                       ("grass_tuft", r.uniform(.8, 1.1))], weights=[1, 2, 1])[0]
         scatter(int(L * 0.55), self.x_min, self.x_max, -6.0, -3.0, verge, "verge", 0.9)
         near = lambda: r.choices([("grass_tuft", r.uniform(1.0, 1.5)), ("flower_patch", r.uniform(.8, 1.1)),
                                   ("field_rock", r.uniform(.3, .6)), ("roadside_bush", r.uniform(.55, .75))],
                                  weights=[6, 2, 1, 1])[0]
+        if bio == "cave":
+            near = lambda: r.choices([("field_rock", r.uniform(.3, .6)), ("glow_mushrooms", r.uniform(.4, .6))], weights=[3, 1])[0]
         scatter(int(L * 0.35), self.x_min, self.x_max, 2.9, 5.2, near, "near", 0.9)
+
+    def dress_cave(self):
+        """Cave: a continuous rock wall behind the path, a second taller row, stalactites overhead,
+        low rocks and glowing mushrooms in front — the party walks a stone path through a tunnel."""
+        r = self.rng
+
+        def free(x, z):
+            return self.free(x, z, "verge")
+
+        x = self.x_min - 6
+        while x < self.x_max + 6:
+            if free(x, -5.5):
+                self.put("cave_rock_wall", x, r.uniform(-5.2, -6.2), rot=r.choice((0, 180)) + r.uniform(-15, 15),
+                         s=r.uniform(1.4, 2.0), group="Forest")
+            x += r.uniform(2.2, 3.0)
+        x = self.x_min - 10
+        while x < self.x_max + 10:
+            self.put("cave_rock_wall", x, r.uniform(-9.0, -11.0), rot=r.uniform(0, 360), s=r.uniform(2.4, 3.2), group="ForestWall")
+            x += r.uniform(3.5, 4.5)
+        x = self.x_min
+        while x < self.x_max:
+            self.put("stalactites", x, r.uniform(-4.5, -7.5), y=r.uniform(4.6, 5.6), rot=r.uniform(0, 360), s=r.uniform(1.2, 1.8), group="ForestWall")
+            x += r.uniform(3.0, 5.0)
+        x = self.x_min
+        while x < self.x_max:
+            z = r.uniform(3.4, 4.8)
+            if r.random() < 0.6:
+                self.put("cave_rock_wall", x, z + 0.6, rot=r.uniform(0, 360), s=r.uniform(.35, .5), group="Verges")
+            else:
+                self.put("field_rock", x, z, rot=r.uniform(0, 360), s=r.uniform(.5, .9), group="Verges")
+            if r.random() < 0.35:
+                self.put("glow_mushrooms", x + 1.2, z - 0.4, s=r.uniform(.35, .55), group="Verges")
+            x += r.uniform(1.8, 2.8)
+        x = self.x_min
+        while x < self.x_max:
+            if free(x, -3.6) and r.random() < 0.5:
+                self.put("glow_mushrooms", x, r.uniform(-3.4, -4.0), s=r.uniform(.4, .7), group="Verges")
+            x += r.uniform(3.0, 5.0)
 
     # ---------------------------------------------------------------- road
     def road(self):
@@ -171,7 +255,7 @@ class Level:
                 w = min(6.0, b - x)
                 k += 1
                 sx = w / 6.0
-                self.put("ground_road_tile", x + w / 2.0, 0.0, group="Road", name="road_%03d" % k,
+                self.put("cave_path_tile" if self.biome == "cave" else "ground_road_tile", x + w / 2.0, 0.0, group="Road", name="road_%03d" % k,
                          scale=None if abs(sx - 1.0) < 1e-3 else (sx, 1.0, 1.0))
                 x += w
 
@@ -180,9 +264,11 @@ class Level:
         ids = sorted({it[2] for it in self.items})
         ext = []
         ext.append('[ext_resource type="Script" path="res://scripts/level/RoadLevel.gd" id="script"]')
-        ext.append('[ext_resource type="Texture2D" path="res://assets/textures/env/grass_ground.png" id="tex_grass"]')
+        ext.append('[ext_resource type="Texture2D" path="res://assets/textures/env/%s.png" id="tex_grass"]' % GROUND_TEX[self.biome])
         for aid in ids:
-            if aid in EV_CAT:
+            if aid in PRO:
+                ext.append('[ext_resource type="PackedScene" path="res://assets/models/%s/%s.glb" id="%s"]' % (PRO[aid], aid, aid))
+            elif aid in EV_CAT:
                 ext.append('[ext_resource type="PackedScene" path="res://assets/models/events/%s/%s.glb" id="%s"]' % (EV_CAT[aid], aid, aid))
             else:
                 ext.append('[ext_resource type="PackedScene" path="res://assets/models/environment/%s/%s.glb" id="%s"]' % (CAT[aid], aid, aid))
@@ -219,11 +305,21 @@ uv1_triplanar = true
 uv1_world_triplanar = true''' % ("Color(0.55, 0.62, 0.75, 1)" if night else "Color(1, 1, 1, 1)"))
         sub.append('''[sub_resource type="StandardMaterial3D" id="mat_backdrop"]
 shading_mode = 0
-albedo_color = %s''' % ("Color(0.04, 0.07, 0.1, 1)" if night else "Color(0.2, 0.3, 0.22, 1)"))
+albedo_color = %s''' % ("Color(0.02, 0.015, 0.03, 1)" if self.biome == "cave" else ("Color(0.04, 0.07, 0.1, 1)" if night else "Color(0.2, 0.3, 0.22, 1)")))
         for i, (x0, x1, z0, z1) in enumerate(strips):
             sub.append('[sub_resource type="PlaneMesh" id="plane_%d"]\nsize = Vector2(%.2f, %.2f)' % (i, x1 - x0, z1 - z0))
         sub.append('[sub_resource type="PlaneMesh" id="plane_backdrop"]\nsize = Vector2(%.1f, 30)\norientation = 2' % (self.x_max - self.x_min + 120))
-        if night:
+        if self.biome == "cave":
+            sub.append('''[sub_resource type="Environment" id="env"]
+background_mode = 1
+background_color = Color(0.02, 0.015, 0.03, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.45, 0.4, 0.62, 1)
+ambient_light_energy = 0.5
+fog_enabled = true
+fog_light_color = Color(0.05, 0.03, 0.08, 1)
+fog_density = 0.025''')
+        elif night:
             sub.append('''[sub_resource type="Environment" id="env"]
 background_mode = 1
 background_color = Color(0.03, 0.05, 0.11, 1)
@@ -631,6 +727,119 @@ def sp_ev(aid, event, depth=8.0, x0=-3.4, x1=3.4, light=None):
     return f
 
 
+# ======================================================================== prologue set pieces
+def sp_farmstead(L, A):
+    # Timofey's farm at the end of c2: log house, haystack, coop behind a wattle fence
+    L.put("farmhouse_log", A + 2.0, -10.0, rot=0)
+    L.put("haystack", A + 7.4, -7.4, rot=30)
+    L.put("chicken_coop", A - 3.6, -6.8, rot=10)
+    for dx in (-5.0, -2.0, 4.0, 7.0, 10.0):
+        L.put("wattle_fence", A + dx, -3.8, rot=L.rng.uniform(-3, 3))
+    L.put("farm_gate", A + 1.0, -3.8, rot=0)
+    L.put("vegetable_garden_bed", A + 8.0, -11.5)
+    L.reserve(A - 7, A + 12, -3, -14, "all")
+
+
+def sp_cursed_grove(L, A):
+    L.put("cursed_oak", A + 3.5, -6.5, rot=200)
+    L.put("cursed_stump", A - 1.0, -4.2, rot=30)
+    L.put("thorn_bush", A + 6.5, -3.8); L.put("thorn_bush", A - 3.0, 3.6, s=0.8)
+    L.put("dead_spruce", A + 8.5, -7.5, rot=60)
+    L.reserve(A - 4, A + 10, -3, -9, "trees")
+
+
+def sp_shacks(L, A):
+    # bandit hamlet: shacks, tents, drying rack, antler totem, unfinished palisade
+    L.put("plank_shack", A - 2.5, -8.0, rot=8)
+    L.put("patched_tent", A + 3.0, -6.0, rot=-6)
+    L.put("drying_rack", A + 7.0, -4.6)
+    L.put("antler_totem", A + 0.8, -4.2)
+    L.put("palisade_unfinished", A + 10.5, -4.6, rot=-4)
+    L.put("plank_shack", A + 9.0, -10.5, rot=-12, s=0.9)
+    L.reserve(A - 6, A + 13, -3, -13, "all")
+
+
+def sp_ruin_gate(L, A):
+    # entrance of the burnt village: unfinished palisade and burnt houses
+    L.put("palisade_unfinished", A - 2.0, -4.2)
+    L.put("palisade_unfinished", A + 4.5, -4.4, rot=180)
+    L.put("burnt_house", A + 1.0, -9.5, rot=8)
+    L.put("charred_fence", A + 8.5, -3.8)
+    L.put("broken_cart", A + 9.5, 3.6, rot=200)
+    L.put("dead_tree_burnt", A - 5.0, -6.5)
+    L.reserve(A - 7, A + 12, -3, -13, "all")
+
+
+def sp_ruin_idol(L, A):
+    event_scene(L, "ev11_idol", A, "idol", depth=9.0)
+    L.put("burnt_house", A + 6.5, -9.0, rot=-10)
+    L.put("charred_fence", A - 5.0, -3.8, rot=6)
+
+
+def sp_ruin_chief(L, A):
+    # Hans' platform among the ashes
+    L.put("bone_shrine", A + 3.0, -5.0)
+    L.put("antler_totem", A - 0.5, -4.0); L.put("antler_totem", A + 6.5, -4.0)
+    L.put("burnt_house", A - 4.5, -10.0, rot=12); L.put("burnt_house", A + 9.5, -10.5, rot=-8)
+    L.put("charred_fence", A + 10.0, -3.8)
+    L.put("broken_cart", A - 3.0, 3.7, rot=160)
+    L.reserve(A - 8, A + 13, -3, -14, "all")
+
+
+def sp_farm_outpost(L, A, gate_x):
+    # c3: the farm yard behind the gate — house, haystack, coop, wattle fence instead of stone walls
+    L.put("forest_defense_gate", gate_x, 0.0, rot=90, name="Gate")
+    for zc in (-2.6, -5.6):
+        L.put("wattle_fence", gate_x, zc - 1.0, rot=90)
+    L.put("wattle_fence", gate_x, 3.6, rot=90)
+    L.put("farmhouse_log", gate_x + 4.5, -10.5)
+    L.put("haystack", gate_x + 10.0, -7.0, rot=20)
+    L.put("chicken_coop", gate_x + 1.5, -6.5, rot=5)
+    for dx in (3.0, 6.0, 9.0, 12.0):
+        L.put("wattle_fence", gate_x + dx, -3.9)
+    L.put("vegetable_garden_bed", gate_x + 13.5, -9.0)
+    L.reserve(gate_x - 8, gate_x + 16, -3, -14, "all")
+
+
+def sp_guild_outpost(L, A, gate_x):
+    # c5: the guild yard — hall behind the gate, training dummies, Timofey's wagon, barrels
+    L.put("forest_defense_gate", gate_x, 0.0, rot=90, name="Gate")
+    for zc in (-2.65, -5.65, -8.65):
+        L.put("low_stone_wall", gate_x, zc, rot=90)
+    L.put("low_stone_wall", gate_x, 2.65, rot=-90)
+    L.put("guild_hall_exterior", gate_x + 5.5, -11.0)
+    L.put("training_dummy", gate_x + 2.5, -4.6, rot=10); L.put("training_dummy", gate_x + 4.3, -4.8, rot=-15)
+    L.put("covered_wagon", gate_x + 10.5, -6.0, rot=80)
+    L.put("wooden_barrel", gate_x + 12.8, -4.2); L.put("wooden_crate", gate_x + 13.6, -4.6, rot=20)
+    L.put("street_lamp", gate_x + 7.5, -3.7)
+    L.reserve(gate_x - 8, gate_x + 16, -3, -15, "all")
+
+
+def sp_cave_mouth(L, A):
+    L.put("cave_rock_wall", A - 3.0, -5.0, s=1.3); L.put("cave_rock_wall", A + 5.0, -5.5, rot=180, s=1.5)
+    L.put("stalactites", A + 1.0, -6.0, y=3.2, s=1.3)
+    L.put("glow_mushrooms", A + 2.0, -3.6, s=.7); L.put("glow_mushrooms", A + 7.5, 3.6, s=.6)
+    L.lights.append(("mush_%d" % int(A), A + 2.0, 0.8, -3.6, (0.3, 0.6, 1.0), 1.6, 5.0))
+    L.reserve(A - 6, A + 9, -3, -9, "all")
+
+
+def sp_cave_bones(L, A):
+    L.put("cave_rock_wall", A + 1.0, -6.0, rot=20, s=1.4)
+    L.put("glow_mushrooms", A - 2.5, -3.7, s=.8); L.put("glow_mushrooms", A + 5.0, -3.9, s=.6)
+    L.put("cursed_stump", A + 3.0, -4.2, s=.7)
+    L.lights.append(("mush_%d" % int(A), A - 2.5, 0.8, -3.7, (0.3, 0.6, 1.0), 1.6, 5.0))
+    L.reserve(A - 5, A + 8, -3, -9, "all")
+
+
+def sp_obelisk(L, A):
+    # the obelisk stands where the anchored enemy is drawn (BattleSim fixed_x 1150 px = A on screen)
+    L.put("obelisk", A, -0.6, name="Obelisk", s=1.2)
+    L.put("cave_rock_wall", A - 4.0, -6.0, s=1.5); L.put("cave_rock_wall", A + 4.5, -6.5, rot=170, s=1.6)
+    L.put("glow_mushrooms", A + 2.2, -3.5, s=.6)
+    L.lights.append(("obelisk_glow", A, 2.2, 0.4, (0.95, 0.25, 0.85), 3.0, 7.0))
+    L.reserve(A - 7, A + 9, -3, -10, "all")
+
+
 # ======================================================================== contracts
 SP = {"clearing": sp_clearing, "spring": sp_spring, "windfall": sp_windfall, "camp": sp_camp, "fork": sp_fork,
       "den": sp_den, "bridge": sp_bridge, "broken_bridge": sp_toll, "fork_trader": sp_fork_trader, "shop": sp_shop,
@@ -643,31 +852,39 @@ SP = {"clearing": sp_clearing, "spring": sp_spring, "windfall": sp_windfall, "ca
       "idol": sp_ev("ev11_idol", "idol"), "dead_merc": sp_ev("ev12_corpse", "dead_merc", depth=9.0),
       "chapel": sp_ev("ev13_chapel", "chapel", light=(-0.2, 1.0, -5.8, (1.0, 0.7, 0.35), 1.5, 4.0)),
       "dice": sp_ev("ev14_dice", "dice", light=(-1.35, 0.6, -4.9, (1.0, 0.5, 0.2), 2.5, 6.0)),
-      "hive": sp_ev("ev15_hive", "hive", depth=9.0), "ditch_cart": sp_ev("ev16_ditch", "ditch_cart")}
+      "hive": sp_ev("ev15_hive", "hive", depth=9.0), "ditch_cart": sp_ev("ev16_ditch", "ditch_cart"),
+      "farmstead": sp_farmstead, "cursed_grove": sp_cursed_grove, "shacks": sp_shacks, "ruin_gate": sp_ruin_gate,
+      "ruin_idol": sp_ruin_idol, "ruin_chief": sp_ruin_chief, "cave_mouth": sp_cave_mouth, "cave_bones": sp_cave_bones,
+      "obelisk": sp_obelisk}
 
 LEVELS = {
-    "c1": ("Первый лесной тракт", False, 0.7, 1.0,
-           [("Опушка", "clearing"), ("Волчий родник", "spring"), ("Бурелом", "windfall"), ("Привал", "camp"), ("Развилка", "fork_trader"), ("Логово", "den")]),
-    "c2": ("Запасы для Ольховки", False, 0.55, 0.9,
-           [("Мост", "bridge"), ("Сборщик у моста", "broken_bridge"), ("Придорожная лавка", "shop"), ("Овраг", "ravine"), ("Привал", "camp"), ("Дикий улей", "hive"), ("Ольховка", "hamlet")]),
-    "c3": ("Последний обоз", False, 0.75, 1.0,
-           [("Лес", "forest"), ("Кузня", "ford_smithy"), ("Развилка", "fork"), ("Лагерь", "camp"), ("Застава", "checkpoint"), ("Мёртвый наёмник", "dead_merc"), ("Ущелье", "gorge")]),
-    "c4": ("Спасение возчиков", False, 0.7, 1.0,
-           [("Брод", "ford"), ("Пленник у дороги", "captive"), ("Посты", "posts"), ("Кости у костра", "dice"), ("Привал", "camp"), ("Клетка на колёсах", "cage_camp"), ("Клетки", "cages")]),
-    "c5": ("Ночной дозор", True, 0.6, 0.9,
-           [("Окраина", "village_edge"), ("Сарай в огне", "barn_fire"), ("Мельница", "mill"), ("Телега в кювете", "ditch_cart"), ("Ночёвка", "camp"), ("Овчарня", "sheepfold")]),
-    "c6": ("След сборщика", False, 0.85, 1.15,
-           [("Охотничья вышка", "tracks"), ("Чаща", "thicket"), ("Часовня", "chapel"), ("Угольщики", "charcoal"), ("Старый тракт", "old_road"), ("Привал", "camp"), ("Тайник", "cache"), ("Ущелье Ганса", "gorge")]),
-    "c7": ("Долговая книга", False, 0.8, 1.05,
-           [("Частокол", "palisade"), ("Перебежчик", "turncoat"), ("Двор логова", "yard"), ("Придорожный идол", "idol"), ("Последний привал", "camp"), ("Шатёр главаря", "chief")]),
+    "c1": ("Тревожные вести", False, 0.7, 1.0,
+           [("Опушка", "clearing"), ("Волчий родник", "spring"), ("Бурелом", "windfall"), ("Привал", "camp"), ("Развилка", "fork_trader"), ("Логово", "den")], "forest"),
+    "c2": ("Дорога к хутору", False, 0.85, 1.15,
+           [("Тёмный ельник", "cursed_grove"), ("Дикий улей", "hive"), ("Придорожная лавка", "shop"), ("Ручей", "ford"), ("Привал", "camp"), ("Мёртвый охотник", "dead_merc"), ("Хутор Тимофея", "farmstead")], "cursed"),
+    "c4": ("Обоз Тимофея", False, 0.75, 1.0,
+           [("Лес", "forest"), ("Кузня", "ford_smithy"), ("Развилка", "fork"), ("Лагерь", "camp"), ("Застава", "checkpoint"), ("Телега в кювете", "ditch_cart"), ("Ущелье", "gorge")], "forest"),
+    "c6": ("Контратака", False, 0.85, 1.15,
+           [("Охотничья вышка", "tracks"), ("Чаща", "cursed_grove"), ("Часовня", "chapel"), ("Угольщики", "charcoal"), ("Старый тракт", "old_road"), ("Привал", "camp"), ("Тайник", "cache"), ("Овраг у посёлка", "shacks")], "forest"),
+    "c7": ("Пепелище", False, 0.8, 0.8,
+           [("Частокол", "ruin_gate"), ("Перебежчик", "turncoat"), ("Рогатый идол", "ruin_idol"), ("Помост вожака", "ruin_chief")], "ash"),
 }
+CAVES = {
+    "sc1": ("Волчья нора", [("Вход в нору", "cave_mouth"), ("Кости", "cave_bones"), ("Обелиск", "obelisk")]),
+    "sc2": ("Паучий грот", [("Паутина", "cave_mouth"), ("Гнездо", "cave_bones"), ("Обелиск", "obelisk")]),
+    "sc3": ("Медвежий разлом", [("Разлом", "cave_mouth"), ("Логово хозяина", "cave_bones"), ("Обелиск", "obelisk")]),
+}
+for _cid, (_t, _n) in CAVES.items():
+    LEVELS[_cid] = (_t, True, 0.0, 0.7, _n, "cave")
+# Обороны: один пункт, ворота поперёк дороги там, где BattleSim.GATE_X = 215 px
+OUTPOSTS = {"c3": ("Оборона хутора", False, 200, sp_farm_outpost), "c5": ("Штурм на закате", False, 201, sp_guild_outpost)}
 
 
 def build_all():
     os.makedirs(OUT, exist_ok=True)
     summary = {}
-    for i, (cid, (title, night, pine, dens, nodes)) in enumerate(LEVELS.items()):
-        L = Level(cid, title, [n for n, _ in nodes], night, pine, dens, seed=100 + i)
+    for i, (cid, (title, night, pine, dens, nodes, biome)) in enumerate(LEVELS.items()):
+        L = Level(cid, title, [n for n, _ in nodes], night, pine, dens, seed=100 + i, biome=biome)
         for k, (nm, sp) in enumerate(nodes):
             L.cur = k
             SP[sp](L, L.anchors[k])
@@ -676,14 +893,14 @@ def build_all():
         L.dress()
         n = L.write(os.path.join(OUT, cid + ".tscn"))
         summary[cid] = (n, len(L.streams), round(L.x_max, 1))
-    # side contract: forest outpost (one node, gate at BattleSim.GATE_X = 215 px)
-    L = Level("s1", "Оборона лесной заставы", ["Застава"], False, 0.8, 1.0, seed=200)
-    gate_x = 1 * SEG_M + 2.15
-    L.cur = 0
-    sp_outpost(L, L.anchors[0], gate_x)
-    L.cur = -1
-    L.road(); L.dress()
-    summary["s1"] = (L.write(os.path.join(OUT, "s1.tscn")), 0, round(L.x_max, 1))
+    for cid, (title, night, seed, sp) in OUTPOSTS.items():
+        L = Level(cid, title, ["Ворота"], night, 0.8, 1.0, seed=seed)
+        gate_x = 1 * SEG_M + 2.15
+        L.cur = 0
+        sp(L, L.anchors[0], gate_x)
+        L.cur = -1
+        L.road(); L.dress()
+        summary[cid] = (L.write(os.path.join(OUT, cid + ".tscn")), 0, round(L.x_max, 1))
     return summary
 
 

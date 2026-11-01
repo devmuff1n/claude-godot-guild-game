@@ -1,0 +1,57 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/characters/HeroModel3D.gd" id="1"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/aiden2/aiden2.glb" id="2"]
+
+[node name="AidenMX3D" type="Node3D"]
+script = ExtResource("1")
+head_pitch_fix_deg = 0.0
+walk_clip_mps = 1.58
+run_clip_mps = 3.18
+loops_mocap = {
+"block": "MX_BlockIdle",
+"cast": "MX_Idle03",
+"idle": "MX_Idle",
+"run": "MX_RunForward",
+"walk": "MX_PlainWalk"
+}
+one_shots_mocap = {
+"attack": "MX_1hMagicAttack01",
+"block_hit": "MX_BlockLarge",
+"cast_release": "MX_1hCastSpell01",
+"death": "MX_DeathBackward",
+"dodge": "MX_StepBackward",
+"hit": "MX_SmallFromFront",
+"quick_release": "MX_1hMagicAttack02",
+"skill_heal": "MX_1hCastSpell01",
+"skill_intercede": "MX_2hMagicAreaAttack02",
+"skill_prayer": "MX_2hCastSpell01",
+"skill_renew": "MX_1hMagicAttack03",
+"skill_ward": "MX_2hMagicAttack04",
+"victory": "MX_Victory"
+}
+impact_times = {
+"MX_1hMagicAttack01": 0.81,
+"MX_1hMagicAttack02": 0.53,
+"MX_1hMagicAttack03": 0.95,
+"MX_1hCastSpell01": 0.58,
+"MX_2hCastSpell01": 0.6,
+"MX_2hMagicAreaAttack02": 1.77,
+"MX_2hMagicAttack04": 2.76
+}
+clip_speeds = {
+"MX_1hMagicAttack01": 1.4,
+"MX_1hMagicAttack02": 1.4,
+"MX_1hMagicAttack03": 1.4,
+"MX_1hCastSpell01": 1.3,
+"MX_2hCastSpell01": 1.3,
+"MX_2hMagicAttack01": 1.3,
+"MX_2hMagicAttack04": 1.3,
+"MX_2hMagicAreaAttack02": 1.3
+}
+mirrored_clips = PackedStringArray()
+spring_chains = []
+prop_scene = null
+
+[node name="Model" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0, 0, 0)

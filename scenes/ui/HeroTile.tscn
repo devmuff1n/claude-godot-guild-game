@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://scripts/ui/HeroTile.gd" id="1_tile"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="2_pill"]
-[ext_resource type="Script" path="res://scripts/ui/PipBar.gd" id="3_pips"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="4_icon"]
 
 [node name="HeroTile" type="Button"]
@@ -91,24 +90,3 @@ mouse_filter = 1
 icon_kind = "job"
 value_width = 18.0
 
-[node name="BurnoutBox" type="HBoxContainer" parent="Box"]
-unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 1
-theme_override_constants/separation = 6
-alignment = 1
-
-[node name="Flame" parent="Box/BurnoutBox" instance=ExtResource("4_icon")]
-custom_minimum_size = Vector2(16, 16)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-kind = "burnout"
-
-[node name="Burnout" type="Control" parent="Box/BurnoutBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 8)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-script = ExtResource("3_pips")

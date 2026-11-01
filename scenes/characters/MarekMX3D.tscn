@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/characters/HeroModel3D.gd" id="1"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/marek2/marek2.glb" id="2"]
+
+[node name="MarekMX3D" type="Node3D"]
+script = ExtResource("1")
+head_pitch_fix_deg = 0.0
+walk_clip_mps = 1.64
+run_clip_mps = 3.31
+loops_mocap = {
+"block": "MX_BlockIdle",
+"cast": "MX_BlockIdle",
+"idle": "MX_Idle4",
+"run": "MX_Run",
+"walk": "MX_PlainWalk"
+}
+one_shots_mocap = {
+"attack": "MX_Slash",
+"block_hit": "MX_Impact",
+"cast_release": "MX_PowerUp",
+"combo": "MX_Slash2",
+"death": "MX_Death",
+"dodge": "MX_StepBackward",
+"hit": "MX_Impact2",
+"quick_release": "MX_PowerUp",
+"skill_banner": "MX_Casting",
+"skill_bash": "MX_Casting2",
+"skill_cleave": "MX_Slash3",
+"skill_taunt": "MX_PowerUp",
+"skill_wall": "MX_Block",
+"victory": "MX_Casting"
+}
+impact_times = {
+"MX_Slash": 0.6,
+"MX_Slash2": 0.67,
+"MX_Slash3": 0.83
+}
+mirrored_clips = PackedStringArray()
+spring_chains = []
+prop_scene = null
+
+[node name="Model" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.057, 0, 0, 0, 1.057, 0, 0, 0, 1.057, 0, 0, 0)

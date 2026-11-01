@@ -177,7 +177,10 @@ static func apply_doc(doc: Dictionary) -> void:
 			if p.has("wave") and c.has("waves"):
 				var wi := int(p["wave"]) - 1
 				if wi >= 0 and wi < c["waves"].size() and not groups.is_empty():
+					var old = c["waves"][wi]
 					c["waves"][wi] = {"groups": groups, "hp_pct": int(p.get("hp_pct", 100)), "dmg_pct": int(p.get("dmg_pct", 100))}
+					if old is Dictionary and old.has("champion"):
+						c["waves"][wi]["champion"] = old["champion"]
 			elif p.has("node"):
 				var ni := int(p["node"])
 				# узлы маршрута могли сдвинуться (вставили событие): ищем точку по имени

@@ -1,0 +1,100 @@
+{
+  "id": "antler_totem",
+  "category": "prologue/hamlet",
+  "glb": "C:\\Users\\armor\\Documents\\poorest_guild\\assets\\models\\prologue/hamlet\\antler_totem.glb",
+  "blend": "C:\\Users\\armor\\Documents\\poorest_guild\\generated-models\\antler_totem\\antler_totem.blend",
+  "target_size_m": [
+    1.5,
+    0.8,
+    3.3
+  ],
+  "glb_size_m": [
+    1.571,
+    0.512,
+    3.553
+  ],
+  "size_deviation": [
+    0.047,
+    -0.36,
+    0.077
+  ],
+  "bounds_min": [
+    -0.785,
+    -0.262,
+    0.0
+  ],
+  "bounds_max": [
+    0.785,
+    0.25,
+    3.553
+  ],
+  "source_vs_glb_bounds_match": true,
+  "triangles": 904,
+  "source_triangles": 904,
+  "visual_mesh_nodes": 2,
+  "unique_meshes": 2,
+  "materials": [
+    "env_bark",
+    "env_bone",
+    "env_feather",
+    "env_horn",
+    "env_ribbon_red",
+    "env_target_paint",
+    "env_wood_raw"
+  ],
+  "collision_nodes": [
+    "antler_totem_totem_col-convcolonly"
+  ],
+  "glb_nodes": 4,
+  "glb_kb": 499,
+  "glb_materials": [
+    [
+      "env_ribbon_red",
+      "OPAQUE",
+      true
+    ],
+    [
+      "env_target_paint",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_horn",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bone",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_feather",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_bark",
+      "OPAQUE",
+      false
+    ],
+    [
+      "env_wood_raw",
+      "OPAQUE",
+      false
+    ]
+  ],
+  "glb_images": 7,
+  "empties": [
+    "antler_totem.001"
+  ],
+  "negative_scale_nodes": [],
+  "mesh_issues": [],
+  "motion_test": [],
+  "parts": [
+    "antler_totem_antlers_ribbons",
+    "antler_totem_pole"
+  ],
+  "built_with": "Blender 5.2.0 LTS, procedural geometry from PNG + MD prompt (no Tripo high-poly)",
+  "time": "2026-10-31 00:05"
+}

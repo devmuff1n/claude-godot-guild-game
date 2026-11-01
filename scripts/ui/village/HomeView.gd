@@ -30,7 +30,9 @@ func refresh() -> void:
 		tile.pressed.connect(func(): village.show_hero(hid))
 	# Награда на выбор
 	var pc: Array = Game.state["pending_choice"]
+	# Награда занимает место отряда, пока не выбрана: колонка не растёт и не вылезает за экран
 	%RewardPanel.visible = pc.size() > 0
+	$Columns/Right/SquadPanel.visible = pc.is_empty()
 	UIK.clear(%PendingCards)
 	for i in pc.size():
 		var card: PanelContainer = REWARD_CARD.instantiate()
@@ -41,7 +43,7 @@ func refresh() -> void:
 		card.get_node("%Name").add_theme_color_override("font_color", Items.rarity_color(it))
 		card.get_node("%Type").text = "%s · ур. %d" % [Items.type_label(it), int(it["ilvl"])]
 		# Название, уровень и тип уже в шапке карточки — в описании только характеристики
-		card.get_node("%Info").text = Items.tooltip_bb(it, "", 1, "", 3)
+		card.get_node("%Info").text = Items.tooltip_bb(it, "", 1, "", 3) + _context_bb(it, card.get_node("%Slot"))
 		var idx := i
 		card.get_node("%ChooseButton").pressed.connect(func():
 			Game.choose_pending(idx)
@@ -55,7 +57,9 @@ func refresh() -> void:
 	for g in Game.state["backpack"].keys():
 		_pill("cons", g, "×%d" % int(Game.state["backpack"][g]), DB.consumable_name(g))
 	var q: Array = Game.state["queue"]
-	%QueueBox.visible = q.size() > 0
+	# Строка очереди всегда занимает место (иначе панель запасов меняет высоту)
+	%QueueBox.modulate.a = 1.0 if q.size() > 0 else 0.0
+	%TakeQueueButton.disabled = q.is_empty()
 	%QueueLabel.text = "Очередь выдачи: %d" % q.size()
 
 func _pill(kind: String, cons: String, val: String, tip: String) -> void:
@@ -73,8 +77,6 @@ func _fill_next() -> void:
 		if Game.contract_available(cid) and Game.contract_done_count(cid) == 0:
 			next = cid
 			break
-	if next == "" and Game.contract_available("s1") and Game.contract_done_count("s1") == 0:
-		next = "s1"
 	if next == "":
 		%NextCaption.text = "ДОСКА ПОРУЧЕНИЙ"
 		%NextName.text = "Все поручения выполнены"
@@ -84,3 +86,26 @@ func _fill_next() -> void:
 	%NextCaption.text = "СЛЕДУЮЩЕЕ ПОРУЧЕНИЕ"
 	%NextName.text = c["name"]
 	%NextInfo.text = "Уровень %d · оплата %d мон." % [int(c["level"]), int(c["pay"])]
+
+## Кому поможет награда (как в Hades): герой, которому вещь даёт больший прирост, и что изменится против надетого.
+## Слоту карточки назначается этот герой — подсказка покажет сравнение с надетым.
+func _context_bb(it: Dictionary, slot: ItemSlot) -> String:
+	var best_h := ""
+	var best := {"slot": "", "gain": -INF}
+	for h in DB.HERO_IDS:
+		if not Items.hero_can_use_type(h, it):
+			continue
+		var g := Game.upgrade_gain(h, it)
+		if g["slot"] != "" and float(g["gain"]) > float(best["gain"]):
+			best = g
+			best_h = h
+	if best_h == "":
+		return ""
+	slot.tip_hero = best_h
+	var old = Game.hero(best_h)["equip"].get(best["slot"])
+	var head := "\n\n[color=#%s]%s[/color] · %s" % [UIK.GOLD_HI.to_html(false), DB.hero_name(best_h), ("вместо «%s»" % Items.display_name(old)) if old != null else "пустой слот"]
+	var rows: Array = Items.compare_rows(it, old) if old != null else []
+	var out := [head]
+	for i in mini(rows.size(), 4):
+		out.append(Items._bb_row(rows[i]))
+	return "\n".join(out)

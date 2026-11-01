@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[node name="LevelUpRow" type="HBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Name" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"MutedLabel"
+text = "Параметр"
+text_overrun_behavior = 3
+
+[node name="Old" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 2
+
+[node name="Arrow" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "→"
+horizontal_alignment = 1
+
+[node name="New" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 2
+
+[node name="Delta" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_type_variation = &"GoodLabel"
+theme_override_font_sizes/font_size = 14
+text = "+0"

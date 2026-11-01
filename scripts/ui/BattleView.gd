@@ -19,6 +19,8 @@ var scroll := 0.0
 var walking := false
 var walk_units: Array = []   # [{look, x}] для режима ходьбы
 var corpses: Array = []      # павшие враги остаются на дороге и уезжают назад вместе с ней
+var actors: Array = []       # актёры кат-сцены вне боя: [{id, look, name, x, facing, moving, swing}]
+var ash: Array = []          # хлопья пепла: враги-проекции (тег phantom) гибнут без тела
 var walk_wagon := false
 var selected_hero := ""
 var target_mode := ""        # "", "enemy", "ally", "ground"
@@ -26,6 +28,7 @@ var target_radius := 0.0     # радиус области в режиме "grou
 var target_ab := ""          # умение, для которого выбирается область (цвет превью)
 var hover_uid := -1
 var hover_pos := Vector2(-1000, -1000)
+var hover_card_uid := -1     # герой, над чьей карточкой внизу сейчас курсор (выбор союзника)
 var time := 0.0
 var shake := 0.0
 var warn_left := 0.0
@@ -42,18 +45,29 @@ var stars: Array = []
 
 ## Герои, которых вместо рисованной фигурки показывает 3D-модель (Hero3DSprite).
 const MODEL_LOOKS := {
-	"neris": "res://scenes/characters/Neris3D.tscn",
-	"elira": "res://scenes/characters/Elira3D.tscn",
+	"neris": "res://scenes/characters/NerisMX3D.tscn",
+	"elira": "res://scenes/characters/EliraMX3D.tscn",
+	"marek": "res://scenes/characters/MarekMX3D.tscn",
+	"aiden": "res://scenes/characters/AidenMX3D.tscn",
 }
 ## Чем 3D-модель отвечает на обычную атаку: Нэрис бьёт магией из посоха, остальные — своим «attack» (Элира — быстрый выстрел).
 const MODEL_ATTACK := {"neris": "cast_release"}
-const ROAD_SPEED_MPS := 1.7  # отряд на дороге идёт со скоростью прокрутки (260 px/с)
-## Выключено (26.10.2026): 3D-модели пока выглядят хуже рисованных фигурок. Модели и сцены остаются в проекте, true вернёт их.
-var use_3d_models := false
+const ROAD_SPEED_PX := 150.0  # отряд на дороге идёт шагом со скоростью прокрутки (ExpeditionScreen.WALK_SPEED)
+## Вид героев выбирает игрок (Settings.hero_look, меню паузы): "3d" — модели MODEL_LOOKS, "2d" — спрайты
+## SPRITE_LOOKS, "simple" — фигурки Art. Герой без ассетов выбранного вида рисуется фигуркой Art.
 var models := {}             # ключ юнита -> Hero3DSprite
+## Герои с покадровой рисованной анимацией (SpriteHero) для вида "2d".
+const SPRITE_LOOKS := {
+	"aiden": "res://assets/sprites/aiden/aiden_actor.tscn",
+	"neris": "res://assets/sprites/neris/neris_actor.tscn",
+}
+var sprites := {}            # ключ юнита -> SpriteHero
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	mouse_exited.connect(func():
+		hover_pos = Vector2(-1000, -1000)
+		hover_uid = -1)
 	var r := RandomNumberGenerator.new()
 	r.seed = 777
 	for i in 26:
@@ -73,6 +87,9 @@ func _process(delta: float) -> void:
 	time += delta
 	shake = max(0.0, shake - delta)
 	warn_left = max(0.0, warn_left - delta)
+	# Враги двигаются и под неподвижным курсором — цель под ним пересчитываем каждый кадр
+	if target_mode in ["enemy", "ally"] and hover_pos.x > -500.0:
+		hover_uid = unit_at(hover_pos)
 	for f in floats:
 		f["t"] += delta
 	floats = floats.filter(func(f): return f["t"] < 1.2)
@@ -85,6 +102,15 @@ func _process(delta: float) -> void:
 	for k in vis.keys():
 		var v: Dictionary = vis[k]
 		v["swing"] = max(0.0, v["swing"] - delta * 3.5)
+		if v.has("ash_t"):
+			v["ash_t"] += delta
+	for a in actors:
+		a["swing"] = max(0.0, float(a.get("swing", 0.0)) - delta * 2.5)
+	for p in ash:
+		p["t"] += delta
+		p["v"] += Vector2(18.0, -10.0) * delta
+		p["p"] += p["v"] * delta
+	ash = ash.filter(func(p): return p["t"] < p["life"])
 	for k in models.keys():
 		var m: Hero3DSprite = models[k]
 		m.render_target_update_mode = SubViewport.UPDATE_ALWAYS if m.used else SubViewport.UPDATE_DISABLED
@@ -93,6 +119,13 @@ func _process(delta: float) -> void:
 		if m.unused_t > 3.0:
 			m.queue_free()
 			models.erase(k)
+	for k in sprites.keys():
+		var sp: SpriteHero = sprites[k]
+		sp.unused_t = 0.0 if sp.used else sp.unused_t + delta
+		sp.used = false
+		if sp.unused_t > 3.0:
+			sp.queue_free()
+			sprites.erase(k)
 	queue_redraw()
 
 ## Забрать визуальные события из симуляции
@@ -125,24 +158,46 @@ func consume_events(evs: Array) -> void:
 				var u2 = sim.unit(int(e["uid"]))
 				if u2 != null:
 					fx.append({"pos": Vector2(u2["x"], GROUND - 55), "kind": e["ab"], "t": 0.0, "dur": 0.6})
-					_model_event(int(e["uid"]), "cast_release")
+					_model_event(int(e["uid"]), "cast_release", String(e["ab"]))
 			"shake":
 				shake = 0.25
+			"death":
+				var ud = sim.unit(int(e["uid"])) if sim != null else null
+				if ud != null and "phantom" in ud["tags"]:
+					_v(int(e["uid"]))["ash_t"] = 0.0
+					spawn_ash(float(ud["x"]), GROUND + float(_v(int(e["uid"])).get("py", 0.0)))
 			"warn_left":
 				warn_left = 2.2
 
-func _model_event(uid: int, kind: String) -> void:
+## ab — умение из события cast_fx: если у 3D-модели есть свой клип "skill_<ab>" (Марек), играет он.
+func _model_event(uid: int, kind: String, ab := "") -> void:
 	if sim == null:
 		return
 	var u = sim.unit(uid)
-	if u == null or not models.has("u%d" % uid):
+	if u == null:
 		return
-	models["u%d" % uid].one_shot(MODEL_ATTACK.get(u["look"], "attack") if kind == "attack" else kind)
+	if sprites.has(_model_key(u)):
+		sprites[_model_key(u)].one_shot(kind)
+		return
+	if not models.has(_model_key(u)):
+		return
+	var m: Hero3DSprite = models[_model_key(u)]
+	if ab != "" and m.hero and m.hero.has_state("skill_" + ab):
+		kind = "skill_" + ab
+	m.one_shot(MODEL_ATTACK.get(u["look"], "attack") if kind == "attack" else kind)
+
+
+## Ключ 3D-модели юнита: герой отряда — по имени (одна модель на бой и дорогу), остальные — по uid.
+func _model_key(u: Dictionary) -> String:
+	return "h_" + String(u["key"]) if u["side"] == "hero" else "u%d" % u["uid"]
 
 
 ## Нарисовать юнита 3D-моделью, если для его облика она есть. false — рисовать как раньше.
 func _draw_model(key: String, look: String, pos: Vector2, facing: int, st: Dictionary) -> bool:
-	if not use_3d_models or not MODEL_LOOKS.has(look):
+	var mode := Settings.hero_look()
+	if mode == "2d" and SPRITE_LOOKS.has(look):
+		return _draw_sprite(key, look, pos, facing, st)
+	if mode != "3d" or not MODEL_LOOKS.has(look):
 		return false
 	var m: Hero3DSprite = models.get(key)
 	if m == null:
@@ -157,6 +212,24 @@ func _draw_model(key: String, look: String, pos: Vector2, facing: int, st: Dicti
 	if not st.get("dead", false):
 		_ell(pos, 30 * SC, 7 * SC, Color(0, 0, 0, 0.35))
 	draw_texture(m.get_texture(), pos - m.anchor(), Color(1, 1, 1, 0.8 if st.get("dead", false) else 1.0))
+	return true
+
+
+## Нарисовать юнита покадровой анимацией (SpriteHero).
+func _draw_sprite(key: String, look: String, pos: Vector2, facing: int, st: Dictionary) -> bool:
+	var sp: SpriteHero = sprites.get(key)
+	if sp == null:
+		var scene := load(SPRITE_LOOKS[look]) as PackedScene
+		if scene == null:
+			return false
+		sp = scene.instantiate()
+		sp.name = "Sprite_" + key
+		add_child(sp)
+		sprites[key] = sp
+	sp.drive(st)
+	if not st.get("dead", false):
+		_ell(pos, Art.shadow_w(look) * SC, 7 * SC, Color(0, 0, 0, 0.35 * float(st.get("alpha", 1.0))))
+	sp.draw_on(self, pos, facing, st)
 	return true
 
 
@@ -183,6 +256,7 @@ func _draw() -> void:
 			_draw_darkness()
 	else:
 		_draw_walkers()
+	_draw_ash()
 	_draw_projs()
 	_draw_fx()
 	_draw_floats()
@@ -415,20 +489,37 @@ func shift_corpses(dx: float) -> void:
 func _draw_walkers() -> void:
 	for c in corpses:
 		Art.draw_unit(self, Vector2(c["x"], GROUND + 4), c["look"], int(c["facing"]) if c["facing"] != 0 else -1, {"t": 0.0, "dead": true, "tier": c.get("tier", 1)}, SC * (1.12 if c.get("big", false) else 1.0) * [1.0, 1.06, 1.12][clampi(int(c.get("tier", 1)), 1, 3) - 1])
-	for w in walk_units:
-		var wpos := Vector2(w["x"], GROUND)
-		var wst := {"moving": walking, "x": w["x"], "speed_mps": ROAD_SPEED_MPS if walking else 0.0}
-		if not _draw_model("w_" + w["look"], w["look"], wpos, 1, wst):
+	for a in actors:
+		var apos := Vector2(float(a["x"]), GROUND + float(a.get("dy", 0.0)))
+		Art.draw_unit(self, apos, a["look"], int(a.get("facing", -1)), {"t": time + float(a["x"]) * 0.01, "moving": a.get("moving", false),
+			"swing": float(a.get("swing", 0.0)), "alpha": float(a.get("alpha", 1.0)), "shade": a.get("shade", false)},
+			SC * (1.12 if a["look"] in ["brute", "captain"] else 1.0))
+	var order: Array = walk_units.duplicate()
+	order.sort_custom(func(a, b): return _hero_stagger(a["look"]) > _hero_stagger(b["look"]))
+	for w in order:
+		var wpos := Vector2(w["x"], GROUND - _hero_stagger(w["look"]) * LANE_PX)
+		var wst := {"moving": walking, "x": w["x"], "speed_mps": ROAD_SPEED_PX / Hero3DSprite.PX_PER_M if walking else 0.0, "gait": "walk"}
+		# та же модель, что была в бою (ключ по герою): после боя она продолжает с текущей позы, без T-позы
+		if not _draw_model("h_" + w["look"], w["look"], wpos, 1, wst):
 			Art.draw_unit(self, wpos, w["look"], 1, {"t": time + w["x"] * 0.01, "moving": walking}, SC)
 
 ## Расстояние между полосами глубины на экране
 const LANE_PX := 30.0
 
-## Глубина фигуры: полоса врага, герои — посередине дороги
+## Глубина фигуры: полоса врага, герои — посередине дороги (обходя соседа, шагают в сторону)
 func _depth(u: Dictionary) -> float:
 	if u["side"] == "enemy":
-		return float(u.get("lane", 1))
-	return (BattleSim.LANES - 1) * 0.5
+		return float(u.get("lane", 1)) + float(u.get("side_step", 0.0)) * 0.6
+	return (BattleSim.LANES - 1) * 0.5 + float(u.get("side_step", 0.0)) - _hero_stagger(String(u["key"]))
+
+## Герои строя через одного стоят чуть дальше по дороге (доля полосы): соседние фигуры не сливаются,
+## а тот, кто дальше, рисуется позади.
+const HERO_STAGGER := 0.33
+
+func _hero_stagger(id: String) -> float:
+	var f: Array = sim.s["formation"] if sim != null else Game.state.get("formation", [])
+	var i := f.find(id)
+	return HERO_STAGGER if i >= 0 and i % 2 == 1 else 0.0
 
 func _unit_order() -> Array:
 	var arr: Array = sim.s["units"].duplicate()
@@ -489,7 +580,18 @@ func _draw_units() -> void:
 		var hf = sim.hero_focus(sh)
 		if hf != null:
 			hero_focus = int(hf["uid"])
-	for u in _unit_order():
+	# Выбор врага: герои, заслоняющие врагов, становятся полупрозрачными, а враги рисуются поверх них
+	var picking_enemy := target_mode == "enemy"
+	var see_through := {}
+	if picking_enemy:
+		see_through = _heroes_covering_enemies()
+	var ui_pass: Array = []
+	var order := _unit_order()
+	if picking_enemy:
+		var heroes_first := order.filter(func(x): return x["side"] != "enemy" or not x["alive"])
+		heroes_first.append_array(order.filter(func(x): return x["side"] == "enemy" and x["alive"]))
+		order = heroes_first
+	for u in order:
 		var v := _v(u["uid"])
 		# Враги стоят на полосах глубины дороги; смена полосы — плавным шагом
 		var ty := (_depth(u) - (BattleSim.LANES - 1) * 0.5) * LANE_PX
@@ -512,29 +614,82 @@ func _draw_units() -> void:
 			if target_mode == "ground":
 				if u["side"] == "enemy" and hover_pos.x > -500.0 and abs(u["x"] - hover_pos.x) <= target_radius + BattleSim.BODY * 0.5:
 					draw_arc(pos + Vector2(0, -2), 40, 0, TAU, 32, Color(area_color(target_ab), 0.95), 3)
-			elif target_mode != "" and u["uid"] == hover_uid:
-				var ok = (target_mode == "enemy" and u["side"] == "enemy") or (target_mode == "ally" and u["side"] == "hero")
-				draw_arc(pos + Vector2(0, -2), 46, 0, TAU, 32, Color(0.4, 1, 0.5) if ok else Color(0.6, 0.6, 0.6), 3)
-			elif target_mode == "enemy" and u["side"] == "enemy":
-				draw_arc(pos + Vector2(0, -2), 38, 0, TAU, 24, Color(1, 0.5, 0.4, 0.35 + 0.25 * sin(time * 6)), 2)
-			elif target_mode == "ally" and u["side"] == "hero":
-				draw_arc(pos + Vector2(0, -2), 38, 0, TAU, 24, Color(0.5, 1, 0.6, 0.35 + 0.25 * sin(time * 6)), 2)
+			elif target_mode != "" and can_target(u):
+				var hot: bool = u["uid"] == hover_uid or u["uid"] == hover_card_uid
+				var tc := Color(1, 0.42, 0.32) if target_mode == "enemy" else Color(0.45, 1, 0.55)
+				if hot:
+					_ell(pos + Vector2(0, 2), 50, 14, Color(tc, 0.28))
+					draw_arc(pos + Vector2(0, -2), 46, 0, TAU, 40, Color(0.05, 0.03, 0.02, 0.6), 6)
+					draw_arc(pos + Vector2(0, -2), 46, 0, TAU, 40, tc.lightened(0.25), 3.5)
+				else:
+					draw_arc(pos + Vector2(0, -2), 38, 0, TAU, 24, Color(tc, 0.35 + 0.25 * sin(time * 6)), 2)
 		var stt := {"t": u["anim"], "moving": moving and u["alive"], "swing": v["swing"], "dead": not u["alive"],
 			"flash": clamp(u["hurt"] / 0.18, 0.0, 1.0) * 0.7, "cast": u["cast"] != null}
+		# Проекция не падает, а тает на месте, рассыпаясь пеплом
+		if not u["alive"] and "phantom" in u["tags"]:
+			var fade := 1.0 - float(v.get("ash_t", 9.0)) / ASH_FADE
+			if fade <= 0.0:
+				continue
+			stt["dead"] = false
+			stt["alpha"] = fade * (0.7 + 0.3 * sin(time * 40.0))
+			stt["flash"] = 0.35 * fade
 		var sc := SC * _tier_k(u)
 		if u["key"] in ["brute", "captain"]:
 			sc *= 1.12
 		stt["tier"] = int(u.get("tier", 1))
+		stt["shade"] = "phantom" in u["tags"]
 		if u["alive"] and sim.has_effect(u, "hidden"):
 			stt["alpha"] = 0.22 + 0.06 * sin(time * 5.0 + u["uid"])
+		elif see_through.has(u["uid"]):
+			stt["alpha"] = 0.38
 		if u["task"] != null:
 			stt["swing"] = abs(sin(time * 6.0))
 		var facing := int(u["facing"]) if u["facing"] != 0 else (1 if u["side"] == "hero" else -1)
 		stt["x"] = u["x"]
-		if not _draw_model("u%d" % u["uid"], u["look"], pos, facing, stt):
+		if not _draw_model(_model_key(u), u["look"], pos, facing, stt):
 			Art.draw_unit(self, pos, u["look"], facing, stt, sc)
 		if u["alive"] and not sim.in_dark(u):
-			_draw_unit_ui(u, pos)
+			ui_pass.append([u, pos])
+	# Полоски здоровья и подписи — после всех фигур, чтобы плашку врага за спиной героя было видно и по ней можно было кликнуть.
+	# Плашки врагов — поверх героев.
+	for it in ui_pass:
+		if it[0]["side"] != "enemy":
+			_draw_unit_ui(it[0], it[1])
+	for it in ui_pass:
+		if it[0]["side"] == "enemy":
+			_draw_unit_ui(it[0], it[1])
+
+## Герои, чей силуэт перекрывает силуэт врага, которого сейчас можно выбрать целью.
+func _heroes_covering_enemies() -> Dictionary:
+	var res := {}
+	var foes: Array = []
+	for e in sim.s["units"]:
+		if e["side"] == "enemy" and can_target(e):
+			foes.append(unit_rect(e))
+	for h in sim.s["units"]:
+		if h["side"] != "hero" or not h["alive"]:
+			continue
+		var hr := unit_rect(h).grow(-6.0)
+		for fr in foes:
+			if hr.intersects(fr):
+				res[h["uid"]] = true
+				break
+	return res
+
+## Перебор целей с клавиатуры (Tab / Shift+Tab): по порядку слева направо.
+func cycle_target(dir: int) -> int:
+	var arr: Array = sim.s["units"].filter(func(x): return can_target(x))
+	if arr.is_empty():
+		return -1
+	arr.sort_custom(func(a, b): return a["x"] < b["x"])
+	var i := -1
+	for k in arr.size():
+		if arr[k]["uid"] == hover_uid:
+			i = k
+	i = posmod(i + dir, arr.size()) if i >= 0 else (0 if dir > 0 else arr.size() - 1)
+	hover_uid = int(arr[i]["uid"])
+	hover_pos = Vector2(-1000, -1000)   # курсор больше не ведёт выбор, пока мышь не сдвинется
+	return hover_uid
 
 ## Враги старших ступеней чуть крупнее.
 func _tier_k(u: Dictionary) -> float:
@@ -542,16 +697,23 @@ func _tier_k(u: Dictionary) -> float:
 		return 1.0
 	return [1.0, 1.06, 1.12][clampi(int(u.get("tier", 1)), 1, 3) - 1]
 
-func _draw_unit_ui(u: Dictionary, pos: Vector2) -> void:
+## Полоска здоровья над юнитом: x — верх полоски, y — её ширина. Общая для отрисовки и наведения.
+func _bar_geom(u: Dictionary, pos: Vector2) -> Vector2:
 	var top := pos.y - Art.top_h(u["look"]) * SC * _tier_k(u) - 8.0
 	if u["key"] in ["brute", "captain"]:
 		top -= 20
 	var bw := 70.0 if u["side"] == "enemy" else 56.0
 	if "boss" in u["tags"]:
 		bw = 110.0
-	var champ: String = u.get("champion", "")
-	if champ != "":
+	if u.get("champion", "") != "":
 		bw = 90.0
+	return Vector2(top, bw)
+
+func _draw_unit_ui(u: Dictionary, pos: Vector2) -> void:
+	var bg := _bar_geom(u, pos)
+	var top := bg.x
+	var bw := bg.y
+	var champ: String = u.get("champion", "")
 	var pct: float = u["hp"] / u["max_hp"]
 	draw_rect(Rect2(pos.x - bw * 0.5 - 1, top - 1, bw + 2, 9), Color(0, 0, 0, 0.8))
 	draw_rect(Rect2(pos.x - bw * 0.5, top, bw * pct, 7), Color(0.9, 0.25, 0.22) if u["side"] == "enemy" else Color(0.4, 0.85, 0.35))
@@ -592,6 +754,17 @@ func _draw_unit_ui(u: Dictionary, pos: Vector2) -> void:
 		draw_rect(Rect2(pos.x - cw * 0.5, cy, cw * clamp(c["t"] / c["total"], 0.0, 1.0), 18), Color(col, 0.75))
 		draw_rect(Rect2(pos.x - cw * 0.5 - 2, cy - 2, cw + 4, 22), col, false, 1.5)
 		draw_string(UIK.fb(), Vector2(pos.x - cw * 0.5, cy + 14), c["name"], HORIZONTAL_ALIGNMENT_CENTER, cw, 13, Color(1, 1, 1))
+		# Читаемая угроза (Into the Breach): над полосой приёма — кого он заденет
+		if u["side"] == "enemy":
+			var tgt := ""
+			var tu = sim.unit(int(c.get("target", -1)))
+			if tu != null and tu["side"] == "hero":
+				tgt = "→ " + String(tu["name"])
+			elif int(c.get("target", -1)) < 0 and String(c.get("obj", "")) != "":
+				tgt = "→ " + ("повозка" if c["obj"] == "wagon" else ("ворота" if c["obj"] == "gate" else "сундук"))
+			if tgt != "":
+				draw_string_outline(UIK.fb(), Vector2(pos.x - cw * 0.5, cy - 6), tgt, HORIZONTAL_ALIGNMENT_CENTER, cw, 13, 3, Color(0, 0, 0, 0.9))
+				draw_string(UIK.fb(), Vector2(pos.x - cw * 0.5, cy - 6), tgt, HORIZONTAL_ALIGNMENT_CENTER, cw, 13, Color(1, 0.72, 0.55))
 	if u["task"] != null:
 		var tk: Dictionary = u["task"]
 		var ty := top - 24
@@ -600,6 +773,74 @@ func _draw_unit_ui(u: Dictionary, pos: Vector2) -> void:
 		draw_string(UIK.fb(), Vector2(pos.x - 50, ty + 12), "Ремонт" if tk["type"] == "repair" else "Тушит", HORIZONTAL_ALIGNMENT_CENTER, 100, 12, Color.WHITE)
 	if u["queued"] != null:
 		draw_string(UIK.f(), Vector2(pos.x - 60, top - 22), "→ " + DB.ABILITIES[u["queued"]["ab"]]["name"], HORIZONTAL_ALIGNMENT_CENTER, 120, 12, Color(1, 0.9, 0.6))
+
+# ================================================================ Кат-сцены
+const ASH_FADE := 0.9
+
+## Хлопья пепла и угольки на месте исчезнувшей проекции.
+func spawn_ash(x: float, ground_y: float) -> void:
+	for i in 120:
+		var ember := i % 7 == 0
+		var col := Color(1.0, 0.32, 0.1) if ember else Color(0.08, 0.07, 0.08).lerp(Color(0.62, 0.6, 0.58), randf() * randf())
+		ash.append({"p": Vector2(x + randf_range(-50, 50), ground_y - randf_range(6, 80)),
+			"v": Vector2(randf_range(-30, 30), randf_range(-90, -20)), "t": -randf() * ASH_FADE * 0.7,
+			"life": randf_range(1.8, 3.2), "col": col, "r": randf_range(2.5, 5.5) if not ember else randf_range(1.5, 2.6)})
+	# тёмный выдох: клуб дыма на месте тела
+	ash.append({"p": Vector2(x, ground_y - 40), "v": Vector2(10, -12), "t": 0.0, "life": 1.4, "col": Color(0.06, 0.04, 0.07), "r": 0.0, "puff": true})
+
+func _draw_ash() -> void:
+	for p in ash:
+		if p["t"] < 0.0:
+			continue
+		var k: float = p["t"] / p["life"]
+		var col: Color = p["col"]
+		if p.get("puff", false):
+			col.a = 0.45 * (1.0 - k)
+			_ell(p["p"], 40.0 + 70.0 * k, 26.0 + 40.0 * k, col)
+			continue
+		col.a = (1.0 - k * k) * 0.95
+		draw_circle(p["p"], float(p["r"]) * (1.0 - k * 0.5), col)
+
+## Короткое движение героя вне боя (3D-модель или спрайт; у простых фигурок — ничего).
+func hero_anim(id: String, kind: String) -> void:
+	var key := "h_" + id
+	if sprites.has(key):
+		sprites[key].one_shot(kind)
+	elif models.has(key):
+		models[key].one_shot(kind)
+
+func add_fx(pos: Vector2, kind: String) -> void:
+	fx.append({"pos": pos, "kind": kind, "t": 0.0, "dur": 0.9})
+
+func actor(id: String) -> Dictionary:
+	for a in actors:
+		if a["id"] == id:
+			return a
+	return {}
+
+## Точка над головой говорящего (координаты слоя): герой на дороге или в бою, либо актёр кат-сцены.
+func speaker_anchor(id: String) -> Vector2:
+	var a := actor(id)
+	if not a.is_empty():
+		return Vector2(float(a["x"]), GROUND - Art.top_h(a["look"]) * SC - 14.0)
+	var x := NAN
+	if sim != null:
+		var u = sim.hero_unit(id)
+		if u != null:
+			x = float(u["x"])
+	else:
+		for w in walk_units:
+			if w["look"] == id:
+				x = float(w["x"])
+	if is_nan(x):
+		return Vector2(-1, -1)
+	var y := GROUND - _hero_stagger(id) * LANE_PX
+	var h := Art.top_h(id) * SC + 18.0
+	if Settings.hero_look() == "3d" and MODEL_LOOKS.has(id):
+		h = 228.0
+	elif Settings.hero_look() == "2d" and SPRITE_LOOKS.has(id):
+		h = 205.0
+	return Vector2(x, y - h)
 
 func _draw_projs() -> void:
 	for p in projs:
@@ -662,19 +903,84 @@ func _draw_floats() -> void:
 		draw_string(UIK.fb(), p + Vector2(-60, 0), f["text"], HORIZONTAL_ALIGNMENT_CENTER, 120, fs, col)
 
 # ================================================================ Ввод
+## Можно ли выбрать юнит целью в текущем режиме наведения: атакующие приёмы — только видимые враги,
+## союзные — только герои. Без режима наведения кликабельны все живые.
+func can_target(u: Dictionary) -> bool:
+	if not u["alive"]:
+		return false
+	match target_mode:
+		"enemy":
+			return u["side"] == "enemy" and not sim.in_dark(u)
+		"ally":
+			return u["side"] == "hero"
+		"ground":
+			return false
+	return true
+
+## Прямоугольник, где юнит нарисован на экране: от ног (с учётом полосы глубины) до полоски здоровья.
+func unit_rect(u: Dictionary) -> Rect2:
+	var k := _tier_k(u)
+	var py := float(_v(u["uid"]).get("py", (_depth(u) - (BattleSim.LANES - 1) * 0.5) * LANE_PX))
+	var feet := GROUND + py
+	var h := Art.top_h(u["look"]) * SC * k + 14.0
+	if u["key"] in ["brute", "captain"]:
+		h += 20.0
+	var hw := 26.0
+	match u["look"]:
+		"wolf", "wolf_alpha", "boar", "lynx", "spider":
+			hw = 40.0
+		"bear":
+			hw = 50.0
+		"spiderling":
+			hw = 24.0
+	hw *= k
+	return Rect2(u["x"] - hw, feet - h, hw * 2.0, h + 14.0)
+
+## Плашка над юнитом — полоска здоровья вместе с именем над ней: наведение на неё тоже выбирает юнита.
+func bar_rect(u: Dictionary) -> Rect2:
+	var py := float(_v(u["uid"]).get("py", (_depth(u) - (BattleSim.LANES - 1) * 0.5) * LANE_PX))
+	var bg := _bar_geom(u, Vector2(u["x"], GROUND + py))
+	var above := 6.0
+	if u["side"] == "enemy":
+		above = 36.0 if u.get("champion", "") != "" else 20.0
+	return Rect2(u["x"] - bg.y * 0.5 - 4.0, bg.x - above, bg.y + 8.0, above + 12.0)
+
+## Юнит под курсором. Сначала ищем того, в чей силуэт попала точка (при наложении — ближайшего к центру,
+## а из равных — стоящего ближе к камере); если не попали ни в кого, берём ближайшего в пределах MAGNET px.
+## Текущая подсвеченная цель держится, пока соседняя не станет заметно ближе, — подсветка не скачет.
+const MAGNET := 28.0
 func unit_at(p: Vector2) -> int:
 	if sim == null:
 		return -1
 	var best := -1
-	var bd := 1e9
+	var bs := 1e9
+	var cur_s := 1e9
 	for u in sim.s["units"]:
-		if not u["alive"]:
+		if not can_target(u):
 			continue
-		var dx: float = abs(u["x"] - p.x)
-		if dx < 40 and p.y > GROUND - 150 and p.y < GROUND + 30:
-			if dx < bd:
-				bd = dx
-				best = u["uid"]
+		var r := unit_rect(u)
+		var c := r.get_center()
+		var sc: float
+		var br := bar_rect(u)
+		if not sim.in_dark(u) and br.has_point(p):
+			# Попали в плашку со здоровьем — это самый точный выбор
+			sc = 0.05 + abs(p.x - br.get_center().x) / br.size.x * 0.1
+		elif r.has_point(p):
+			sc = abs(p.x - c.x) / (r.size.x * 0.5) * 0.7 + abs(p.y - c.y) / (r.size.y * 0.5) * 0.3 - _depth(u) * 0.04
+		else:
+			var dx: float = max(r.position.x - p.x, 0.0, p.x - r.end.x)
+			var dy: float = max(r.position.y - p.y, 0.0, p.y - r.end.y)
+			var d := Vector2(dx, dy).length()
+			if d > MAGNET:
+				continue
+			sc = 1.0 + d / MAGNET
+		if u["uid"] == hover_uid:
+			cur_s = sc
+		if sc < bs:
+			bs = sc
+			best = u["uid"]
+	if cur_s < 1e8 and cur_s <= bs + 0.18:
+		return hover_uid
 	return best
 
 func object_at(p: Vector2) -> String:
@@ -690,14 +996,21 @@ func _gui_input(ev: InputEvent) -> void:
 	if ev is InputEventMouseMotion:
 		hover_uid = unit_at(ev.position)
 		hover_pos = ev.position
+		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if (hover_uid >= 0 and target_mode in ["enemy", "ally"]) else Control.CURSOR_ARROW
 	elif ev is InputEventMouseButton and ev.pressed:
 		if target_mode == "ground" and ev.button_index == MOUSE_BUTTON_LEFT:
 			ground_clicked.emit(ev.position.x)
 			accept_event()
 			return
 		var uid := unit_at(ev.position)
+		hover_uid = uid
 		if uid >= 0:
 			unit_clicked.emit(uid, ev.button_index)
+			accept_event()
+		elif target_mode != "":
+			# В режиме наведения клик мимо цели ничего не делает (правая кнопка — отмена)
+			if ev.button_index == MOUSE_BUTTON_RIGHT:
+				unit_clicked.emit(-1, MOUSE_BUTTON_RIGHT)
 			accept_event()
 		else:
 			var o := object_at(ev.position)

@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/StatRow.tscn" id="3_row"]
 
 [node name="StatsPanel" type="VBoxContainer"]
-custom_minimum_size = Vector2(380, 0)
+custom_minimum_size = Vector2(366, 0)
 theme_override_constants/separation = 8
 script = ExtResource("1_stats")
 
@@ -31,8 +31,15 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="AttrHeader" type="Label" parent="."]
+[node name="AttrHead" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AttrHeader" type="Label" parent="AttrHead"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 theme_type_variation = &"CaptionLabel"
 text = "АТРИБУТЫ"
 

@@ -13,6 +13,18 @@ func _ready() -> void:
 	%LastResult.pressed.connect(func(): chosen.emit("last_result"))
 	%Abandon.pressed.connect(func(): chosen.emit("abandon"))
 	%MainMenu.pressed.connect(func(): chosen.emit("main_menu"))
+	# вид героев (Settings.hero_look) меняется сразу, без закрытия меню
+	var looks := {"simple": %LookSimple, "2d": %Look2D, "3d": %Look3D}
+	for v in looks:
+		looks[v].pressed.connect(func():
+			Settings.set_hero_look(v)
+			_mark_look(looks))
+	_mark_look(looks)
+
+
+func _mark_look(looks: Dictionary) -> void:
+	for v in looks:
+		UIK.mark(looks[v], v == Settings.hero_look())
 
 ## title — заголовок окна; actions — какие кнопки показать (из ACTIONS)
 func setup(title: String, actions: Array, show_controls := false) -> SystemMenu:
