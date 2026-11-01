@@ -82,7 +82,7 @@
           "node": 6, "name": "Хутор Тимофея", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
             [["shade_wolf", 2], ["shade_lynx", 2], ["wolf", 2]],
-            [["shade_wolf", 2], ["shade_wolf", 2]]
+            [["shade_wolf", 2], ["shade_wolf", 2], ["wolf", 2]]
           ],
           "ambush": []
         }
@@ -118,10 +118,10 @@
           ]
         },
         {
-          "wave": 5, "name": "Волна 5", "hp_pct": 100, "dmg_pct": 100,
+          "wave": 5, "name": "Волна 5", "hp_pct": 90, "dmg_pct": 100,
           "groups": [
             [["brute", 3], ["bandit", 3], ["archer", 3]],
-            [["shade_wolf", 3], ["shade_wolf", 3], ["arsonist", 3]]
+            [["shade_wolf", 3], ["arsonist", 3]]
           ]
         }
       ]
@@ -186,10 +186,10 @@
           ]
         },
         {
-          "wave": 5, "name": "Волна 5", "hp_pct": 90, "dmg_pct": 100,
+          "wave": 5, "name": "Волна 5", "hp_pct": 80, "dmg_pct": 100,
           "groups": [
-            [["brute", 4], ["arsonist", 4], ["bandit", 4]],
-            [["archer", 4], ["bandit", 4]]
+            [["bandit", 4], ["arsonist", 4], ["bandit", 4]],
+            [["archer", 4]]
           ]
         }
       ]
@@ -238,7 +238,8 @@
           "node": 3, "name": "Помост вожака", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
             [["bandit", 7], ["archer", 7], ["arsonist", 7]],
-            [["captain", 7], ["archer", 7], ["shade_alpha", 7]]
+            [["shade_alpha", 7], ["shade_wolf", 7]],
+            [["captain", 7], ["bandit", 7]]
           ],
           "ambush": []
         }
