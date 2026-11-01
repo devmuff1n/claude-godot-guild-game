@@ -421,6 +421,12 @@ func _expedition_dialogs() -> void:
 		["арена", func():
 			var m: SystemMenu = _host(preload("res://scenes/ui/SystemMenu.tscn"))
 			m.setup("Пауза", ["resume", "abandon"], true)],
+		["деревня", func():
+			var m: SystemMenu = _host(preload("res://scenes/ui/SystemMenu.tscn"))
+			m.setup("Меню", ["resume", "save", "last_result", "main_menu"])],
+		["настройки", func():
+			var m: SystemMenu = _host(preload("res://scenes/ui/SystemMenu.tscn"))
+			m.setup("Настройки", [])],
 	])
 	# Привал: без разговора, разговор с каждым, сцена у костра, личный вечер
 	var camp := [["пусто", func():

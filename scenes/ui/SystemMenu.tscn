@@ -23,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(380, 410)
+custom_minimum_size = Vector2(380, 490)
 layout_mode = 2
 theme_type_variation = &"PanelModal"
 
@@ -116,6 +116,67 @@ size_flags_horizontal = 3
 focus_mode = 0
 theme_type_variation = &"ButtonSmall"
 text = "3D"
+
+[node name="WindowRow" type="HBoxContainer" parent="Center/Panel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="WindowLabel" type="Label" parent="Center/Panel/Box/WindowRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+tooltip_text = "Режим окна игры."
+mouse_filter = 1
+theme_type_variation = &"MutedLabel"
+text = "Экран"
+
+[node name="WinWindowed" type="Button" parent="Center/Panel/Box/WindowRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Окно выбранного размера"
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Окно"
+
+[node name="WinFullscreen" type="Button" parent="Center/Panel/Box/WindowRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Во весь экран без рамки: быстро переключается на другие окна"
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Без рамки"
+
+[node name="WinExclusive" type="Button" parent="Center/Panel/Box/WindowRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Исключительный полноэкранный режим"
+focus_mode = 0
+theme_type_variation = &"ButtonSmall"
+text = "Полный"
+
+[node name="ResRow" type="HBoxContainer" parent="Center/Panel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ResLabel" type="Label" parent="Center/Panel/Box/ResRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+tooltip_text = "Размер окна. Интерфейс масштабируется целиком, пропорции 16:9."
+mouse_filter = 1
+theme_type_variation = &"MutedLabel"
+text = "Размер"
+
+[node name="Resolution" type="OptionButton" parent="Center/Panel/Box/ResRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
 
 [node name="Spacer" type="Control" parent="Center/Panel/Box"]
 layout_mode = 2

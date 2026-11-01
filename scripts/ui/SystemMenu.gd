@@ -20,6 +20,32 @@ func _ready() -> void:
 			Settings.set_hero_look(v)
 			_mark_look(looks))
 	_mark_look(looks)
+	# режим окна и размер (Settings.window_mode/resolution) тоже применяются сразу
+	var modes := {"windowed": %WinWindowed, "fullscreen": %WinFullscreen, "exclusive": %WinExclusive}
+	for v in modes:
+		modes[v].pressed.connect(func():
+			Settings.set_window_mode(v)
+			_mark_display(modes))
+	for r: Vector2i in Settings.RESOLUTIONS:
+		%Resolution.add_item("%d × %d" % [r.x, r.y])
+	%Resolution.item_selected.connect(func(i: int):
+		Settings.set_resolution(Settings.RESOLUTIONS[i])
+		_mark_display(modes))
+	_mark_display(modes)
+
+
+func _mark_display(modes: Dictionary) -> void:
+	for v in modes:
+		UIK.mark(modes[v], v == Settings.window_mode())
+	var opt: OptionButton = %Resolution
+	var windowed := Settings.window_mode() == "windowed"
+	for i in Settings.RESOLUTIONS.size():
+		var fits := Settings.fits_screen(Settings.RESOLUTIONS[i])
+		opt.set_item_disabled(i, not fits)
+		opt.set_item_tooltip(i, "" if fits else "Больше экрана")
+	opt.select(Settings.RESOLUTIONS.find(Settings.resolution()))
+	opt.disabled = not windowed
+	opt.tooltip_text = "" if windowed else "Во весь экран размер окна равен экрану"
 
 
 func _mark_look(looks: Dictionary) -> void:

@@ -2,6 +2,7 @@ extends Control
 ## Титульный экран (scenes/screens/TitleScreen.tscn): логотип, главное меню и три слота сохранения.
 
 const SLOT_ROW := preload("res://scenes/ui/SlotRow.tscn")
+const SYSTEM_MENU := preload("res://scenes/ui/SystemMenu.tscn")
 
 var main
 var params: Dictionary = {}
@@ -11,6 +12,7 @@ var confirm_del := -1
 
 func _ready() -> void:
 	%QuitButton.pressed.connect(func(): get_tree().quit())
+	%SettingsButton.pressed.connect(show_settings)
 	%ContinueLatest.pressed.connect(func():
 		var i := _latest_slot()
 		if i >= 0:
@@ -42,6 +44,13 @@ func _latest_slot() -> int:
 			best = i
 			best_t = t
 	return best
+
+## Настройки (вид героев, экран) — то же системное меню, без кнопок действий
+func show_settings() -> void:
+	var m: SystemMenu = SYSTEM_MENU.instantiate()
+	add_child(m)
+	m.setup("Настройки", [])
+	m.chosen.connect(func(_a): m.queue_free())
 
 func new_game(i: int) -> void:
 	Game.new_game(i)

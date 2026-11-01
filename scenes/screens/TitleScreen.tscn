@@ -92,6 +92,15 @@ theme_override_constants/separation = 8
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="SettingsButton" type="Button" parent="Left"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+theme_type_variation = &"ButtonGhost"
+text = "Настройки"
+
 [node name="QuitButton" type="Button" parent="Left"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 40)

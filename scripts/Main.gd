@@ -15,6 +15,7 @@ var current: Control
 @onready var toast_box: VBoxContainer = %ToastBox
 
 func _ready() -> void:
+	Settings.apply_display()
 	get_tree().set_auto_accept_quit(false)
 	Game.toast.connect(_toast)
 	var shot: String = OS.get_environment("GUILD_SHOT")
