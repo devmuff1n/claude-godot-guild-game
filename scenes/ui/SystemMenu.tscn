@@ -166,7 +166,7 @@ theme_override_constants/separation = 6
 [node name="ResLabel" type="Label" parent="Center/Panel/Box/ResRow"]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
-tooltip_text = "Размер окна. Интерфейс масштабируется целиком, пропорции 16:9."
+tooltip_text = "Разрешение кадра. В окне — и размер окна, если помещается на экран; во весь экран кадр растягивается на экран."
 mouse_filter = 1
 theme_type_variation = &"MutedLabel"
 text = "Размер"

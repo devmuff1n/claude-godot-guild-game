@@ -66,30 +66,30 @@ static func set_resolution(v: Vector2i) -> void:
 	apply_display()
 
 
-## Экран, на котором поместится окно размера v: текущий, иначе любой другой (-1 — ни одного)
-static func screen_for(v: Vector2i) -> int:
-	var cur := DisplayServer.window_get_current_screen()
-	var order := [cur]
-	for i in DisplayServer.get_screen_count():
-		if i != cur:
-			order.append(i)
-	for i in order:
-		var sz := DisplayServer.screen_get_size(i)
-		if v.x <= sz.x and v.y <= sz.y:
-			return i
-	return -1
+## Самый большой размер 16:9, который помещается в рабочую область экрана scr (с рамкой окна)
+static func window_fit(v: Vector2i, scr: int) -> Vector2i:
+	var area := DisplayServer.screen_get_usable_rect(scr).size - Vector2i(0, 40)
+	var k := minf(1.0, minf(float(area.x) / v.x, float(area.y) / v.y))
+	return Vector2i(int(v.x * k), int(v.y * k))
 
 
-static func fits_screen(v: Vector2i) -> bool:
-	return screen_for(v) >= 0
+## Во сколько раз 3D-виды (HiResView) рисуются крупнее макета 1600×900: разрешение / 900
+static func render_scale() -> float:
+	_load()
+	return _resolution.y / 900.0
 
 
-## Применить режим окна и размер (при запуске и при смене в меню)
+## Применить режим окна и разрешение (при запуске и при смене в меню).
+## Интерфейс — макет 1600×900, растянутый на окно целиком (canvas_items/keep): он всегда чёткий
+## в родных пикселях окна. Разрешение задаёт, в каком размере рисуется 3D (HiResView), и размер
+## окна в оконном режиме (если не влезает в экран — наибольший влезающий 16:9).
 static func apply_display() -> void:
 	_load()
 	if not _display_saved or DisplayServer.get_name() == "headless":
 		return
 	var win := (Engine.get_main_loop() as SceneTree).root
+	var res := _resolution
+	(Engine.get_main_loop() as SceneTree).call_group(HiResView.GROUP, "refresh")
 	match _window_mode:
 		"fullscreen":
 			win.mode = Window.MODE_FULLSCREEN
@@ -97,20 +97,13 @@ static func apply_display() -> void:
 			win.mode = Window.MODE_EXCLUSIVE_FULLSCREEN
 		_:
 			win.mode = Window.MODE_WINDOWED
-			var res := _resolution
-			if not _force_res and not fits_screen(res):
-				res = RESOLUTIONS[0]
-				for r in RESOLUTIONS:
-					if fits_screen(r):
-						res = r
-			var scr := screen_for(res)
-			if scr < 0:
-				scr = DisplayServer.window_get_current_screen()
+			var scr := DisplayServer.window_get_current_screen()
+			var sz := res if _force_res else window_fit(res, scr)
 			var area := DisplayServer.screen_get_usable_rect(scr)
-			win.size = res
+			win.size = sz
 			# по центру рабочей области, но заголовок окна не уходит за верх экрана
-			var pos := area.position + (area.size - res) / 2
-			win.position = Vector2i(max(pos.x, DisplayServer.screen_get_position(scr).x), max(pos.y, area.position.y))
+			var pos := area.position + (area.size - sz) / 2
+			win.position = Vector2i(max(pos.x, area.position.x), max(pos.y, area.position.y))
 
 
 static func _save_display() -> void:

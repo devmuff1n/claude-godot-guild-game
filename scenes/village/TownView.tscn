@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/ui/HiResView.gd" id="hires_view"]
 [ext_resource type="Script" path="res://scripts/ui/village/TownView.gd" id="1_town"]
 [ext_resource type="PackedScene" path="res://scenes/village/Town3D.tscn" id="2_town3d"]
 
@@ -22,6 +23,7 @@ offset_top = -78.0
 offset_right = 16.0
 offset_bottom = 16.0
 stretch = true
+script = ExtResource("hires_view")
 
 [node name="TownViewport" type="SubViewport" parent="TownView"]
 unique_name_in_owner = true

@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/ui/HiResView.gd" id="hires_view"]
 [ext_resource type="Script" path="res://scripts/ui/ExpeditionScreen.gd" id="1_g0r50"]
 [ext_resource type="Script" path="res://scripts/ui/BattleView.gd" id="2_8o1qk"]
 [ext_resource type="PackedScene" path="res://scenes/expedition/ExpeditionTopBar.tscn" id="3_top"]
@@ -27,6 +28,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 stretch = true
+script = ExtResource("hires_view")
 
 [node name="LevelViewport" type="SubViewport" parent="LevelView"]
 unique_name_in_owner = true

@@ -28,11 +28,8 @@ func _ready() -> void:
 			_mark_display(modes))
 	for r: Vector2i in Settings.RESOLUTIONS:
 		%Resolution.add_item("%d × %d" % [r.x, r.y])
-	# выбор размера во весь экран переключает в окно этого размера
 	%Resolution.item_selected.connect(func(i: int):
 		Settings.set_resolution(Settings.RESOLUTIONS[i])
-		if Settings.window_mode() != "windowed":
-			Settings.set_window_mode("windowed")
 		_mark_display(modes))
 	_mark_display(modes)
 
@@ -40,14 +37,7 @@ func _ready() -> void:
 func _mark_display(modes: Dictionary) -> void:
 	for v in modes:
 		UIK.mark(modes[v], v == Settings.window_mode())
-	var opt: OptionButton = %Resolution
-	var windowed := Settings.window_mode() == "windowed"
-	for i in Settings.RESOLUTIONS.size():
-		var fits := Settings.fits_screen(Settings.RESOLUTIONS[i])
-		opt.set_item_disabled(i, not fits)
-		opt.set_item_tooltip(i, "" if fits else "Больше экрана")
-	opt.select(Settings.RESOLUTIONS.find(Settings.resolution()))
-	opt.tooltip_text = "" if windowed else "Во весь экран — разрешение монитора; выбор размера переключит в окно"
+	%Resolution.select(Settings.RESOLUTIONS.find(Settings.resolution()))
 
 
 func _mark_look(looks: Dictionary) -> void:
