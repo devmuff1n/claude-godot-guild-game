@@ -66,11 +66,22 @@ static func set_resolution(v: Vector2i) -> void:
 	apply_display()
 
 
-## Размер помещается в рабочую область экрана, где сейчас окно (с запасом на рамку окна)
+## Экран, на котором поместится окно размера v: текущий, иначе любой другой (-1 — ни одного)
+static func screen_for(v: Vector2i) -> int:
+	var cur := DisplayServer.window_get_current_screen()
+	var order := [cur]
+	for i in DisplayServer.get_screen_count():
+		if i != cur:
+			order.append(i)
+	for i in order:
+		var sz := DisplayServer.screen_get_size(i)
+		if v.x <= sz.x and v.y <= sz.y:
+			return i
+	return -1
+
+
 static func fits_screen(v: Vector2i) -> bool:
-	var scr := DisplayServer.window_get_current_screen()
-	var area := DisplayServer.screen_get_usable_rect(scr).size
-	return v.x <= area.x and v.y <= area.y - 32
+	return screen_for(v) >= 0
 
 
 ## Применить режим окна и размер (при запуске и при смене в меню)
@@ -92,10 +103,14 @@ static func apply_display() -> void:
 				for r in RESOLUTIONS:
 					if fits_screen(r):
 						res = r
-			win.size = res
-			var scr := DisplayServer.window_get_current_screen()
+			var scr := screen_for(res)
+			if scr < 0:
+				scr = DisplayServer.window_get_current_screen()
 			var area := DisplayServer.screen_get_usable_rect(scr)
-			win.position = area.position + (area.size - res) / 2
+			win.size = res
+			# по центру рабочей области, но заголовок окна не уходит за верх экрана
+			var pos := area.position + (area.size - res) / 2
+			win.position = Vector2i(max(pos.x, DisplayServer.screen_get_position(scr).x), max(pos.y, area.position.y))
 
 
 static func _save_display() -> void:
