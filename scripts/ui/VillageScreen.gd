@@ -17,7 +17,6 @@ const BACKGROUNDS := {
 }
 const SYSTEM_MENU := preload("res://scenes/ui/SystemMenu.tscn")
 const RESULT := preload("res://scenes/ui/ResultDialog.tscn")
-const LEVELUP := preload("res://scenes/ui/LevelUpDialog.tscn")
 const STORY := preload("res://scenes/ui/StoryDialog.tscn")
 
 const STORY_TEXT := [
@@ -48,8 +47,15 @@ func _ready() -> void:
 		show_result(params["result"])
 	elif not Game.state.get("intro_seen", false):
 		_show_intro()
+	elif not Game.state["pending_choice"].is_empty():
+		show_pending_choice()
 
 func show_tab(id: String, opts := {}) -> void:
+	if not Game.feature_open(id):
+		id = "town"
+	Game.mark_feature_seen(id)
+	if id == "shop":
+		Game.mark_feature_seen("forge")
 	tab = id
 	top_bar.set_tab(id)
 	var bg_path: String = BACKGROUNDS.get(id, "res://assets/bg/village.png")
@@ -113,31 +119,22 @@ func _on_menu(a: String) -> void:
 		"main_menu":
 			go_title()
 
+## Вступительная кат-сцена (если её ещё не видели) — отдельный экран в 3D-поселении
 func _show_intro() -> void:
-	var d: StoryDialog = _open(STORY.instantiate())
-	d.setup("БЕДНЕЙШАЯ ГИЛЬДИЯ КОРОЛЕВСТВА", "«Последний грош»",
-		[STORY_TEXT[0], "Эйден — жрец, на котором держится гильдия: её старый глава, Ортвин Хейл, почти не встаёт с кресла. С Эйденом Марек Вальд, бывший сержант со щитом; эльфийская охотница Элира; чернокнижница Нэрис Вейль. Денег нет. Работа — есть."],
-		"Первое поручение ждёт на доске: «Тревожные вести».", "За работу", DB.HERO_IDS)
-	d.closed.connect(func():
-		Game.state["intro_seen"] = true
-		Game.save()
-		close_modal()
-		show_tab("board"))
+	main.goto.call_deferred("intro")
 
 func show_result(res: Dictionary) -> void:
 	var d: ResultDialog = _open(RESULT.instantiate())
 	d.setup(res)
 	d.closed.connect(func():
 		close_modal()
-		var ups: Array = res.get("levels", []).filter(func(lu): return lu.has("before"))
-		if not ups.is_empty():
-			var lv: LevelUpDialog = _open(LEVELUP.instantiate())
-			lv.setup(ups)
-			lv.closed.connect(func():
-				close_modal()
-				_after_result(res))
-		else:
-			_after_result(res))
+		_after_result(res))
+
+## Награда на выбор, которую не успели взять (игру закрыли на шаге выбора)
+func show_pending_choice() -> void:
+	var d: ResultDialog = _open(RESULT.instantiate())
+	d.setup_choice()
+	d.closed.connect(close_modal)
 
 func _after_result(res: Dictionary) -> void:
 	if res.get("chapter_end", false) and not Game.state.get("ending_seen", false):

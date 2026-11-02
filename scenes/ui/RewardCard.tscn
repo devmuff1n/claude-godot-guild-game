@@ -1,10 +1,12 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/ui/ItemSlot.tscn" id="1_vhep1"]
+[ext_resource type="Script" path="res://scripts/ui/RewardCard.gd" id="2_card"]
 
 [node name="RewardCard" type="PanelContainer"]
 custom_minimum_size = Vector2(300, 0)
 theme_type_variation = &"PanelInset"
+script = ExtResource("2_card")
 
 [node name="Box" type="VBoxContainer" parent="."]
 layout_mode = 2

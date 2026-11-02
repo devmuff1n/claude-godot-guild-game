@@ -106,6 +106,12 @@ func refresh() -> void:
 			var n := int(it4.get("rerolls", 0))
 			if n > 0:
 				%RerollButton.tooltip_text += "\nУже перекована: %d раз(а)." % n
+	# Перековка — в кузнице, она строится позже лавки; кнопка держит место в строке
+	var forge := Game.feature_open("forge")
+	%RerollButton.modulate.a = 1.0 if forge else 0.0
+	%RerollButton.mouse_filter = Control.MOUSE_FILTER_STOP if forge else Control.MOUSE_FILTER_IGNORE
+	if not forge:
+		%RerollButton.disabled = true
 	UIK.clear(%ConsSell)
 	for id in ["potion_hp", "potion_mp", "kit"]:
 		if int(Game.state["potions"].get(id, 0)) > 0:

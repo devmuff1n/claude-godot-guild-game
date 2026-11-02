@@ -94,9 +94,15 @@ func save() -> void:
 
 func _migrate() -> void:
 	var fresh := _fresh_state()
+	var had_seen := state.has("features_seen")
 	for k in fresh.keys():
 		if not state.has(k):
 			state[k] = fresh[k]
+	# Старые сохранения: всё, что уже открыто, считается увиденным (без меток «новое» на вкладках)
+	if not had_seen:
+		for f in DB.FEATURES.keys():
+			if feature_open(f):
+				state["features_seen"][f] = true
 	for id in state.get("heroes", {}).keys():
 		# Ручное распределение очков атрибутов убрано: рост атрибутов теперь целиком в DB.HEROES → grow
 		state["heroes"][id].erase("alloc")
@@ -124,7 +130,7 @@ func _fresh_state() -> Dictionary:
 		"formation": ["marek", "aiden", "neris", "elira"],
 		"relations": {}, "knowledge": {"facts": {}, "prefs": {}}, "topics_done": {}, "pair_done": {},
 		"pending_choice": [], "expedition": null, "last_result": {}, "news": [], "saved_at": "",
-		"intro_seen": false, "ending_seen": false, "diplomacy": null, "cutscenes_seen": {},
+		"intro_seen": false, "ending_seen": false, "diplomacy": null, "cutscenes_seen": {}, "features_seen": {},
 	}
 	var prev := state
 	state = st  # next_uid нужен для генерации
@@ -589,6 +595,33 @@ func contract_available(cid: String) -> bool:
 
 func contract_done_count(cid: String) -> int:
 	return int(state["completed"].get(cid, 0))
+
+## Название здания для уведомлений
+func building_name(id: String) -> String:
+	return DB.BUILDING_NAMES.get(id, id)
+
+# ================================================================ Открытие возможностей
+## Всё открыто сразу (только для тестов интерфейса)
+var all_features := false
+
+## Открыта ли функция (DB.FEATURES): после первого выполнения нужного поручения. Неизвестная — открыта.
+func feature_open(id: String) -> bool:
+	var f: Dictionary = DB.FEATURES.get(id, {})
+	return all_features or f.is_empty() or contract_done_count(f["after"]) > 0
+
+## Стоит ли здание поселения (DB.BUILDINGS). Неизвестное — стоит.
+func building_built(id: String) -> bool:
+	var after: String = DB.BUILDINGS.get(id, "")
+	return all_features or after == "" or contract_done_count(after) > 0
+
+## Функция открыта, но игрок её ещё не видел — метка «новое» на вкладке
+func feature_new(id: String) -> bool:
+	return feature_open(id) and not state.get("features_seen", {}).has(id)
+
+func mark_feature_seen(id: String) -> void:
+	if feature_new(id):
+		state["features_seen"][id] = true
+		changed.emit()
 
 func default_purse() -> int:
 	return min(int(state["treasury"]), 60)
@@ -1090,7 +1123,8 @@ func finish_expedition(kind: String) -> Dictionary:
 				res["chapter_end"] = true
 		res["levels"] = _apply_levels()
 		_gen_shop(state, rng)
-		lines.append("Ассортимент лавки обновлён.")
+		if feature_open("shop"):
+			lines.append("Ассортимент лавки обновлён.")
 	res["by_hero"] = e["counters"].get("by_hero", {}).duplicate(true)
 	var cut := int(e["counters"].get("xp_cut", 0))
 	if kind != "abandon" and cut > 0:
@@ -1122,12 +1156,27 @@ func unlock_snapshot() -> Dictionary:
 	for cid in DB.CONTRACTS.keys():
 		if DB.CONTRACTS[cid].get("side", false) and contract_available(cid):
 			side[cid] = true
-	return {"stages": stages, "abilities": abil, "side": side, "social": social_unlocked()}
+	var feats := {}
+	for f in DB.FEATURES.keys():
+		if feature_open(f):
+			feats[f] = true
+	var built := {}
+	for b in DB.BUILDINGS.keys():
+		if building_built(b):
+			built[b] = true
+	return {"stages": stages, "abilities": abil, "side": side, "social": social_unlocked(), "features": feats, "buildings": built}
 
 ## Новинки по сравнению со снимком: [{kind, title, tip}]. Уровень героев к этому моменту уже применён.
 func unlocks_since(before: Dictionary) -> Array:
 	var now := unlock_snapshot()
 	var out := []
+	for f in DB.FEATURES.keys():
+		if now["features"].has(f) and not before.get("features", {}).has(f):
+			var fd: Dictionary = DB.FEATURES[f]
+			out.append({"kind": "feature", "icon": fd["icon"], "title": fd["title"], "tip": fd["tip"]})
+	for b in DB.BUILDINGS.keys():
+		if now["buildings"].has(b) and not before.get("buildings", {}).has(b):
+			out.append({"kind": "building", "icon": "home", "title": "Построено: %s" % building_name(b), "tip": "Новое здание в поселении"})
 	var by_hero := {}
 	for ab in now["abilities"].keys():
 		if not before["abilities"].has(ab):

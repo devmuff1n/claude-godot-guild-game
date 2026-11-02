@@ -35,17 +35,11 @@ func refresh() -> void:
 	$Columns/Right/SquadPanel.visible = pc.is_empty()
 	UIK.clear(%PendingCards)
 	for i in pc.size():
-		var card: PanelContainer = REWARD_CARD.instantiate()
+		var card: RewardCard = REWARD_CARD.instantiate()
 		%PendingCards.add_child(card)
-		var it: Dictionary = pc[i]
-		card.get_node("%Slot").item = it
-		card.get_node("%Name").text = Items.display_name(it)
-		card.get_node("%Name").add_theme_color_override("font_color", Items.rarity_color(it))
-		card.get_node("%Type").text = "%s · ур. %d" % [Items.type_label(it), int(it["ilvl"])]
-		# Название, уровень и тип уже в шапке карточки — в описании только характеристики
-		card.get_node("%Info").text = Items.tooltip_bb(it, "", 1, "", 3) + _context_bb(it, card.get_node("%Slot"))
+		card.setup(pc[i])
 		var idx := i
-		card.get_node("%ChooseButton").pressed.connect(func():
+		card.chosen.connect(func():
 			Game.choose_pending(idx)
 			refresh())
 	# Запасы
@@ -86,26 +80,3 @@ func _fill_next() -> void:
 	%NextCaption.text = "СЛЕДУЮЩЕЕ ПОРУЧЕНИЕ"
 	%NextName.text = c["name"]
 	%NextInfo.text = "Уровень %d · оплата %d мон." % [int(c["level"]), int(c["pay"])]
-
-## Кому поможет награда (как в Hades): герой, которому вещь даёт больший прирост, и что изменится против надетого.
-## Слоту карточки назначается этот герой — подсказка покажет сравнение с надетым.
-func _context_bb(it: Dictionary, slot: ItemSlot) -> String:
-	var best_h := ""
-	var best := {"slot": "", "gain": -INF}
-	for h in DB.HERO_IDS:
-		if not Items.hero_can_use_type(h, it):
-			continue
-		var g := Game.upgrade_gain(h, it)
-		if g["slot"] != "" and float(g["gain"]) > float(best["gain"]):
-			best = g
-			best_h = h
-	if best_h == "":
-		return ""
-	slot.tip_hero = best_h
-	var old = Game.hero(best_h)["equip"].get(best["slot"])
-	var head := "\n\n[color=#%s]%s[/color] · %s" % [UIK.GOLD_HI.to_html(false), DB.hero_name(best_h), ("вместо «%s»" % Items.display_name(old)) if old != null else "пустой слот"]
-	var rows: Array = Items.compare_rows(it, old) if old != null else []
-	var out := [head]
-	for i in mini(rows.size(), 4):
-		out.append(Items._bb_row(rows[i]))
-	return "\n".join(out)

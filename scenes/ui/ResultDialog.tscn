@@ -24,13 +24,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(940, 700)
+custom_minimum_size = Vector2(1300, 760)
 layout_mode = 2
 theme_type_variation = &"PanelModal"
 
 [node name="Box" type="VBoxContainer" parent="Center/Panel"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 
 [node name="Head" type="VBoxContainer" parent="Center/Panel/Box"]
 layout_mode = 2
@@ -51,18 +51,171 @@ theme_override_font_sizes/font_size = 30
 text = "Поручение"
 horizontal_alignment = 1
 
-[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Box"]
+[node name="Steps" type="HBoxContainer" parent="Center/Panel/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="StepHeroes" type="Label" parent="Center/Panel/Box/Steps"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "1 · ГЕРОИ"
+
+[node name="StepLoot" type="Label" parent="Center/Panel/Box/Steps"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "2 · ДОБЫЧА"
+
+[node name="StepChoice" type="Label" parent="Center/Panel/Box/Steps"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "3 · НАГРАДА НА ВЫБОР"
+
+[node name="StepSummary" type="Label" parent="Center/Panel/Box/Steps"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "4 · ИТОГИ"
+
+[node name="Sep" type="HSeparator" parent="Center/Panel/Box"]
+layout_mode = 2
+
+[node name="Pages" type="Control" parent="Center/Panel/Box"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="PageHeroes" type="VBoxContainer" parent="Center/Panel/Box/Pages"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/separation = 14
+
+[node name="Caption" type="Label" parent="Center/Panel/Box/Pages/PageHeroes"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+theme_override_font_sizes/font_size = 24
+text = "Новый уровень!"
+horizontal_alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="Center/Panel/Box/Pages/PageHeroes"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Growth" type="HBoxContainer" parent="Center/Panel/Box/Pages/PageHeroes"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="PageLoot" type="VBoxContainer" parent="Center/Panel/Box/Pages"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/separation = 18
+
+[node name="MoneyBox" type="PanelContainer" parent="Center/Panel/Box/Pages/PageLoot"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"PanelSection"
+
+[node name="Box" type="VBoxContainer" parent="Center/Panel/Box/Pages/PageLoot/MoneyBox"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Caption" type="Label" parent="Center/Panel/Box/Pages/PageLoot/MoneyBox/Box"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "В КАЗНУ"
+horizontal_alignment = 1
+
+[node name="Row" type="HBoxContainer" parent="Center/Panel/Box/Pages/PageLoot/MoneyBox/Box"]
+layout_mode = 2
+alignment = 1
+
+[node name="Coin" parent="Center/Panel/Box/Pages/PageLoot/MoneyBox/Box/Row" instance=ExtResource("2_icon")]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Total" type="Label" parent="Center/Panel/Box/Pages/PageLoot/MoneyBox/Box/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_type_variation = &"BigValueLabel"
+theme_override_font_sizes/font_size = 30
+text = "+0"
+
+[node name="TotalNote" type="Label" parent="Center/Panel/Box/Pages/PageLoot/MoneyBox/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TinyLabel"
+horizontal_alignment = 1
+
+[node name="LootCaption" type="Label" parent="Center/Panel/Box/Pages/PageLoot"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ДОБЫЧА"
+horizontal_alignment = 1
+
+[node name="Loot" type="HFlowContainer" parent="Center/Panel/Box/Pages/PageLoot"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 10
+alignment = 1
+
+[node name="PageChoice" type="VBoxContainer" parent="Center/Panel/Box/Pages"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/separation = 14
+
+[node name="Caption" type="Label" parent="Center/Panel/Box/Pages/PageChoice"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+theme_override_font_sizes/font_size = 24
+text = "Выберите одну вещь"
+horizontal_alignment = 1
+
+[node name="ChoiceCards" type="HBoxContainer" parent="Center/Panel/Box/Pages/PageChoice"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="PageSummary" type="ScrollContainer" parent="Center/Panel/Box/Pages"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 horizontal_scroll_mode = 0
 
-[node name="ScrollBody" type="VBoxContainer" parent="Center/Panel/Box/Scroll"]
+[node name="ScrollBody" type="VBoxContainer" parent="Center/Panel/Box/Pages/PageSummary"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 12
 
-[node name="Outro" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody"]
+[node name="Outro" type="Label" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
@@ -70,163 +223,79 @@ theme_type_variation = &"QuoteLabel"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Sep" type="HSeparator" parent="Center/Panel/Box/Scroll/ScrollBody"]
-layout_mode = 2
-
-[node name="Columns" type="HBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody"]
-layout_mode = 2
-theme_override_constants/separation = 24
-
-[node name="Ledger" type="VBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody/Columns"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="MoneyBox" type="PanelContainer" parent="Center/Panel/Box/Scroll/ScrollBody/Columns"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 0)
-layout_mode = 2
-size_flags_vertical = 0
-theme_type_variation = &"PanelSection"
-
-[node name="Box" type="VBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody/Columns/MoneyBox"]
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="Caption" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody/Columns/MoneyBox/Box"]
-layout_mode = 2
-theme_type_variation = &"CaptionLabel"
-text = "В КАЗНУ"
-horizontal_alignment = 1
-
-[node name="Row" type="HBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody/Columns/MoneyBox/Box"]
-layout_mode = 2
-alignment = 1
-
-[node name="Coin" parent="Center/Panel/Box/Scroll/ScrollBody/Columns/MoneyBox/Box/Row" instance=ExtResource("2_icon")]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="Total" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody/Columns/MoneyBox/Box/Row"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"BigValueLabel"
-theme_override_font_sizes/font_size = 30
-text = "+0"
-
-[node name="TotalNote" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody/Columns/MoneyBox/Box"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"TinyLabel"
-horizontal_alignment = 1
-
-[node name="SummaryBox" type="VBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="Caption" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody/SummaryBox"]
-layout_mode = 2
-tooltip_text = "Сумма по всем выигранным боям похода. Поглощено — урон, снятый бронёй, блоком, стеной щитов и барьерами."
-mouse_filter = 1
-theme_type_variation = &"CaptionLabel"
-text = "ИТОГИ ПО ГЕРОЯМ"
-
-[node name="SummaryRows" type="VBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody/SummaryBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="LootBox" type="VBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody"]
+[node name="NewsBox" type="VBoxContainer" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Caption" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody/LootBox"]
-layout_mode = 2
-theme_type_variation = &"CaptionLabel"
-text = "ДОБЫЧА"
-
-[node name="Loot" type="HFlowContainer" parent="Center/Panel/Box/Scroll/ScrollBody/LootBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 8
-
-[node name="ChoiceNote" type="HBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody/LootBox"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="Icon" parent="Center/Panel/Box/Scroll/ScrollBody/LootBox/ChoiceNote" instance=ExtResource("2_icon")]
-layout_mode = 2
-size_flags_vertical = 4
-kind = "gift"
-
-[node name="Text" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody/LootBox/ChoiceNote"]
-layout_mode = 2
-theme_type_variation = &"GoodLabel"
-text = "В доме гильдии ждёт награда на выбор"
-
-[node name="GrowthBox" type="VBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="Caption" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody/GrowthBox"]
-layout_mode = 2
-theme_type_variation = &"CaptionLabel"
-text = "РОСТ ОТРЯДА"
-
-[node name="Growth" type="HFlowContainer" parent="Center/Panel/Box/Scroll/ScrollBody/GrowthBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 8
-
-[node name="NewsBox" type="VBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="UnlockRow" type="HBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody/NewsBox"]
+[node name="UnlockRow" type="HBoxContainer" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody/NewsBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Caption" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody/NewsBox/UnlockRow"]
+[node name="Caption" type="Label" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody/NewsBox/UnlockRow"]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"CaptionLabel"
 text = "ОТКРЫТО"
 
-[node name="Unlocks" type="HFlowContainer" parent="Center/Panel/Box/Scroll/ScrollBody/NewsBox/UnlockRow"]
+[node name="Unlocks" type="HFlowContainer" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody/NewsBox/UnlockRow"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 6
 
-[node name="NextRow" type="HBoxContainer" parent="Center/Panel/Box/Scroll/ScrollBody/NewsBox"]
+[node name="NextRow" type="HBoxContainer" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody/NewsBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Caption" type="Label" parent="Center/Panel/Box/Scroll/ScrollBody/NewsBox/NextRow"]
+[node name="Caption" type="Label" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody/NewsBox/NextRow"]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"CaptionLabel"
 text = "ДАЛЬШЕ"
 
-[node name="Next" type="HFlowContainer" parent="Center/Panel/Box/Scroll/ScrollBody/NewsBox/NextRow"]
+[node name="Next" type="HFlowContainer" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody/NewsBox/NextRow"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 6
+
+[node name="Sep" type="HSeparator" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody"]
+layout_mode = 2
+
+[node name="Columns" type="HBoxContainer" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody"]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="Ledger" type="VBoxContainer" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody/Columns"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="SummaryBox" type="VBoxContainer" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody/Columns"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Caption" type="Label" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody/Columns/SummaryBox"]
+layout_mode = 2
+tooltip_text = "Сумма по всем выигранным боям похода. Поглощено — урон, снятый бронёй, блоком, стеной щитов и барьерами."
+mouse_filter = 1
+theme_type_variation = &"CaptionLabel"
+text = "ИТОГИ ПО ГЕРОЯМ"
+
+[node name="SummaryRows" type="VBoxContainer" parent="Center/Panel/Box/Pages/PageSummary/ScrollBody/Columns/SummaryBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
 
 [node name="Footer" type="HBoxContainer" parent="Center/Panel/Box"]
 layout_mode = 2
@@ -238,4 +307,4 @@ custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"ButtonPrimary"
-text = "Продолжить"
+text = "Далее"

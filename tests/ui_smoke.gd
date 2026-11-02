@@ -49,10 +49,9 @@ func _ready() -> void:
 	await wait(5)
 	Game.slot = 1
 	Game.state = Game._fresh_state()
+	Game.state["intro_seen"] = true
 	Game.save()
 	main.goto("village")
-	await wait(3)
-	press("За работу")
 	await wait(3)
 	for cid in (["c1"] if OS.get_environment("QUICK") != "" else ["c1", "c2", "c3", "c4"]):
 		await run_contract(cid)
@@ -118,11 +117,13 @@ func run_contract(cid: String) -> void:
 	await wait(2)
 	press("В деревню")
 	await wait(2)
+	# Итоги по шагам: «Далее» до шага выбора, там — первая вещь, потом до конца
+	for k in 8:
+		if not press("Выбрать"):
+			if not press("Далее") and not press("Готово"):
+				break
+		await wait(2)
 	var vv = main.current
-	vv.show_tab("home")
-	await wait(2)
-	press("Выбрать")
-	await wait(2)
 	# Экипировка: всё подходящее и лучшее
 	for h in DB.HERO_IDS:
 		for i in Game.storage().size():

@@ -29,8 +29,12 @@ func refresh() -> void:
 	for id in DB.HERO_IDS:
 		pts += Game.perk_points(id)
 	var badges := {
-		"home": Game.state["pending_choice"].size() > 0 or Game.state["queue"].size() > 0,
-		"party": pts > 0,
+		"home": Game.state["pending_choice"].size() > 0 or Game.state["queue"].size() > 0 or Game.feature_new("home"),
+		"party": pts > 0 or Game.feature_new("party"),
+		"shop": Game.feature_new("shop") or Game.feature_new("forge"),
+		"arena": Game.feature_new("arena"),
+		# Пока не выполнено ни одного поручения — подсветить доску: с неё начинается игра
+		"board": Game.state["completed"].is_empty(),
 	}
 	for h in _hotspots():
 		h.set_badge(badges.get(h.tab, false))
@@ -49,7 +53,8 @@ func _on_gui_input(ev: InputEvent) -> void:
 		_mouse = ev.position
 		var h := _pick()
 		if h:
-			village.show_tab(h.tab)
+			# Пока «Дом гильдии» не открыт, главное здание ведёт к поручениям
+			village.show_tab(h.tab if Game.feature_open(h.tab) else "board")
 
 ## Зона здания под точкой контейнера
 func _pick() -> TownHotspot:
@@ -61,7 +66,8 @@ func _pick() -> TownHotspot:
 	q.collide_with_areas = true
 	q.collide_with_bodies = false
 	var hit := cam.get_world_3d().direct_space_state.intersect_ray(q)
-	return hit.get("collider") as TownHotspot if not hit.is_empty() else null
+	var h := hit.get("collider") as TownHotspot if not hit.is_empty() else null
+	return h if h and h.is_visible_in_tree() else null
 
 func _set_hot(h: TownHotspot) -> void:
 	if h == _hot:
@@ -73,7 +79,7 @@ func _set_hot(h: TownHotspot) -> void:
 	container.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if h else Control.CURSOR_ARROW
 	if h:
 		h.set_highlight(true)
-		hover_label.text = h.title
+		hover_label.text = h.title if Game.feature_open(h.tab) else "Поручения"
 
 func _physics_process(_delta: float) -> void:
 	_set_hot(_pick())

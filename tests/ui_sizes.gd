@@ -143,6 +143,7 @@ func _ready() -> void:
 	Game.slot = -1
 	Game.state = Game._fresh_state()
 	Game.state["intro_seen"] = true
+	Game.all_features = true
 	main.goto("village")
 	await wait(5)
 	vs = main.current
@@ -362,7 +363,6 @@ func _village_dialogs() -> void:
 			vs.show_menu()],
 	])
 	await check_window("Сюжетное окно", _ov, [
-		["вступление", func(): vs._show_intro()],
 		["концовка", func(): vs._show_ending()],
 	])
 	vs.close_modal()

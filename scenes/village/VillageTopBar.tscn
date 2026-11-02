@@ -122,6 +122,21 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_nav")
 text = "Лавка"
 
+[node name="ShopBadge" parent="Box/Nav/NavShop" instance=ExtResource("2_icon")]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -16.0
+offset_top = 6.0
+offset_right = -2.0
+offset_bottom = 20.0
+mouse_filter = 2
+kind = "badge"
+
 [node name="NavArena" type="Button" parent="Box/Nav"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -130,6 +145,21 @@ theme_type_variation = &"ButtonTab"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_nav")
 text = "Арена"
+
+[node name="ArenaBadge" parent="Box/Nav/NavArena" instance=ExtResource("2_icon")]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -16.0
+offset_top = 6.0
+offset_right = -2.0
+offset_bottom = 20.0
+mouse_filter = 2
+kind = "badge"
 
 [node name="Spacer" type="Control" parent="Box"]
 layout_mode = 2

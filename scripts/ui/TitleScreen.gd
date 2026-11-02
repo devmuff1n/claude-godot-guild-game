@@ -54,7 +54,7 @@ func show_settings() -> void:
 
 func new_game(i: int) -> void:
 	Game.new_game(i)
-	main.goto("village")
+	main.goto("intro")
 
 func load_game(i: int) -> void:
 	if not Game.load_slot(i):

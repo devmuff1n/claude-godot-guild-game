@@ -28,9 +28,14 @@ func refresh() -> void:
 	%Trust.set_value(str(int(Game.state["trust"])))
 	%Trust.tooltip_text = "Доверие деревни" + ("\nСкидка в лавке: %d%%" % disc if disc > 0 else "")
 	%Chapter.set_value("%d/%d" % [int(Game.state["story_stage"]), DB.STORY_ORDER.size()])
-	# Метки «есть что сделать» на вкладках
-	%HomeBadge.visible = Game.state["pending_choice"].size() > 0 or Game.state["queue"].size() > 0
+	# Вкладки появляются по мере открытия возможностей (DB.FEATURES); «Поселение» и «Поручения» есть всегда
+	for k in tabs.keys():
+		tabs[k].visible = Game.feature_open(k)
+	# Метки «есть что сделать» или «новое» на вкладках
+	%HomeBadge.visible = Game.state["pending_choice"].size() > 0 or Game.state["queue"].size() > 0 or Game.feature_new("home")
 	var pts := 0
 	for id in DB.HERO_IDS:
 		pts += Game.perk_points(id)
-	%PartyBadge.visible = pts > 0
+	%PartyBadge.visible = pts > 0 or Game.feature_new("party")
+	%ShopBadge.visible = Game.feature_new("shop") or Game.feature_new("forge")
+	%ArenaBadge.visible = Game.feature_new("arena")

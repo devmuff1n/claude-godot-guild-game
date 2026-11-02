@@ -125,7 +125,18 @@ func _fill_details() -> void:
 	if c.get("outpost", false):
 		%Route.tooltip_text = "Оборона заставы: %d волн налётчиков.\nМежду волнами — ремонт ворот (материалы: %d) и тушение пожаров." % [c["waves"].size(), c["materials"]]
 	%Locked.visible = not avail
-	%Prep.visible = avail and not diplo
+	# Подготовка открывается по частям (DB.FEATURES): в первом походе — только «Выступить»
+	var obj_on := Game.feature_open("objectives")
+	var shop_on := Game.feature_open("shop")
+	var form_on := Game.feature_open("formation")
+	var cols := %Prep.get_node("Columns")
+	cols.get_node("Objectives").visible = obj_on
+	cols.get_node("VSep").visible = obj_on and shop_on
+	cols.get_node("Supplies").visible = shop_on
+	cols.visible = obj_on or shop_on
+	%Prep.get_node("FormationHeader").visible = form_on
+	%Formation.visible = form_on
+	%Prep.visible = avail and not diplo and (obj_on or shop_on or form_on)
 	%DepartButton.disabled = not avail
 	%DepartButton.text = "В путь" if diplo else "Выступить"
 	if diplo and avail:

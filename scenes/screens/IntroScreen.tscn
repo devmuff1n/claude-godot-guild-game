@@ -1,0 +1,143 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/IntroScreen.gd" id="1_intro"]
+[ext_resource type="Script" path="res://scripts/ui/HiResView.gd" id="2_hires"]
+[ext_resource type="PackedScene" path="res://scenes/village/Town3D.tscn" id="3_town"]
+
+[node name="IntroScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_intro")
+
+[node name="Back" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="View" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+stretch = true
+script = ExtResource("2_hires")
+
+[node name="Viewport" type="SubViewport" parent="View"]
+unique_name_in_owner = true
+handle_input_locally = false
+msaa_3d = 2
+size = Vector2i(1600, 900)
+render_target_update_mode = 4
+
+[node name="Town3D" parent="View/Viewport" instance=ExtResource("3_town")]
+unique_name_in_owner = true
+
+[node name="Actors" type="Node3D" parent="View/Viewport"]
+unique_name_in_owner = true
+
+[node name="CineCam" type="Camera3D" parent="View/Viewport"]
+unique_name_in_owner = true
+fov = 40.0
+far = 300.0
+
+[node name="LetterTop" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 72.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_type_variation = &"PanelLetterbox"
+
+[node name="LetterBottom" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -150.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"PanelLetterbox"
+
+[node name="Row" type="HBoxContainer" parent="LetterBottom"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Pad" type="Control" parent="LetterBottom/Row"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Portrait" type="TextureRect" parent="LetterBottom/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Lines" type="VBoxContainer" parent="LetterBottom/Row"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Speaker" type="Label" parent="LetterBottom/Row/Lines"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SpeakerLabel"
+theme_override_font_sizes/font_size = 18
+text = " "
+
+[node name="Text" type="Label" parent="LetterBottom/Row/Lines"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 58)
+layout_mode = 2
+theme_type_variation = &"SpeechLabel"
+theme_override_font_sizes/font_size = 21
+autowrap_mode = 3
+
+[node name="Skip" type="Button" parent="LetterBottom/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Пропустить сцену"
+focus_mode = 0
+theme_type_variation = &"ButtonGhost"
+text = "Пропустить ▸▸"
+
+[node name="Banner" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 250.0
+offset_bottom = 420.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_type_variation = &"BannerLabel"
+theme_override_font_sizes/font_size = 52
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Fade" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

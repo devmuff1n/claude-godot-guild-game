@@ -6,6 +6,7 @@ const SCREENS := {
 	"village": "res://scenes/screens/VillageScreen.tscn",
 	"expedition": "res://scenes/screens/ExpeditionScreen.tscn",
 	"diplomacy": "res://scenes/screens/DiplomacyScreen.tscn",
+	"intro": "res://scenes/screens/IntroScreen.tscn",
 }
 const TOAST := preload("res://scenes/ui/Toast.tscn")
 const BALANCE := preload("res://scenes/ui/balance/BalanceEditor.tscn")
@@ -27,7 +28,7 @@ func _ready() -> void:
 		add_child(dn)
 	if OS.get_environment("GUILD_UITEST") != "":
 		var tn := Node.new()
-		var tests := {"extra": "res://tests/ui_extra.gd", "jitter": "res://tests/ui_jitter.gd", "sizes": "res://tests/ui_sizes.gd", "balance": "res://tests/balance_ui.gd", "video": "res://tests/autoplay_video.gd", "anim": "res://tests/anim_rec.gd", "cutscene": "res://tests/cutscene_check.gd", "cutshots": "res://tests/cutscene_shots.gd"}
+		var tests := {"extra": "res://tests/ui_extra.gd", "jitter": "res://tests/ui_jitter.gd", "sizes": "res://tests/ui_sizes.gd", "balance": "res://tests/balance_ui.gd", "video": "res://tests/autoplay_video.gd", "anim": "res://tests/anim_rec.gd", "cutscene": "res://tests/cutscene_check.gd", "cutshots": "res://tests/cutscene_shots.gd", "reward": "res://tests/reward_steps.gd", "intro": "res://tests/intro_shots.gd"}
 		tn.set_script(load(tests.get(OS.get_environment("GUILD_UITEST"), "res://tests/ui_smoke.gd")))
 		add_child(tn)
 		return
@@ -219,7 +220,7 @@ func _debug_start(mode: String) -> void:
 			open_balance({"cid": bp[0], "point": int(bp[1]), "tab": "types" if mode == "balance_types" else "waves"})
 		"intro":
 			Game.state["intro_seen"] = false
-			goto("village")
+			goto("intro")
 		"roadshop":
 			_debug_start("event")
 			Game.ex()["node"] = 2
