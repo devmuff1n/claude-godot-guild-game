@@ -292,6 +292,59 @@ func _village() -> void:
 			av.preset = idx
 			av.refresh()])
 	await check_window("Арена", _tab_root, arena)
+	# Стройка: всё построено и обычная игра (часть построена, часть закрыта сюжетом)
+	var build := []
+	build.append(["всё построено", func():
+		Game.all_features = true
+		var bv = await _tab("build")
+		bv.refresh()])
+	build.append(["Кузница построена, денег мало", func():
+		Game.all_features = false
+		var keep_built: Dictionary = Game.state["built"].duplicate()
+		var keep_c8 := int(Game.state["completed"].get("c8", 0))
+		var keep_tr := int(Game.state["treasury"])
+		Game.state["completed"]["c8"] = 1
+		Game.state["treasury"] = 420
+		Game.state["built"] = {"Smithy": true}
+		var bv = await _tab("build")
+		bv.refresh()
+		Game.state["built"] = keep_built
+		Game.state["treasury"] = keep_tr
+		if keep_c8 == 0:
+			Game.state["completed"].erase("c8")
+		Game.all_features = true])
+	await check_window("Стройка", _tab_root, build)
+	# Кузница: ничего не выбрано, надетая вещь, вещь из кладовой, вещь на пределе заточки
+	var forge := []
+	forge.append(["ничего не выбрано", func():
+		var fv = await _tab("forge")
+		fv.sel = {}
+		fv.refresh()])
+	forge.append(["надетое оружие", func():
+		var fv = await _tab("forge")
+		fv.hero_id = "marek"
+		fv.sel = {"kind": "equip", "hero": "marek", "slot": "main"}
+		fv.refresh()])
+	forge.append(["вещь из кладовой", func():
+		var rng := RandomNumberGenerator.new()
+		var keep = Game.state["storage"][0]
+		Game.state["storage"][0] = Items.make("ring_silver", 6, "epic", rng)
+		var fv = await _tab("forge")
+		fv.sel = {"kind": "storage", "index": 0}
+		fv.refresh()
+		await wait(3)
+		Game.state["storage"][0] = keep])
+	forge.append(["заточено до предела", func():
+		var w: Dictionary = Game.hero("marek")["equip"]["main"]
+		var keep := int(w.get("plus", 0))
+		w["plus"] = DB.SHARPEN_MAX
+		var fv = await _tab("forge")
+		fv.sel = {"kind": "equip", "hero": "marek", "slot": "main"}
+		fv.refresh()
+		await wait(3)
+		w["plus"] = keep])
+	await check_window("Кузница", _tab_root, forge)
+	Game.all_features = true
 	# Дом гильдии: с очередью выдачи и без
 	var home := []
 	for st in DB.STORY_ORDER.size() + 1:
@@ -475,6 +528,7 @@ func _diplomacy() -> void:
 	if err != "":
 		print("[SIZES] SKIP дипломатия: ", err)
 		return
+	Game.dip_arrive()
 	main.goto("diplomacy")
 	await wait(5)
 	var beats: Array = Game.dip_scenario()["beats"]

@@ -61,7 +61,11 @@ func load_game(i: int) -> void:
 		Game.notify("Не удалось загрузить сохранение.")
 		return
 	if Game.state.get("diplomacy") != null:
-		main.goto("diplomacy")
+		# Делегация ещё в пути — игрок в деревне
+		if Game.dip_traveling():
+			main.goto("village", {"tab": "board"})
+		else:
+			main.goto("diplomacy")
 		return
 	main.goto("expedition" if Game.state["expedition"] != null else "village")
 

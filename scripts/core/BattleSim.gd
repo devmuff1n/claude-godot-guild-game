@@ -16,6 +16,8 @@ const OBJ_NAMES := {"wagon": "Повозка", "gate": "Ворота", "chest": 
 var s: Dictionary = {}
 var events: Array = []
 var rng := RandomNumberGenerator.new()
+## Отдельный генератор для реагентов, чтобы добыча не меняла ход боя
+var drop_rng := RandomNumberGenerator.new()
 
 # ================================================================ Настройка
 ## cfg: heroes [{id, d (derive), hp, mp, atb, perks, level}], formation [id front→back], groups, ambush, level,
@@ -31,12 +33,13 @@ func setup(cfg: Dictionary) -> void:
 		"outpost_amb": cfg.get("outpost_ambush", ["wolf"]).duplicate(), "shade_k": float(cfg.get("shade_k", 1.0)),
 		"log": [], "loss": "", "boss": cfg.get("boss", false), "boss_time": 0.0, "boss_alive": false,
 		"counters": {"potions": 0, "ko": {}, "dmg_taken": {}, "healing": 0, "wards": 0, "taunts": 0, "kills": {},
-			"interrupts": 0, "curses": 0, "spell_dmg": 0, "xp": 0, "coins": 0, "heal_by": {}, "champions": 0, "by_hero": {}},
+			"interrupts": 0, "curses": 0, "spell_dmg": 0, "xp": 0, "coins": 0, "heal_by": {}, "champions": 0, "by_hero": {}, "reagents": {}},
 		"used": {},
 		"rng_seed": 0, "rng_state": 0,
 		"hp_mult": float(cfg.get("hp_pct", 100)) / 100.0, "dmg_mult": float(cfg.get("dmg_pct", 100)) / 100.0,
 	}
 	s["rng_seed"] = rng.seed
+	drop_rng.seed = rng.seed ^ 0x5eed
 	for hc in cfg.get("heroes", []):
 		_add_hero(hc)
 	if cfg.get("wagon") != null:
@@ -76,6 +79,9 @@ func load_state(st: Dictionary) -> void:
 		s["used"] = {}
 	rng.seed = int(s.get("rng_seed", 0))
 	rng.state = int(s.get("rng_state", 0))
+	drop_rng.seed = rng.seed ^ 0x5eed
+	if not s["counters"].has("reagents"):
+		s["counters"]["reagents"] = {}
 	# Бой, сохранённый до ступеней врагов: достраиваем приёмы по типу и уровню
 	for u in s["units"]:
 		if u["side"] != "enemy" or u.has("pas"):
@@ -1446,6 +1452,7 @@ func _kill(t: Dictionary) -> void:
 		s["counters"]["xp"] += xp_got
 		s["counters"]["xp_cut"] = int(s["counters"].get("xp_cut", 0)) + xp_full - xp_got
 		s["counters"]["coins"] += int(t["coins"])
+		_drop_reagents(t)
 		var k: String = t.get("last_hit", "")
 		if k != "":
 			s["counters"]["kills"][k] = s["counters"]["kills"].get(k, 0) + 1
@@ -1976,3 +1983,33 @@ func _check_end() -> void:
 
 func is_over() -> bool:
 	return s["phase"] in ["won", "lost"]
+
+## Реагенты с павшего врага (DB.REAGENT_DROPS): духи — пепел, люди — лом, звери — шкуры.
+## Элита — наверняка, босс и чемпион — больше и с пеплом. Мелочь (паучки) ничего не даёт.
+func _drop_reagents(t: Dictionary) -> void:
+	var tags: Array = t.get("tags", [])
+	if "minion" in tags:
+		return
+	var kind := ""
+	var chance := 0.0
+	for tag in ["phantom", "human", "beast"]:
+		if tag in tags:
+			kind = DB.REAGENT_DROPS[tag][0]
+			chance = float(DB.REAGENT_DROPS[tag][1])
+			break
+	if kind == "":
+		return
+	var got := {}
+	if "boss" in tags:
+		got[kind] = 3
+		got["ash"] = int(got.get("ash", 0)) + 2
+	elif "elite" in tags:
+		got[kind] = 1 + (1 if drop_rng.randf() < 0.5 else 0)
+	elif drop_rng.randf() < chance:
+		got[kind] = 1
+	if "champion" in tags:
+		got[kind] = int(got.get(kind, 0)) + 1
+		got["ash"] = int(got.get("ash", 0)) + 1
+	var r: Dictionary = s["counters"]["reagents"]
+	for k in got.keys():
+		r[k] = int(r.get(k, 0)) + int(got[k])

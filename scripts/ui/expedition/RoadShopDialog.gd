@@ -14,7 +14,7 @@ func refresh(title: String, ids: Array) -> void:
 	var e := Game.ex()
 	%Title.text = title
 	%Purse.set_value(str(int(e["purse"])))
-	%Backpack.set_value("%d/%d" % [Game.backpack_count(), DB.BACKPACK_CAP])
+	%Backpack.set_value("%d/%d" % [Game.backpack_count(), Game.backpack_cap()])
 	UIK.clear(%Grid)
 	for id in ids:
 		var cid: String = id

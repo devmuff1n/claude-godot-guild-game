@@ -1,0 +1,66 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/village/BuildView.gd" id="1_build"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="2_icon"]
+
+[node name="BuildView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_build")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_type_variation = &"PanelDark"
+
+[node name="Box" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Head" type="HBoxContainer" parent="Panel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Icon" parent="Panel/Box/Head" instance=ExtResource("2_icon")]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+kind = "material"
+
+[node name="Titles" type="VBoxContainer" parent="Panel/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -2
+
+[node name="Caption" type="Label" parent="Panel/Box/Head/Titles"]
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+text = "ПОСЕЛЕНИЕ"
+
+[node name="Title" type="Label" parent="Panel/Box/Head/Titles"]
+layout_mode = 2
+tooltip_text = "Здания строятся за монеты из казны. Новые участки открываются по ходу сюжета."
+mouse_filter = 1
+theme_type_variation = &"TitleLabel"
+text = "Стройка"
+
+[node name="Sep" type="HSeparator" parent="Panel/Box"]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Grid" type="GridContainer" parent="Panel/Box/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 3

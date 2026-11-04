@@ -16,6 +16,7 @@ func _setup(alloc: Dictionary, premium: bool) -> void:
 
 func _quiet_run() -> Dictionary:
 	Game.start_diplomacy("c8")
+	Game.dip_arrive()
 	while true:
 		var opts: Array = Game.dip_beat()["options"]
 		var best := 0
@@ -67,8 +68,9 @@ func _ready() -> void:
 	_setup({"elo": 1}, true)
 	print("очки Эйдена: ", Game.social_points("aiden"), " (job ", Game.hero("aiden")["job"], ")")
 	ok = ok and Game.social_points("aiden") == DB.MAX_JOB - 1
-	ok = ok and Game.add_social("aiden", "elo") == "" and Game.social_value("aiden", "elo") == 4
+	ok = ok and Game.add_social("aiden", "elo") != ""  # до дипломатии черты закрыты: c8 идёт на природных значениях
 	Game.start_diplomacy("c8")
+	Game.dip_arrive()
 	ok = ok and Game.add_social("aiden", "cha") != ""  # в пути нельзя
 	var last := Game.dip_choose(0)
 	var saved: Dictionary = str_to_var(var_to_str(Game.state))
@@ -80,6 +82,7 @@ func _ready() -> void:
 	var res := Game.finish_diplomacy()
 	ok = ok and res["chapter_end"] and Game.state["chapter_done"] and int(Game.state["story_stage"]) == 8
 	ok = ok and Game.state.get("diplomacy") == null and Game.start_diplomacy("c8") != ""
+	ok = ok and Game.social_unlocked() and Game.add_social("aiden", "elo") == "" and Game.social_value("aiden", "elo") == 4
 	print("c8 итог: ", res["lines"])
 	print("DIPLO CHECK ", "OK" if ok else "FAIL")
 	get_tree().quit()

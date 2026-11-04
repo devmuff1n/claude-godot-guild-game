@@ -161,6 +161,54 @@ offset_bottom = 20.0
 mouse_filter = 2
 kind = "badge"
 
+[node name="NavBuild" type="Button" parent="Box/Nav"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_nav")
+text = "Стройка"
+
+[node name="BuildBadge" parent="Box/Nav/NavBuild" instance=ExtResource("2_icon")]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -16.0
+offset_top = 6.0
+offset_right = -2.0
+offset_bottom = 20.0
+mouse_filter = 2
+kind = "badge"
+
+[node name="NavForge" type="Button" parent="Box/Nav"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_nav")
+text = "Кузница"
+
+[node name="ForgeBadge" parent="Box/Nav/NavForge" instance=ExtResource("2_icon")]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -16.0
+offset_top = 6.0
+offset_right = -2.0
+offset_bottom = 20.0
+mouse_filter = 2
+kind = "badge"
+
 [node name="Spacer" type="Control" parent="Box"]
 layout_mode = 2
 size_flags_horizontal = 3

@@ -96,6 +96,13 @@ func _draw() -> void:
 		var p := Vector2(size.x - 22, size.y - 5)
 		draw_string_outline(f2, p, "×%d" % count, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, 3, Color(0, 0, 0, 0.9))
 		draw_string(f2, p, "×%d" % count, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color(1, 0.95, 0.8))
+	# Заточка из Кузницы — «+N» в правом нижнем углу
+	if item != null and int(item.get("plus", 0)) > 0:
+		var f3 := UIK.fb()
+		var t3 := "+%d" % int(item["plus"])
+		var p3 := Vector2(size.x - 6 - f3.get_string_size(t3, HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x, size.y - 5)
+		draw_string_outline(f3, p3, t3, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, 3, Color(0, 0, 0, 0.9))
+		draw_string(f3, p3, t3, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, UIK.GOLD_HI)
 	if dim:
 		_box(r, Color(0, 0, 0, 0.55), Color(0, 0, 0, 0), 0)
 	if upgrade and item != null:

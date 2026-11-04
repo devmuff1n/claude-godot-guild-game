@@ -62,6 +62,7 @@ func run_diplomacy(cid: String) -> Dictionary:
 	if err != "":
 		print("ERR ", err)
 		return {"res": {"kind": "error"}, "t": 0}
+	Game.dip_arrive()
 	while true:
 		var opts: Array = Game.dip_beat()["options"]
 		var best := 0

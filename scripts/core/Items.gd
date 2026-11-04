@@ -24,7 +24,14 @@ static func display_name(item: Dictionary) -> String:
 		var pre: String = DB.AFFIX_PREFIX.get(aff[0][0], "")
 		if pre != "":
 			n = "%s · %s" % [n, pre.to_lower()]
+	var plus := int(item.get("plus", 0))
+	if plus > 0:
+		n += " +%d" % plus
 	return n
+
+## Множитель чисел вещи от заточки в Кузнице (+6% за уровень)
+static func sharpen_mult(item: Dictionary) -> float:
+	return 1.0 + DB.SHARPEN_STEP * float(item.get("plus", 0))
 
 static func rarity_color(item: Dictionary) -> Color:
 	return DB.RARITY_COLORS.get(item.get("rarity", "common"), Color.WHITE)
@@ -37,26 +44,31 @@ static func stats(item: Dictionary) -> Dictionary:
 	var b := base_of(item)
 	var ilvl: int = int(item.get("ilvl", 1))
 	var s := {}
+	var sm := sharpen_mult(item)
 	if b.has("dmg"):
-		var m := ilvl_mult(ilvl, 0.13)
+		var m := ilvl_mult(ilvl, 0.13) * sm
 		s["dmg_min"] = int(round(b["dmg"][0] * m))
 		s["dmg_max"] = int(round(b["dmg"][1] * m))
 		s["interval"] = b["interval"]
 		s["range"] = b["range"]
 	if b.has("sp"):
-		s["sp"] = round(b["sp"] * ilvl_mult(ilvl, 0.2))
+		s["sp"] = round(b["sp"] * ilvl_mult(ilvl, 0.2) * sm)
 	if b.has("armor"):
-		s["armor"] = round(b["armor"] * ilvl_mult(ilvl, 0.18))
+		s["armor"] = round(b["armor"] * ilvl_mult(ilvl, 0.18) * sm)
 	if b.has("armor_t"):
-		s["armor"] = max(1.0, round(b["armor_t"] * ilvl_mult(ilvl, 0.3)))
+		s["armor"] = max(1.0, round(b["armor_t"] * ilvl_mult(ilvl, 0.3) * sm))
 	if b.has("block"):
 		s["block"] = float(b["block"])
-		s["block_val"] = round(b["block_val"] * ilvl_mult(ilvl, 0.18))
+		s["block_val"] = round(b["block_val"] * ilvl_mult(ilvl, 0.18) * sm)
 	var imp: Dictionary = IMPLICIT.get(item.get("base", ""), {})
 	for k in imp.keys():
-		s[k] = s.get(k, 0.0) + snapped(imp[k] * ilvl_mult(ilvl, 0.3), 0.1)
+		s[k] = s.get(k, 0.0) + snapped(imp[k] * ilvl_mult(ilvl, 0.3) * sm, 0.1)
 	for a in item.get("affixes", []):
-		s[a[0]] = s.get(a[0], 0.0) + a[1]
+		if sm == 1.0:
+			s[a[0]] = s.get(a[0], 0.0) + a[1]
+		else:
+			var v: float = float(a[1]) * sm
+			s[a[0]] = s.get(a[0], 0.0) + (snapped(v, 0.1) if a[0] in DB.PCT_STATS else round(v))
 	return s
 
 ## Требуемый уровень героя. Требований к характеристикам нет — только уровень (как в WoW).
@@ -69,7 +81,7 @@ static func own_stats(hero_id: String, level: int) -> Dictionary:
 
 static func price(item: Dictionary) -> int:
 	var b := base_of(item)
-	return int(round(b.get("price", 10) * ilvl_mult(int(item.get("ilvl", 1)), 0.25) * RARITY_PRICE.get(item.get("rarity", "common"), 1.0)))
+	return int(round(b.get("price", 10) * ilvl_mult(int(item.get("ilvl", 1)), 0.25) * RARITY_PRICE.get(item.get("rarity", "common"), 1.0) * (1.0 + 0.1 * float(item.get("plus", 0)))))
 
 static func sell_price(item: Dictionary) -> int:
 	return max(1, int(price(item) * 0.3))

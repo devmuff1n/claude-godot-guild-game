@@ -95,10 +95,17 @@ func save() -> void:
 func _migrate() -> void:
 	var fresh := _fresh_state()
 	var had_seen := state.has("features_seen")
+	var had_built := state.has("built")
 	for k in fresh.keys():
 		if not state.has(k):
 			state[k] = fresh[k]
 	# Старые сохранения: всё, что уже открыто, считается увиденным (без меток «новое» на вкладках)
+	# Старые сохранения: здания, которые раньше появлялись сами, считаются построенными
+	if not had_built:
+		for b in OLD_BUILDINGS.keys():
+			var after: String = OLD_BUILDINGS[b]
+			if after == "" or int(state.get("completed", {}).get(after, 0)) > 0:
+				state["built"][b] = true
 	if not had_seen:
 		for f in DB.FEATURES.keys():
 			if feature_open(f):
@@ -130,7 +137,8 @@ func _fresh_state() -> Dictionary:
 		"formation": ["marek", "aiden", "neris", "elira"],
 		"relations": {}, "knowledge": {"facts": {}, "prefs": {}}, "topics_done": {}, "pair_done": {},
 		"pending_choice": [], "expedition": null, "last_result": {}, "news": [], "saved_at": "",
-		"intro_seen": false, "ending_seen": false, "diplomacy": null, "cutscenes_seen": {}, "features_seen": {},
+		"intro_seen": false, "ending_seen": false, "diplomacy": null, "cutscenes_seen": {}, "features_seen": {}, "built": {},
+		"reagents": {"scrap": 0, "hide": 0, "ash": 0},
 	}
 	var prev := state
 	state = st  # next_uid нужен для генерации
@@ -439,7 +447,12 @@ func _gen_shop(st: Dictionary, r: RandomNumberGenerator) -> void:
 	var ilvl: int = clamp(1 + dc, 1, 9)
 	var quality := dc * 0.6
 	var stock := []
-	for i in 8:
+	# Кузница добавляет вещей в ассортимент (DB.BUILDINGS → "stock")
+	var extra := 0
+	for b in DB.BUILDINGS.keys():
+		if DB.BUILDINGS[b].has("stock") and (st.get("built", {}).has(b) or all_features):
+			extra += int(DB.BUILDINGS[b]["stock"])
+	for i in 8 + extra:
 		var it: Dictionary
 		if i < 4:
 			var hid: String = DB.HERO_IDS[i]
@@ -460,6 +473,10 @@ func shop_price(item: Dictionary) -> int:
 func cons_price(id: String, road := false) -> int:
 	var base: int = DB.CONSUMABLES[id]["price"] if DB.CONSUMABLES.has(id) else DB.GIFTS[id]["price"]
 	var p := base * (1.0 - discount())
+	if id in ["potion_hp", "potion_mp"]:
+		p *= building_k("potion_k")
+	elif id == "kit":
+		p *= building_k("kit_k")
 	if road:
 		p = base * 1.25
 	return int(ceil(p))
@@ -494,8 +511,8 @@ func buy_cons(id: String, road := false) -> String:
 			return "В походном кошельке не хватает монет."
 	elif int(state["treasury"]) < p:
 		return "Не хватает денег в казне."
-	if DB.GIFTS.has(id) and backpack_count() >= DB.BACKPACK_CAP:
-		return "Походный рюкзак полон (%d)." % DB.BACKPACK_CAP
+	if DB.GIFTS.has(id) and backpack_count() >= backpack_cap():
+		return "Походный рюкзак полон (%d)." % backpack_cap()
 	if road:
 		exd["purse"] = int(exd["purse"]) - p
 		exd["spent"] = int(exd.get("spent", 0)) + p
@@ -604,15 +621,224 @@ func building_name(id: String) -> String:
 ## Всё открыто сразу (только для тестов интерфейса)
 var all_features := false
 
-## Открыта ли функция (DB.FEATURES): после первого выполнения нужного поручения. Неизвестная — открыта.
+## Открыта ли функция (DB.FEATURES): после первого выполнения нужного поручения
+## и, если у функции есть "buildings", когда построено хотя бы одно из этих зданий. Неизвестная — открыта.
 func feature_open(id: String) -> bool:
 	var f: Dictionary = DB.FEATURES.get(id, {})
-	return all_features or f.is_empty() or contract_done_count(f["after"]) > 0
+	if all_features or f.is_empty():
+		return true
+	# Функция здания работает, пока здание стоит (оно и так строится не раньше своего срока)
+	if f.has("buildings"):
+		for b in f["buildings"]:
+			if building_built(b):
+				return true
+		return false
+	return milestone_done(f["after"])
 
-## Стоит ли здание поселения (DB.BUILDINGS). Неизвестное — стоит.
+## Наступил ли момент "after" из DB.FEATURES / DB.BUILDINGS: "" — с начала игры, "sent:cid" — дипломатическая
+## миссия cid отправлена (в пути, идёт или завершена), иначе — поручение выполнено хотя бы раз.
+func milestone_done(after: String) -> bool:
+	if after == "":
+		return true
+	if after.begins_with("sent:"):
+		var cid := after.substr(5)
+		return contract_done_count(cid) > 0 or (state.get("diplomacy") != null and state["diplomacy"].get("cid", "") == cid)
+	return contract_done_count(after) > 0
+
+## Как назвать момент "after" в подсказке «Откроется …»
+func milestone_text(after: String) -> String:
+	if after.begins_with("sent:"):
+		return "когда делегация отправится в путь («%s»)" % DB.CONTRACTS[after.substr(5)]["name"]
+	return "после «%s»" % DB.CONTRACTS[after]["name"]
+
+## Здания до строительства за монеты (2026-11-02) появлялись сами после этих поручений — для старых сохранений
+const OLD_BUILDINGS := {"GuildHall": "", "PartyInn": "c1", "Market": "c2", "Cottages1": "c2", "Smithy": "c3",
+	"TrainingYard": "c3", "Alchemist": "c4", "Cottages2": "c4", "Tannery": "c5"}
+
+## Стоит ли здание поселения (DB.BUILDINGS). Бесплатные стоят сами после своего поручения, платные — когда построены.
+## Неизвестное — стоит.
 func building_built(id: String) -> bool:
-	var after: String = DB.BUILDINGS.get(id, "")
-	return all_features or after == "" or contract_done_count(after) > 0
+	var b: Dictionary = DB.BUILDINGS.get(id, {})
+	if all_features or b.is_empty():
+		return true
+	if int(b["price"]) <= 0:
+		return building_available(id)
+	return state.get("built", {}).has(id)
+
+## Можно ли уже строить здание: выполнено нужное поручение
+func building_available(id: String) -> bool:
+	return milestone_done(DB.BUILDINGS.get(id, {}).get("after", ""))
+
+## Почему здание нельзя построить сейчас ("" — можно)
+func build_problem(id: String) -> String:
+	var b: Dictionary = DB.BUILDINGS.get(id, {})
+	if b.is_empty():
+		return "Нет такого здания."
+	if building_built(id):
+		return "Уже построено."
+	if not id in DB.BUILD_ORDER:
+		return "Это здание пока не строится."
+	if not building_available(id):
+		return "Откроется %s." % milestone_text(b["after"])
+	if state["expedition"] != null:
+		return "Строить можно только в деревне."
+	if int(state["treasury"]) < int(b["price"]):
+		return "Не хватает денег в казне."
+	return ""
+
+## Построить здание за монеты из казны
+func build(id: String) -> String:
+	var why := build_problem(id)
+	if why != "":
+		return why
+	var b: Dictionary = DB.BUILDINGS[id]
+	state["treasury"] = int(state["treasury"]) - int(b["price"])
+	state["built"][id] = true
+	if b.has("trust"):
+		state["trust"] = int(state["trust"]) + int(b["trust"])
+	notify("Построено: %s" % building_name(id))
+	save()
+	changed.emit()
+	return ""
+
+## Сколько зданий можно построить прямо сейчас (метка на вкладке «Стройка»)
+func buildable_count() -> int:
+	var n := 0
+	for id in DB.BUILD_ORDER:
+		if build_problem(id) == "":
+			n += 1
+	return n
+
+## Вместимость походного рюкзака: базовая + здания с "backpack"
+func backpack_cap() -> int:
+	return DB.BACKPACK_CAP + building_sum("backpack")
+
+## Герои, которых могут привлечь построенные здания (DB.BUILDINGS → "recruit"). Заготовка: пока у зданий
+## нет героев, список пуст; механика найма появится позже.
+func recruit_candidates() -> Array:
+	var out := []
+	for id in DB.BUILDINGS.keys():
+		var r: String = DB.BUILDINGS[id].get("recruit", "")
+		if r != "" and building_built(id) and not state["heroes"].has(r):
+			out.append(r)
+	return out
+
+## Произведение множителя key ("potion_k", "kit_k", "reroll_k") по построенным зданиям
+func building_k(key: String) -> float:
+	var k := 1.0
+	for id in DB.BUILDINGS.keys():
+		if DB.BUILDINGS[id].has(key) and building_built(id):
+			k *= float(DB.BUILDINGS[id][key])
+	return k
+
+## Сумма целого бонуса key ("stock", "backpack") по построенным зданиям
+func building_sum(key: String) -> int:
+	var n := 0
+	for id in DB.BUILDINGS.keys():
+		if DB.BUILDINGS[id].has(key) and building_built(id):
+			n += int(DB.BUILDINGS[id][key])
+	return n
+
+## Цена перековки (сейчас без скидок; место для будущих улучшений Кузницы)
+func reroll_price(item: Dictionary) -> int:
+	return maxi(1, int(round(Items.reroll_price(item) * building_k("reroll_k"))))
+
+# ================================================================ Реагенты, разборка и заточка (Кузница)
+func reagent_count(id: String) -> int:
+	return int(state.get("reagents", {}).get(id, 0))
+
+func add_reagents(r: Dictionary) -> void:
+	if not state.has("reagents"):
+		state["reagents"] = {}
+	for k in r.keys():
+		state["reagents"][k] = maxi(0, int(state["reagents"].get(k, 0)) + int(r[k]))
+
+## «Железный лом ×2, Пепел теней ×1»
+static func reagents_text(r: Dictionary) -> String:
+	var parts := []
+	for k in DB.REAGENT_ORDER:
+		if int(r.get(k, 0)) != 0:
+			parts.append("%s ×%d" % [DB.REAGENTS[k]["name"], int(r[k])])
+	return ", ".join(parts)
+
+## Основной реагент вещи: оружие, щиты, кольчуги и латы — лом, кожа и ткань — шкуры, украшения — пепел
+static func reagent_of(item: Dictionary) -> String:
+	var b := Items.base_of(item)
+	if b.has("wtype"):
+		return "scrap"
+	match b.get("atype", ""):
+		"mail", "plate": return "scrap"
+		"jewel": return "ash"
+	return "hide"
+
+## Что даст разборка вещи
+static func salvage_yield(item: Dictionary) -> Dictionary:
+	var main := reagent_of(item)
+	var extra: int = {"common": 0, "uncommon": 1, "rare": 2, "epic": 4}.get(item.get("rarity", "common"), 0)
+	var out := {main: 1 + int(item.get("ilvl", 1)) / 3 + extra + int(item.get("plus", 0))}
+	var ash: int = {"rare": 1, "epic": 2}.get(item.get("rarity", "common"), 0)
+	if ash > 0:
+		out["ash"] = int(out.get("ash", 0)) + ash
+	return out
+
+## Разобрать вещь из кладовой на реагенты
+func salvage_storage(idx: int) -> String:
+	if not feature_open("forge"):
+		return "Разборка — в кузнице."
+	var st := storage()
+	if idx < 0 or idx >= st.size() or st[idx] == null:
+		return "Выберите вещь в кладовой."
+	var y := salvage_yield(st[idx])
+	st[idx] = null
+	add_reagents(y)
+	notify("Разобрано: %s" % reagents_text(y))
+	save()
+	changed.emit()
+	return ""
+
+## Цена следующей заточки: {"coins", "reagents"} (пусто — дальше точить нельзя)
+static func sharpen_cost(item: Dictionary) -> Dictionary:
+	var n := int(item.get("plus", 0))
+	if n >= DB.SHARPEN_MAX:
+		return {}
+	var r := {reagent_of(item): 2 + 2 * n}
+	if n >= 2:
+		r["ash"] = int(r.get("ash", 0)) + n - 1
+	return {"coins": int(round(maxf(10.0, Items.price(item) * 0.25) * (1 + n))), "reagents": r}
+
+func sharpen_problem(item) -> String:
+	if not feature_open("forge"):
+		return "Заточка — в кузнице."
+	if item == null:
+		return "Выберите вещь."
+	var cost := sharpen_cost(item)
+	if cost.is_empty():
+		return "Вещь заточена до предела."
+	if state["expedition"] != null:
+		return "Кузница — только в деревне."
+	if int(state["treasury"]) < int(cost["coins"]):
+		return "Не хватает денег в казне."
+	for k in cost["reagents"].keys():
+		if reagent_count(k) < int(cost["reagents"][k]):
+			return "Не хватает: %s." % DB.REAGENTS[k]["name"]
+	return ""
+
+## Заточить вещь (из кладовой или надетую): +1 к заточке, +6% к её числам
+func sharpen(item) -> String:
+	var why := sharpen_problem(item)
+	if why != "":
+		return why
+	var cost := sharpen_cost(item)
+	state["treasury"] = int(state["treasury"]) - int(cost["coins"])
+	var neg := {}
+	for k in cost["reagents"].keys():
+		neg[k] = -int(cost["reagents"][k])
+	add_reagents(neg)
+	item["plus"] = int(item.get("plus", 0)) + 1
+	notify("Заточено: %s" % Items.display_name(item))
+	save()
+	changed.emit()
+	return ""
 
 ## Функция открыта, но игрок её ещё не видел — метка «новое» на вкладке
 func feature_new(id: String) -> bool:
@@ -629,6 +855,8 @@ func default_purse() -> int:
 func start_expedition(cid: String, opts: Dictionary) -> String:
 	if state["expedition"] != null:
 		return "Уже в походе."
+	if state.get("diplomacy") != null:
+		return "Эйден с делегацией — походы после возвращения."
 	var c: Dictionary = DB.CONTRACTS[cid]
 	if c.has("diplomacy"):
 		return "Это дипломатическая миссия: в путь — через start_diplomacy()."
@@ -737,6 +965,10 @@ func absorb_battle(sim: BattleSim) -> void:
 		ec["dmg_taken"][k] = int(ec["dmg_taken"].get(k, 0)) + int(c["dmg_taken"][k])
 	for k in c["kills"].keys():
 		ec["kills"][k] = int(ec["kills"].get(k, 0)) + int(c["kills"][k])
+	if not e.has("reagents"):
+		e["reagents"] = {}
+	for k in c.get("reagents", {}).keys():
+		e["reagents"][k] = int(e["reagents"].get(k, 0)) + int(c["reagents"][k])
 	if not ec.has("by_hero"):
 		ec["by_hero"] = {}
 	for k in c.get("by_hero", {}).keys():
@@ -861,7 +1093,7 @@ func apply_event_choice(ch: Dictionary) -> Array:
 			state["potions"][k] = max(0, int(state["potions"][k]) + int(fx[k]))
 	if fx.has("kit"):
 		e["kits"] = max(0, int(e["kits"]) + int(fx["kit"]))
-	if fx.has("gift") and backpack_count() < DB.BACKPACK_CAP:
+	if fx.has("gift") and backpack_count() < backpack_cap():
 		state["backpack"][fx["gift"]] = int(state["backpack"].get(fx["gift"], 0)) + 1
 	if fx.has("wagon_pct") and e["wagon"] != null:
 		e["wagon"]["hp"] = min(e["wagon"]["max"], e["wagon"]["hp"] + e["wagon"]["max"] * float(fx["wagon_pct"]) / 100.0)
@@ -1127,6 +1359,13 @@ func finish_expedition(kind: String) -> Dictionary:
 			lines.append("Ассортимент лавки обновлён.")
 	res["by_hero"] = e["counters"].get("by_hero", {}).duplicate(true)
 	var cut := int(e["counters"].get("xp_cut", 0))
+	# Реагенты с врагов: при победе и отступлении остаются, при прерванном походе — нет
+	if kind != "abandon":
+		var rg: Dictionary = e.get("reagents", {})
+		add_reagents(rg)
+		res["reagents"] = rg.duplicate()
+		if feature_open("forge") and not rg.is_empty():
+			lines.append("Реагенты: %s" % reagents_text(rg))
 	if kind != "abandon" and cut > 0:
 		lines.append("Опыт за врагов ниже уровнем отряда урезан: −%d" % cut)
 	res["unlocks"] = unlocks_since(snap)
@@ -1161,10 +1400,13 @@ func unlock_snapshot() -> Dictionary:
 		if feature_open(f):
 			feats[f] = true
 	var built := {}
+	var can_build := {}
 	for b in DB.BUILDINGS.keys():
 		if building_built(b):
 			built[b] = true
-	return {"stages": stages, "abilities": abil, "side": side, "social": social_unlocked(), "features": feats, "buildings": built}
+		elif building_available(b):
+			can_build[b] = true
+	return {"can_build": can_build, "stages": stages, "abilities": abil, "side": side, "social": social_unlocked(), "features": feats, "buildings": built}
 
 ## Новинки по сравнению со снимком: [{kind, title, tip}]. Уровень героев к этому моменту уже применён.
 func unlocks_since(before: Dictionary) -> Array:
@@ -1174,9 +1416,22 @@ func unlocks_since(before: Dictionary) -> Array:
 		if now["features"].has(f) and not before.get("features", {}).has(f):
 			var fd: Dictionary = DB.FEATURES[f]
 			out.append({"kind": "feature", "icon": fd["icon"], "title": fd["title"], "tip": fd["tip"]})
-	for b in DB.BUILDINGS.keys():
-		if now["buildings"].has(b) and not before.get("buildings", {}).has(b):
-			out.append({"kind": "building", "icon": "home", "title": "Построено: %s" % building_name(b), "tip": "Новое здание в поселении"})
+	# Новые участки на стройке — одной строкой (бесплатные здания объявляет своя функция, платные строит сам игрок)
+	var can := []
+	var tips := []
+	for b in DB.BUILD_ORDER:
+		if now["can_build"].has(b) and not before.get("can_build", {}).has(b) and not before.get("buildings", {}).has(b):
+			var bd: Dictionary = DB.BUILDINGS[b]
+			can.append(building_name(b))
+			tips.append("%s · %d мон.: %s" % [building_name(b), int(bd["price"]), ", ".join(bd["gives"])])
+	# Когда стройка только что открылась, участки перечисляет её подсказка
+	var build_new: bool = now["features"].has("build") and not before.get("features", {}).has("build")
+	if build_new:
+		for f in out:
+			if f.get("title", "") == DB.FEATURES["build"]["title"]:
+				f["tip"] += "\n" + "\n".join(tips)
+	if not can.is_empty() and not build_new:
+		out.append({"kind": "building", "icon": "material", "title": "Можно построить: %s" % ", ".join(can), "tip": "Вкладка «Стройка»\n" + "\n".join(tips)})
 	var by_hero := {}
 	for ab in now["abilities"].keys():
 		if not before["abilities"].has(ab):
@@ -1592,10 +1847,45 @@ func start_diplomacy(cid: String) -> String:
 		return "Поручение ещё не открыто."
 	if contract_done_count(cid) > 0:
 		return "Миссия уже завершена."
-	state["diplomacy"] = {"cid": cid, "beat": 0, "favor": 0, "coins": 0, "flags": {}, "log": [], "last": {}}
+	var snap := unlock_snapshot()
+	state["diplomacy"] = {"cid": cid, "beat": 0, "favor": 0, "coins": 0, "flags": {}, "log": [], "last": {},
+		"days": DB.DIPLO_TRAVEL_DAYS}
+	var titles := []
+	for u in unlocks_since(snap):
+		titles.append(u["title"])
+	notify("Делегация в пути: до столицы %d %s." % [DB.DIPLO_TRAVEL_DAYS, _days_word(DB.DIPLO_TRAVEL_DAYS)] +
+		(" Открыто: %s." % ", ".join(titles) if not titles.is_empty() else ""))
 	save()
 	changed.emit()
 	return ""
+
+## Сколько дней делегации ещё идти до места (0 — дошла, можно начинать сцены)
+func dip_days() -> int:
+	return int(dip().get("days", 0)) if not dip().is_empty() else 0
+
+func dip_traveling() -> bool:
+	return dip_days() > 0
+
+## Сразу на место (отладка и тесты)
+func dip_arrive() -> void:
+	if not dip().is_empty():
+		dip()["days"] = 0
+
+## Прошёл день в деревне, пока делегация в пути
+func dip_wait_day() -> void:
+	if not dip_traveling():
+		return
+	dip()["days"] = dip_days() - 1
+	notify("Делегация дошла до столицы." if dip_days() == 0 else "Прошёл день. До столицы: %d %s." % [dip_days(), _days_word(dip_days())])
+	save()
+	changed.emit()
+
+static func _days_word(n: int) -> String:
+	if n % 10 == 1 and n % 100 != 11:
+		return "день"
+	if n % 10 in [2, 3, 4] and not (n % 100 in [12, 13, 14]):
+		return "дня"
+	return "дней"
 
 func dip_option_problem(opt: Dictionary) -> String:
 	var req: Dictionary = opt.get("req", {})
@@ -1639,7 +1929,7 @@ func dip_check_info(opt: Dictionary) -> Dictionary:
 ## Выбрать вариант i текущей сцены: бросок, последствия, запись итога в last.
 func dip_choose(i: int) -> Dictionary:
 	var d := dip()
-	if d.is_empty() or not d["last"].is_empty() or dip_finished():
+	if d.is_empty() or dip_traveling() or not d["last"].is_empty() or dip_finished():
 		return {}
 	var opt: Dictionary = dip_beat()["options"][i]
 	if dip_option_problem(opt) != "":

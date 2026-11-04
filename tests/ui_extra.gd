@@ -10,6 +10,10 @@ func _ready() -> void:
 	for c in ["c1", "c2"]:
 		Game.state["completed"][c] = 1
 	Game.state["story_stage"] = 2
+	# Перековка и арена — в Кузнице и на Тренировочном дворе, их строят после c8
+	Game.state["completed"]["c8"] = 1
+	for b in ["Smithy", "TrainingYard"]:
+		Game.state["built"][b] = true
 	Game.save()
 	main.goto("village")
 	await wait(3)

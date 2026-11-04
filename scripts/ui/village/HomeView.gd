@@ -47,7 +47,7 @@ func refresh() -> void:
 	for id in ["potion_hp", "potion_mp", "kit"]:
 		_pill("cons", id, str(int(Game.state["potions"].get(id, 0))), DB.consumable_name(id))
 	_pill("storage", "", "%d/%d" % [Game.storage_count(), DB.STORAGE_SIZE], "Кладовая")
-	_pill("backpack", "", "%d/%d" % [Game.backpack_count(), DB.BACKPACK_CAP], "Походный рюкзак: подарки для вечера на привале")
+	_pill("backpack", "", "%d/%d" % [Game.backpack_count(), Game.backpack_cap()], "Походный рюкзак: подарки для вечера на привале")
 	for g in Game.state["backpack"].keys():
 		_pill("cons", g, "×%d" % int(Game.state["backpack"][g]), DB.consumable_name(g))
 	var q: Array = Game.state["queue"]

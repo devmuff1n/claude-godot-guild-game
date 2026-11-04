@@ -6,7 +6,7 @@ extends Control
 
 @export_enum("coin", "trust", "chapter", "purse", "backpack", "burnout", "xp", "job", "lock", "check", "cross",
 	"sword", "shield", "flag", "menu", "pause", "play", "heart", "friend", "skull", "hourglass", "camp", "event",
-	"route", "storage", "perk", "save", "home", "board", "shop", "party", "arena", "gift", "dot", "diamond", "material", "badge", "cons", "dawn", "sun", "dusk", "moon")
+	"route", "storage", "perk", "save", "home", "board", "shop", "party", "arena", "gift", "dot", "diamond", "material", "badge", "cons", "dawn", "sun", "dusk", "moon", "r_scrap", "r_hide", "r_ash")
 var kind: String = "coin":
 	set(v):
 		kind = v
@@ -238,6 +238,24 @@ func _paint() -> void:
 			_ring(Vector2(12, 12), 6.5, C_INK, 2.2)
 		"diamond":
 			_poly([Vector2(12, 4), Vector2(20, 12), Vector2(12, 20), Vector2(4, 12)], C_GOLD)
+		"r_scrap":
+			# Железный лом: брусок и гнутый гвоздь
+			_poly([Vector2(3, 15), Vector2(15, 11), Vector2(20, 14), Vector2(8, 19)], Color(0.48, 0.5, 0.54))
+			_poly([Vector2(3, 15), Vector2(8, 19), Vector2(8, 21), Vector2(3, 17)], Color(0.32, 0.33, 0.36))
+			_line(Vector2(13, 4), Vector2(15, 10), Color(0.7, 0.72, 0.76), 2.2)
+			_line(Vector2(15, 10), Vector2(20, 9), Color(0.7, 0.72, 0.76), 2.2)
+			_line(Vector2(11, 4), Vector2(15, 4), Color(0.7, 0.72, 0.76), 2.2)
+		"r_hide":
+			# Шкура, растянутая лоскутом
+			_poly([Vector2(5, 5), Vector2(12, 7), Vector2(19, 5), Vector2(18, 12), Vector2(20, 19), Vector2(12, 17), Vector2(4, 19), Vector2(6, 12)], Color(0.6, 0.42, 0.26))
+			_line(Vector2(9, 10), Vector2(15, 10), Color(0.42, 0.28, 0.16), 1.4)
+			_line(Vector2(9, 14), Vector2(15, 14), Color(0.42, 0.28, 0.16), 1.4)
+		"r_ash":
+			# Пепел теней: горка с лиловыми искрами
+			_poly([Vector2(3, 20), Vector2(8, 13), Vector2(12, 11), Vector2(16, 13), Vector2(21, 20)], Color(0.36, 0.34, 0.4))
+			_circ(Vector2(12, 7), 1.8, Color(0.72, 0.5, 0.95))
+			_circ(Vector2(16.5, 5), 1.2, Color(0.72, 0.5, 0.95))
+			_circ(Vector2(8, 5.5), 1.0, Color(0.72, 0.5, 0.95))
 		"material":
 			_rect(Rect2(3, 13, 18, 5), Color(0.55, 0.38, 0.2))
 			_rect(Rect2(5, 7, 18, 5), Color(0.62, 0.44, 0.24))

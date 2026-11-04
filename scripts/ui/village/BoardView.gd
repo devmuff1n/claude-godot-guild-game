@@ -143,9 +143,22 @@ func _fill_details() -> void:
 		var party: Array = Game.dip_scenario(sel)["party"]
 		%DelCard0.setup(party[0])
 		%DelCard1.setup(party[1])
+		%DepartButton.tooltip_text = ""
+		var hdr := "ДЕЛЕГАЦИЯ"
 		if not first:
 			%DepartButton.disabled = true
 			%DepartButton.tooltip_text = "Миссия завершена"
+		elif not Game.dip().is_empty() and Game.dip()["cid"] == sel:
+			# Делегация в пути: дни идут по кнопке, пока в деревне можно строить
+			var days := Game.dip_days()
+			if days > 0:
+				hdr = "ДЕЛЕГАЦИЯ В ПУТИ · ЕЩЁ %d %s" % [days, Game._days_word(days).to_upper()]
+				%DepartButton.text = "Ждать день"
+				%DepartButton.tooltip_text = "Пока делегация в пути, в деревне можно заняться другими делами."
+			else:
+				hdr = "ДЕЛЕГАЦИЯ В СТОЛИЦЕ"
+				%DepartButton.text = "В столицу"
+		%MissionHeader.text = hdr
 		return
 	if not avail:
 		var req := []
@@ -193,7 +206,7 @@ func _fill_details() -> void:
 	UIK.clear(%Supplies)
 	for id in ["potion_hp", "potion_mp", "kit"]:
 		_pill(%Supplies, "cons", id, str(int(Game.state["potions"].get(id, 0))), DB.consumable_name(id))
-	_pill(%Supplies, "backpack", "", "%d/%d" % [Game.backpack_count(), DB.BACKPACK_CAP], "Походный рюкзак: подарки для вечера на привале")
+	_pill(%Supplies, "backpack", "", "%d/%d" % [Game.backpack_count(), Game.backpack_cap()], "Походный рюкзак: подарки для вечера на привале")
 	%Formation.refresh()
 
 func _update_purse_label() -> void:
@@ -202,11 +215,19 @@ func _update_purse_label() -> void:
 
 func _depart() -> void:
 	if DB.CONTRACTS[sel].has("diplomacy"):
+		if not Game.dip().is_empty() and Game.dip()["cid"] == sel:
+			if Game.dip_traveling():
+				Game.dip_wait_day()
+				refresh()
+			else:
+				village.main.goto("diplomacy")
+			return
 		var e := Game.start_diplomacy(sel)
 		if e != "":
 			Game.notify(e)
 			return
-		village.main.goto("diplomacy")
+		# Делегация ушла: до столицы несколько дней, игрок остаётся в деревне
+		refresh()
 		return
 	var opts := {"purse": purse, "general": general, "formation": Game.state["formation"]}
 	if pers_obj != "":

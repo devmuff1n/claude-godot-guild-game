@@ -8,6 +8,8 @@ const TABS := {
 	"shop": "res://scenes/village/ShopView.tscn",
 	"party": "res://scenes/village/PartyView.tscn",
 	"arena": "res://scenes/village/ArenaView.tscn",
+	"build": "res://scenes/village/BuildView.tscn",
+	"forge": "res://scenes/village/SmithyView.tscn",
 }
 ## Фон под вкладкой (остальные — деревня)
 const BACKGROUNDS := {
@@ -54,8 +56,6 @@ func show_tab(id: String, opts := {}) -> void:
 	if not Game.feature_open(id):
 		id = "town"
 	Game.mark_feature_seen(id)
-	if id == "shop":
-		Game.mark_feature_seen("forge")
 	tab = id
 	top_bar.set_tab(id)
 	var bg_path: String = BACKGROUNDS.get(id, "res://assets/bg/village.png")

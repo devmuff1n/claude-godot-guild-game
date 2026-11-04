@@ -5,7 +5,7 @@ extends PanelContainer
 signal tab_selected(id: String)
 signal menu_pressed
 
-@onready var tabs := {"town": %NavTown, "home": %NavHome, "board": %NavBoard, "shop": %NavShop, "party": %NavParty, "arena": %NavArena}
+@onready var tabs := {"town": %NavTown, "home": %NavHome, "board": %NavBoard, "shop": %NavShop, "party": %NavParty, "arena": %NavArena, "build": %NavBuild, "forge": %NavForge}
 
 func _ready() -> void:
 	for k in tabs.keys():
@@ -37,5 +37,7 @@ func refresh() -> void:
 	for id in DB.HERO_IDS:
 		pts += Game.perk_points(id)
 	%PartyBadge.visible = pts > 0 or Game.feature_new("party")
-	%ShopBadge.visible = Game.feature_new("shop") or Game.feature_new("forge")
+	%ShopBadge.visible = Game.feature_new("shop")
+	%ForgeBadge.visible = Game.feature_new("forge")
 	%ArenaBadge.visible = Game.feature_new("arena")
+	%BuildBadge.visible = Game.feature_new("build") or Game.buildable_count() > 0

@@ -140,7 +140,7 @@ func _debug_start(mode: String) -> void:
 		goto("expedition")
 		return
 	# diplo — миссия c8 с начала, diplo_<N> — на сцене N, diplo_<N>_r — с итогом броска, diplo_end — итоги; party_social — вкладка «Черты»
-	if mode.begins_with("diplo") or mode == "party_social":
+	if mode.begins_with("diplo") or mode == "party_social" or mode == "trip":
 		for i in 7:
 			Game.state["completed"][DB.STORY_ORDER[i]] = 1
 		Game.state["story_stage"] = 7
@@ -150,10 +150,19 @@ func _debug_start(mode: String) -> void:
 			Game.hero(id)["job"] = DB.MAX_JOB
 		Game.hero("aiden")["social"] = {"elo": 2, "cha": 1, "faith": 1}
 		if mode == "party_social":
+			# Черты открываются после дипломатии c8
+			Game.state["completed"]["c8"] = 1
+			Game.state["story_stage"] = 8
 			goto("village", {"tab": "party"})
 			current.show_tab("party", {"side_tab": "social", "hero_id": "aiden"})
 			return
 		Game.start_diplomacy("c8")
+		if mode == "trip":
+			# Делегация только что ушла: Поручения, в казне на Кузницу
+			Game.state["treasury"] = 900
+			goto("village", {"tab": "board"})
+			return
+		Game.dip_arrive()
 		var dp := mode.split("_")
 		if mode == "diplo_end":
 			while true:

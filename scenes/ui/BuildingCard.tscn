@@ -1,0 +1,60 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/BuildingCard.gd" id="1_card"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="2_icon"]
+
+[node name="BuildingCard" type="PanelContainer"]
+custom_minimum_size = Vector2(360, 176)
+size_flags_horizontal = 3
+theme_type_variation = &"PanelInset"
+script = ExtResource("1_card")
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Head" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Icon" parent="Box/Head" instance=ExtResource("2_icon")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+kind = "home"
+
+[node name="Titles" type="VBoxContainer" parent="Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="Box/Head/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+theme_override_font_sizes/font_size = 16
+text_overrun_behavior = 3
+
+[node name="Status" type="Label" parent="Box/Head/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TinyLabel"
+text_overrun_behavior = 3
+
+[node name="Gives" type="Label" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="BuildButton" type="Button" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"ButtonPrimary"
+text = "Построить"
