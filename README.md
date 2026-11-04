@@ -81,6 +81,7 @@ godot --headless --path . res://tests/Test.tscn              # бот прохо
 godot --headless --path . res://tests/BuildCheck.tscn        # стройка с отправкой делегации c8, дни пути, Кузница: заточка, разборка, реагенты с врагов
 godot --headless --path . res://tests/LootCheck.tscn         # правила оружия, требования уровня, добыча под отряд, перековка и закрепление товаров в лавке, урезание опыта
 godot --headless --path . res://tests/DayTimeCheck.tscn     # время суток каждого пункта, привал — ночь, ночные бои только там, где задумано
+N=20 TIERS=3,4.5 CIDS=c5,c7 godot --headless --path . res://tests/chapter/Chapter.tscn  # проходимость глав ботом: темп команд, GEARS= (снаряжение), ITEMS= (добыча/награды/лавка), PERKS= (none,a,b,each)
 GUILD_UITEST=1 godot --headless --path .                     # нажимает настоящие кнопки: 4 контракта, привалы, сохранение/загрузка, отказ от похода
 GUILD_UITEST=extra godot --headless --path .                 # арена, поражение, лавка, запреты на вещи, переполнение кладовой
 GUILD_UITEST=jitter godot --path .                           # бой с открытым меню: проверяет, что ни один элемент HUD не сдвигается
