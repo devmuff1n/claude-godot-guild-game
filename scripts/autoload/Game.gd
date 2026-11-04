@@ -447,15 +447,28 @@ func _gen_shop(st: Dictionary, r: RandomNumberGenerator) -> void:
 	var ilvl: int = clamp(1 + dc, 1, 9)
 	var quality := dc * 0.6
 	var stock := []
+	# Закреплённая вещь остаётся на прилавке и занимает одно из мест
+	for old in st["shop"].get("stock", []):
+		if old.get("pinned", false):
+			stock.append(old)
+			break
 	# Кузница добавляет вещей в ассортимент (DB.BUILDINGS → "stock")
 	var extra := 0
 	for b in DB.BUILDINGS.keys():
 		if DB.BUILDINGS[b].has("stock") and (st.get("built", {}).has(b) or all_features):
 			extra += int(DB.BUILDINGS[b]["stock"])
-	for i in 8 + extra:
+	var picks: Array = DB.HERO_IDS.duplicate()
+	for j in range(picks.size() - 1, 0, -1):
+		var k := r.randi_range(0, j)
+		var t = picks[j]
+		picks[j] = picks[k]
+		picks[k] = t
+	for i in DB.SHOP_STOCK + extra:
+		if i == 0 and not stock.is_empty():
+			continue
 		var it: Dictionary
-		if i < 4:
-			var hid: String = DB.HERO_IDS[i]
+		if i < DB.SHOP_HERO_PICKS:
+			var hid: String = picks[i]
 			var lvl: int = int(st["heroes"][hid]["level"]) if st["heroes"].has(hid) else 1
 			it = Items.item_for_hero(hid, lvl + 1, ilvl, r, quality - 1.0)
 		else:
@@ -463,12 +476,13 @@ func _gen_shop(st: Dictionary, r: RandomNumberGenerator) -> void:
 		stock.append(it)
 	st["shop"]["stock"] = stock
 	st["shop"]["gen"] = int(st["shop"].get("gen", 0)) + 1
+	st["shop"]["free_rerolls"] = DB.SHOP_FREE_REROLLS
 
 func refresh_shop() -> void:
 	_gen_shop(state, rng)
 
 func shop_price(item: Dictionary) -> int:
-	return int(ceil(Items.price(item) * (1.0 - discount())))
+	return int(ceil(Items.price(item) * DB.SHOP_MARKUP * (1.0 - discount())))
 
 func cons_price(id: String, road := false) -> int:
 	var base: int = DB.CONSUMABLES[id]["price"] if DB.CONSUMABLES.has(id) else DB.GIFTS[id]["price"]
@@ -497,6 +511,7 @@ func buy_item(idx: int) -> String:
 		return "Не хватает денег в казне."
 	state["treasury"] = int(state["treasury"]) - p
 	stock.remove_at(idx)
+	it.erase("pinned")
 	if not add_item(it):
 		notify("Кладовая заполнена — вещь ждёт в очереди выдачи.")
 	save()
@@ -569,27 +584,65 @@ func buyback(idx: int) -> String:
 	changed.emit()
 	return ""
 
-## Перековка: новые случайные свойства вещи из кладовой. Цена растёт с каждой попыткой (Items.reroll_price).
-## Свойства подкручиваются под случайного героя, который может носить вещь.
-func reroll_storage(idx: int) -> String:
-	var st := storage()
-	if idx < 0 or idx >= st.size() or st[idx] == null:
-		return "Выберите вещь в кладовой."
-	var it: Dictionary = st[idx]
-	if not Items.can_reroll(it):
+## Перековка товара на прилавке: новые случайные свойства. DB.SHOP_FREE_REROLLS бесплатных до обновления лавки,
+## дальше — за монеты, и каждая следующая перековка той же вещи дороже (Items.reroll_price).
+func free_rerolls() -> int:
+	return int(state["shop"].get("free_rerolls", DB.SHOP_FREE_REROLLS))
+
+## Цена перековки товара сейчас: 0 — бесплатно
+func stock_reroll_price(idx: int) -> int:
+	var stock: Array = state["shop"]["stock"]
+	if idx < 0 or idx >= stock.size() or free_rerolls() > 0:
+		return 0
+	return reroll_price(stock[idx])
+
+func stock_reroll_problem(idx: int) -> String:
+	var stock: Array = state["shop"]["stock"]
+	if idx < 0 or idx >= stock.size():
+		return "Выберите товар."
+	if not feature_open("forge"):
+		return "Перековка — в кузнице."
+	if not Items.can_reroll(stock[idx]):
 		return "У обычной вещи нет свойств для перековки."
-	var p := Items.reroll_price(it)
-	if int(state["treasury"]) < p:
+	if int(state["treasury"]) < stock_reroll_price(idx):
 		return "Не хватает денег в казне."
-	state["treasury"] = int(state["treasury"]) - p
+	return ""
+
+func reroll_stock(idx: int) -> String:
+	var why := stock_reroll_problem(idx)
+	if why != "":
+		return why
+	var it: Dictionary = state["shop"]["stock"][idx]
+	var p := stock_reroll_price(idx)
+	if p > 0:
+		state["treasury"] = int(state["treasury"]) - p
+	else:
+		state["shop"]["free_rerolls"] = free_rerolls() - 1
 	var who := []
 	for h in DB.HERO_IDS:
 		if Items.hero_can_use_type(h, it):
 			who.append(h)
 	Items.reroll(it, rng, who[rng.randi_range(0, who.size() - 1)] if not who.is_empty() else "")
+	# Бесплатные перековки не поднимают цену следующих
+	if p == 0:
+		it["rerolls"] = int(it["rerolls"]) - 1
 	save()
 	changed.emit()
 	return ""
+
+## Закрепить товар (или снять закрепление): закреплённая вещь остаётся на прилавке при обновлении лавки.
+## Закрепить можно одну вещь.
+func toggle_pin(idx: int) -> void:
+	var stock: Array = state["shop"]["stock"]
+	if idx < 0 or idx >= stock.size():
+		return
+	var on: bool = not stock[idx].get("pinned", false)
+	for it in stock:
+		it.erase("pinned")
+	if on:
+		stock[idx]["pinned"] = true
+	save()
+	changed.emit()
 
 func choose_pending(idx: int) -> void:
 	var pc: Array = state["pending_choice"]

@@ -9,6 +9,10 @@ func _ready() -> void:
 const COMPANIONS := ["marek", "elira", "neris"]
 const STORAGE_SIZE := 80
 const BACKPACK_CAP := 8
+const SHOP_STOCK := 5          # вещей на прилавке (Кузница добавляет ещё); ассортимент будет расти вместе с гильдией
+const SHOP_HERO_PICKS := 2     # из них подобраны под случайных героев отряда, остальные случайные
+const SHOP_MARKUP := 1.3       # наценка лавки на цену вещи
+const SHOP_FREE_REROLLS := 3   # бесплатные перековки товаров до обновления лавки (обновляется после каждого похода)
 const MAX_LEVEL := 10
 ## Job 4 — последний: очки Job идут на три этапа перков (2, 3, 4)
 const MAX_JOB := 4

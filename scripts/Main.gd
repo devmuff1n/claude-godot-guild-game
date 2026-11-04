@@ -184,6 +184,48 @@ func _debug_start(mode: String) -> void:
 						break
 		goto("diplomacy")
 		return
+	# forge_shop — лавка с Кузницей: выбран товар, второй закреплён, одна бесплатная перековка потрачена
+	if mode == "forge_shop":
+		for c in DB.STORY_ORDER:
+			Game.state["completed"][c] = 1
+		Game.state["story_stage"] = 8
+		Game.state["treasury"] = 1200
+		Game.state["built"]["Smithy"] = true
+		Game.refresh_shop()
+		Game.toggle_pin(2)
+		Game.state["shop"]["free_rerolls"] = 2
+		goto("village", {"tab": "shop"})
+		var shv = current.content.get_child(0)
+		shv.sel_stock = 4
+		shv.refresh()
+		return
+	# forge — вкладка «Кузница»: глава пройдена, Кузница стоит, реагенты и вещи в кладовой
+	if mode == "forge":
+		for c in DB.STORY_ORDER:
+			Game.state["completed"][c] = 1
+		Game.state["story_stage"] = 8
+		Game.state["treasury"] = 1200
+		Game.state["built"]["Smithy"] = true
+		Game.add_reagents({"scrap": 14, "hide": 9, "ash": 4})
+		var r := RandomNumberGenerator.new()
+		r.seed = 3
+		for i in 6:
+			Game.add_item(Items.random_item(6, r, 1.0, DB.HERO_IDS))
+		Game.hero("marek")["equip"]["main"]["plus"] = 2
+		goto("village", {"tab": "forge"})
+		var sv = current.content.get_child(0)
+		sv.sel = {"kind": "equip", "hero": "marek", "slot": "main"}
+		sv.refresh()
+		return
+	# build — вкладка «Стройка»: глава пройдена, Кузница уже стоит, в казне 1200
+	if mode == "build":
+		for c in DB.STORY_ORDER:
+			Game.state["completed"][c] = 1
+		Game.state["story_stage"] = 8
+		Game.state["treasury"] = 1200
+		Game.state["built"]["Smithy"] = true
+		goto("village", {"tab": "build"})
+		return
 	match mode:
 		"village", "town", "party", "board", "shop", "journal", "arena":
 			var tabs := {"village": "home", "town": "town", "party": "party", "board": "board", "shop": "shop", "journal": "party", "arena": "arena"}

@@ -55,15 +55,29 @@ func _ready() -> void:
 	ok(int(pl.get("int", 0)) >= 0, "латы с интеллектом возможны")
 	var cl: Dictionary = aff.get("cloth", {})
 	ok(int(cl.get("int", 0)) > int(cl.get("str", 0)) * 3, "на ткани интеллект чаще силы")
-	# Перековка
+	# Перековка товаров в лавке: 3 бесплатно, дальше за монеты; закреплённая вещь переживает обновление
 	Game.state["treasury"] = 1000
-	var y := Items.make("leather_chest", 3, "rare", r)
-	Game.storage()[5] = y
-	var p0 := Items.reroll_price(y)
-	ok(Game.reroll_storage(5) == "", "перековка проходит")
-	ok(Items.reroll_price(y) > p0, "следующая перековка дороже (%d → %d)" % [p0, Items.reroll_price(y)])
-	ok(int(Game.state["treasury"]) == 1000 - p0, "деньги списаны")
+	Game.state["completed"]["c8"] = 1  # перековка — с Кузницей
+	Game.state["built"]["Smithy"] = true
+	Game.refresh_shop()
+	var stock: Array = Game.state["shop"]["stock"]
+	stock[0] = Items.make("leather_chest", 3, "rare", r)
+	var y: Dictionary = stock[0]
+	for i in DB.SHOP_FREE_REROLLS:
+		ok(Game.stock_reroll_price(0) == 0 and Game.reroll_stock(0) == "", "бесплатная перековка %d" % (i + 1))
+	ok(int(Game.state["treasury"]) == 1000 and Game.free_rerolls() == 0, "бесплатные не списали денег")
+	var p0 := Game.stock_reroll_price(0)
+	ok(p0 > 0 and Game.reroll_stock(0) == "" and int(Game.state["treasury"]) == 1000 - p0, "дальше за деньги (%d)" % p0)
+	ok(Game.stock_reroll_price(0) > p0, "следующая перековка дороже (%d → %d)" % [p0, Game.stock_reroll_price(0)])
 	ok(y["affixes"].size() == DB.RARITY_AFFIXES["rare"], "число свойств сохранилось")
+	Game.toggle_pin(0)
+	Game.toggle_pin(1)
+	ok(not stock[0].has("pinned") and stock[1].get("pinned", false), "закрепить можно одну вещь")
+	var pinned: Dictionary = stock[1]
+	Game.refresh_shop()
+	ok(Game.state["shop"]["stock"].has(pinned) and Game.state["shop"]["stock"].size() == stock.size(), "закреплённая вещь осталась, мест столько же")
+	ok(Game.free_rerolls() == DB.SHOP_FREE_REROLLS, "после обновления снова %d бесплатные" % DB.SHOP_FREE_REROLLS)
+	ok(Game.buy_item(Game.state["shop"]["stock"].find(pinned)) == "" and not pinned.has("pinned"), "купленная вещь без закрепления")
 	# Опыт
 	ok(DB.xp_factor(5, 1) == 0.1, "враг на 4 уровня ниже — 10% опыта")
 	ok(DB.xp_factor(3, 3) == 1.0, "враг своего уровня — весь опыт")

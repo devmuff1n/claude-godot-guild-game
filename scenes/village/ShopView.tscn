@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/village/ShopView.gd" id="1_pl2s1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Icon.tscn" id="2_icon"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResourcePill.tscn" id="3_pill"]
 
 [node name="ShopView" type="Control"]
 layout_mode = 3
@@ -61,10 +62,25 @@ text = "Лавка Ольги"
 [node name="Sep" type="HSeparator" parent="Columns/BuyPanel/Scroll/Box"]
 layout_mode = 2
 
-[node name="GearHeader" type="Label" parent="Columns/BuyPanel/Scroll/Box"]
+[node name="GearHead" type="HBoxContainer" parent="Columns/BuyPanel/Scroll/Box"]
 layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="GearHeader" type="Label" parent="Columns/BuyPanel/Scroll/Box/GearHead"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Ассортимент меняется после каждого похода. Одну вещь можно закрепить — она останется на прилавке."
+mouse_filter = 1
 theme_type_variation = &"CaptionLabel"
 text = "СНАРЯЖЕНИЕ"
+
+[node name="FreeRerolls" parent="Columns/BuyPanel/Scroll/Box/GearHead" instance=ExtResource("3_pill")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Бесплатные перековки до обновления лавки"
+icon_kind = "material"
+value_width = 36.0
 
 [node name="StockGrid" type="GridContainer" parent="Columns/BuyPanel/Scroll/Box"]
 unique_name_in_owner = true
@@ -72,6 +88,40 @@ layout_mode = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
 columns = 3
+
+[node name="StockBar" type="PanelContainer" parent="Columns/BuyPanel/Scroll/Box"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_type_variation = &"PanelSection"
+
+[node name="Row" type="HBoxContainer" parent="Columns/BuyPanel/Scroll/Box/StockBar"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="StockName" type="Label" parent="Columns/BuyPanel/Scroll/Box/StockBar/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_type_variation = &"SmallLabel"
+text = "—"
+text_overrun_behavior = 3
+
+[node name="RerollButton" type="Button" parent="Columns/BuyPanel/Scroll/Box/StockBar/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+text = "Перековать"
+
+[node name="PinButton" type="Button" parent="Columns/BuyPanel/Scroll/Box/StockBar/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+text = "Закрепить"
 
 [node name="SoldOut" type="Label" parent="Columns/BuyPanel/Scroll/Box"]
 unique_name_in_owner = true
@@ -147,14 +197,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_type_variation = &"SmallLabel"
 text_overrun_behavior = 3
-
-[node name="RerollButton" type="Button" parent="Columns/SellPanel/Box/SellBar/Row"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(190, 0)
-layout_mode = 2
-size_flags_vertical = 4
-focus_mode = 0
-text = "Перековать"
 
 [node name="SellButton" type="Button" parent="Columns/SellPanel/Box/SellBar/Row"]
 unique_name_in_owner = true

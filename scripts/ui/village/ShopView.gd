@@ -1,5 +1,5 @@
 extends Control
-## Лавка Ольги (scenes/village/ShopView.tscn): покупка за казну, продажа, перековка свойств, выкуп проданного.
+## Лавка Ольги (scenes/village/ShopView.tscn): покупка за казну, перековка и закрепление товара, продажа, выкуп проданного.
 
 const SHOP_CARD := preload("res://scenes/ui/ShopItemCard.tscn")
 const CONS_CARD := preload("res://scenes/ui/ConsCard.tscn")
@@ -10,12 +10,14 @@ const CONS_IDS := ["potion_hp", "potion_mp", "kit", "apple", "berries", "wine", 
 
 var village
 var sel_sell := -1
+var sel_stock := -1
 
 func _ready() -> void:
 	%SellButton.pressed.connect(func():
 		Game.sell_storage(sel_sell)
 		sel_sell = -1)
-	%RerollButton.pressed.connect(func(): _msg(Game.reroll_storage(sel_sell)))
+	%RerollButton.pressed.connect(func(): _msg(Game.reroll_stock(sel_stock)))
+	%PinButton.pressed.connect(func(): Game.toggle_pin(sel_stock))
 	Game.changed.connect(_on_changed)
 	refresh()
 
@@ -40,6 +42,12 @@ func refresh() -> void:
 		%StockGrid.add_child(row)
 		var s: ItemSlot = row.get_node("%Slot")
 		s.item = it
+		s.selected = i == sel_stock
+		var si := i
+		s.clicked.connect(func(_x):
+			sel_stock = -1 if sel_stock == si else si
+			refresh())
+		row.get_node("%PinMark").modulate.a = 1.0 if it.get("pinned", false) else 0.0
 		var nm: Label = row.get_node("%Name")
 		nm.text = Items.display_name(it)
 		nm.add_theme_color_override("font_color", Items.rarity_color(it))
@@ -49,7 +57,10 @@ func refresh() -> void:
 		b.text = "Купить · %d мон." % price
 		b.disabled = int(Game.state["treasury"]) < price
 		var idx := i
-		b.pressed.connect(func(): _msg(Game.buy_item(idx)))
+		b.pressed.connect(func():
+			sel_stock = -1
+			_msg(Game.buy_item(idx)))
+	_fill_stock_bar(stock)
 	# Припасы
 	UIK.clear(%ConsGrid)
 	for id in CONS_IDS:
@@ -58,7 +69,7 @@ func refresh() -> void:
 		var s2: ItemSlot = card.get_node("%Slot")
 		s2.cons_id = id
 		var owned := int(Game.state["potions"].get(id, 0)) if DB.CONSUMABLES.has(id) else int(Game.state["backpack"].get(id, 0))
-		var desc: String = DB.CONSUMABLES[id]["desc"] if DB.CONSUMABLES.has(id) else DB.GIFTS[id]["desc"] + "\nПодарок для вечера на привале (походный рюкзак, %d мест)." % DB.BACKPACK_CAP
+		var desc: String = DB.CONSUMABLES[id]["desc"] if DB.CONSUMABLES.has(id) else DB.GIFTS[id]["desc"] + "\nПодарок для вечера на привале (походный рюкзак, %d мест)." % Game.backpack_cap()
 		s2.tip_bb = "[b]%s[/b]\n%s" % [DB.consumable_name(id), desc]
 		card.get_node("%Name").text = DB.consumable_name(id)
 		card.get_node("%Owned").text = ("есть: %d" % owned) if owned > 0 else ""
@@ -89,9 +100,6 @@ func refresh() -> void:
 	# Строка продажи всегда на месте, чтобы список ниже не прыгал
 	%SellButton.disabled = not has_sel
 	%SellButton.text = "Продать"
-	%RerollButton.disabled = true
-	%RerollButton.text = "Перековать"
-	%RerollButton.tooltip_text = "Новые случайные свойства для необычной и лучшей вещи. Каждая следующая перековка той же вещи дороже."
 	%SellName.text = "—"
 	%SellName.add_theme_color_override("font_color", UIK.MUTED)
 	if has_sel:
@@ -99,19 +107,6 @@ func refresh() -> void:
 		%SellName.text = Items.display_name(it4)
 		%SellName.add_theme_color_override("font_color", Items.rarity_color(it4))
 		%SellButton.text = "Продать · %d мон." % Items.sell_price(it4)
-		if Items.can_reroll(it4):
-			var rp := Items.reroll_price(it4)
-			%RerollButton.text = "Перековать · %d мон." % rp
-			%RerollButton.disabled = int(Game.state["treasury"]) < rp
-			var n := int(it4.get("rerolls", 0))
-			if n > 0:
-				%RerollButton.tooltip_text += "\nУже перекована: %d раз(а)." % n
-	# Перековка — в кузнице, она строится позже лавки; кнопка держит место в строке
-	var forge := Game.feature_open("forge")
-	%RerollButton.modulate.a = 1.0 if forge else 0.0
-	%RerollButton.mouse_filter = Control.MOUSE_FILTER_STOP if forge else Control.MOUSE_FILTER_IGNORE
-	if not forge:
-		%RerollButton.disabled = true
 	UIK.clear(%ConsSell)
 	for id in ["potion_hp", "potion_mp", "kit"]:
 		if int(Game.state["potions"].get(id, 0)) > 0:
@@ -134,6 +129,40 @@ func refresh() -> void:
 		b3.text = "Выкупить — %d" % int(e["price"])
 		var idx2 := i
 		b3.pressed.connect(func(): _msg(Game.buyback(idx2)))
+
+## Строка под прилавком: выбранный товар, перековка (сначала бесплатные), закрепление
+func _fill_stock_bar(stock: Array) -> void:
+	if sel_stock >= stock.size():
+		sel_stock = -1
+	var forge := Game.feature_open("forge")
+	%FreeRerolls.modulate.a = 1.0 if forge else 0.0
+	%FreeRerolls.set_value("%d/%d" % [Game.free_rerolls(), DB.SHOP_FREE_REROLLS])
+	%RerollButton.modulate.a = 1.0 if forge else 0.0
+	%RerollButton.mouse_filter = Control.MOUSE_FILTER_STOP if forge else Control.MOUSE_FILTER_IGNORE
+	%RerollButton.text = "Перековать"
+	%RerollButton.tooltip_text = "Новые случайные свойства товара. %d бесплатно до обновления лавки, дальше за монеты." % DB.SHOP_FREE_REROLLS
+	%PinButton.text = "Закрепить"
+	UIK.mark(%PinButton, false)
+	%PinButton.tooltip_text = "Закреплённая вещь останется на прилавке, когда ассортимент обновится. Закрепить можно одну вещь."
+	if sel_stock < 0:
+		%StockName.text = "—"
+		%StockName.add_theme_color_override("font_color", UIK.MUTED)
+		%RerollButton.disabled = true
+		%PinButton.disabled = true
+		return
+	var it: Dictionary = stock[sel_stock]
+	%StockName.text = Items.display_name(it)
+	%StockName.add_theme_color_override("font_color", Items.rarity_color(it))
+	var p := Game.stock_reroll_price(sel_stock)
+	%RerollButton.text = "Перековать · бесплатно" if p == 0 else "Перековать · %d мон." % p
+	var why := Game.stock_reroll_problem(sel_stock)
+	%RerollButton.disabled = why != "" or not forge
+	if why != "":
+		%RerollButton.tooltip_text += "\n" + why
+	%PinButton.disabled = false
+	if it.get("pinned", false):
+		%PinButton.text = "Закреплено"
+		UIK.mark(%PinButton, true)
 
 func _chip_sell(id: String, n: int) -> void:
 	var b: Button = CHIP.instantiate()

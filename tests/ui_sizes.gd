@@ -282,6 +282,16 @@ func _village() -> void:
 						sv.sel_sell = j
 					n += 1
 			sv.refresh()])
+	for i in 3:
+		var idx := i
+		shop.append(["товар %d выбран%s" % [idx, ", закреплён" if idx == 1 else ""], func():
+			var sv = await _tab("shop")
+			sv.sel_sell = -1
+			if Game.state["shop"]["stock"].size() > idx:
+				sv.sel_stock = idx
+				if idx == 1 and not Game.state["shop"]["stock"][1].get("pinned", false):
+					Game.toggle_pin(1)
+			sv.refresh()])
 	await check_window("Лавка", _tab_root, shop)
 	# Арена: каждый набор врагов
 	var arena := []

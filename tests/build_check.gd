@@ -68,7 +68,7 @@ func _ready() -> void:
 	var got: Dictionary = sim.s["counters"]["reagents"]
 	ok(int(got.get("hide", 0)) > 10 and int(got.get("scrap", 0)) == 3 and int(got.get("ash", 0)) == 2, "с врагов: %s" % Game.reagents_text(got))
 	Game.refresh_shop()
-	ok(Game.state["shop"]["stock"].size() == 10, "кузница: в лавке 10 вещей")
+	ok(Game.state["shop"]["stock"].size() == DB.SHOP_STOCK + 2, "кузница: в лавке на 2 вещи больше")
 	ok(Game.recruit_candidates().is_empty(), "новых героев пока нет")
 	print("BUILD FAILS=%d" % fails)
 	get_tree().quit(1 if fails > 0 else 0)
