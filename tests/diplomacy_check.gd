@@ -84,5 +84,21 @@ func _ready() -> void:
 	ok = ok and Game.state.get("diplomacy") == null and Game.start_diplomacy("c8") != ""
 	ok = ok and Game.social_unlocked() and Game.add_social("aiden", "elo") == "" and Game.social_value("aiden", "elo") == 4
 	print("c8 итог: ", res["lines"])
+	# Выплата зависит от исхода, расходы вычитаются отдельно, премия остаётся только за триумф.
+	for scenario in [[4, 200], [5, 260], [9, 350]]:
+		_setup({}, false)
+		var treasury := int(Game.state["treasury"])
+		Game.start_diplomacy("c8")
+		Game.dip_arrive()
+		Game.dip()["beat"] = Game.dip_scenario()["beats"].size()
+		Game.dip()["favor"] = scenario[0]
+		Game.dip()["coins"] = -30
+		var payout := Game.finish_diplomacy()
+		var expected := int(scenario[1]) - 30
+		var paid := int(payout["coins"])
+		var payout_ok: bool = paid == expected and int(Game.state["treasury"]) == treasury + expected \
+			and Game.state["premium_claimed"].has("c8") == (scenario[0] == 9)
+		ok = ok and payout_ok
+		print("c8 выплата при расположении %d: %d, ожидалось %d" % [scenario[0], paid, expected])
 	print("DIPLO CHECK ", "OK" if ok else "FAIL")
-	get_tree().quit()
+	get_tree().quit(0 if ok else 1)

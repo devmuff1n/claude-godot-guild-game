@@ -801,15 +801,42 @@ func _setup_obj_panel() -> void:
 func _obj_task(kind: String) -> void:
 	if sim == null:
 		return
-	var u = sim.hero_unit(obj_panel.selected_hero())
 	var target := _main_obj()
 	if kind == "extinguish":
 		for k in sim.s["objects"].keys():
 			if sim.s["objects"][k]["burning"] > 0.0:
 				target = k
+		if _siege_gate_fire(target):
+			var problem := _select_gate_fire_hero()
+			if problem != "":
+				_show_banner(problem, 1.6)
+				return
+	var u = sim.hero_unit(obj_panel.selected_hero())
 	var p := sim.start_task(u["uid"], kind, target)
 	if p != "":
 		_show_banner(p, 1.6)
+
+func _siege_gate_fire(obj: String) -> bool:
+	return (obj == "gate" and not arena and Game.ex()["cid"] == "c5" and not sim.is_over()
+		and sim.s["objects"]["gate"]["hp"] > 0.0 and sim.s["objects"]["gate"]["burning"] > 0.0)
+
+## Сохраняет выбор игрока, если герой может тушить. Возвращает причину, когда действие недоступно.
+func _select_gate_fire_hero() -> String:
+	var selected := obj_panel.selected_hero()
+	var available := ""
+	for hero: Dictionary in sim.alive_of("hero"):
+		var task = hero["task"]
+		if task != null and task["type"] == "extinguish" and task["obj"] == "gate":
+			return "Ворота уже тушат."
+		if sim.s["phase"] == "fight" and sim.is_stunned(hero):
+			continue
+		if sim.task_problem(hero["uid"], "extinguish", "gate") == "" and (available == "" or hero["key"] == selected):
+			available = hero["key"]
+	if available == "":
+		return "Сейчас некому тушить ворота."
+	if available != selected:
+		obj_panel.select_hero(available)
+	return ""
 
 func _update_obj_panel() -> void:
 	if sim == null or not obj_panel.visible:
@@ -825,8 +852,10 @@ func _update_obj_panel() -> void:
 	for kk in sim.s["objects"].keys():
 		if sim.s["objects"][kk]["burning"] > 0.0:
 			burning = true
+	var fire_alert := _siege_gate_fire(k)
+	var extinguish_problem := _select_gate_fire_hero() if fire_alert else ""
 	var u = sim.hero_unit(obj_panel.selected_hero())
-	obj_panel.update(o, res, u if u != null else {}, burning)
+	obj_panel.update(o, res, u if u != null else {}, burning, fire_alert, extinguish_problem)
 
 # ---------------------------------------------------------------- Оборона заставы: передышка между волнами
 func _update_prep_panel() -> void:

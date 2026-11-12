@@ -570,7 +570,7 @@ var CONTRACTS := {
 			{"type": "battle", "name": "Чаща", "groups": [["raider", "archer", "shade_wolf"], ["raider", "raider", "bandit"]], "ambush": ["shade_boar", "shade_wolf"]},
 			{"type": "event", "name": "Часовня", "event": "chapel"},
 			{"type": "shop", "name": "Угольщики"},
-			{"type": "battle", "name": "Старый тракт", "groups": [["bandit", "arsonist", "archer"], ["brute", "bandit", "shade_lynx", "bandit"]],
+			{"type": "battle", "name": "Старый тракт", "groups": [["bandit", "arsonist", "archer"], ["brute", "bandit", "shade_lynx"], ["bandit"]],
 				"champion": {"type": "arsonist", "affix": "fiery", "name": "Огнебород"}},
 			{"type": "camp", "name": "Привал"},
 			{"type": "event", "name": "Тайник", "event": "cache"},

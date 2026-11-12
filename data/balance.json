@@ -209,7 +209,8 @@
           "node": 4, "name": "Старый тракт", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
             [["bandit", 6], ["arsonist", 6], ["archer", 6]],
-            [["brute", 6], ["bandit", 6], ["shade_lynx", 6], ["bandit", 6]]
+            [["brute", 6], ["bandit", 6], ["shade_lynx", 6]],
+            [["bandit", 6]]
           ],
           "ambush": []
         },

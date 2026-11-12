@@ -31,12 +31,15 @@ func setup(kind: String) -> void:
 	%RepButton.tooltip_text = "+20%% за 4 с · тратит %s · герой выходит из боя" % ("ремкомплект" if kind == "wagon" else "материал")
 
 ## task_hero — юнит выбранного героя (или пустой словарь); any_burning — горит ли что-нибудь
-func update(o: Dictionary, res_count: int, task_hero: Dictionary, any_burning: bool) -> void:
+func update(o: Dictionary, res_count: int, task_hero: Dictionary, any_burning: bool,
+		fire_alert: bool, extinguish_problem: String) -> void:
 	%ObjPct.text = "%d%%" % int(round(o["hp"] / o["max"] * 100.0))
 	%Fire.visible = o["burning"] > 0.0
 	%ObjBar.set_val(o["hp"], o["max"])
 	%Res.set_value(str(res_count))
-	%ExtButton.disabled = not any_burning
+	%ExtAlert.visible = fire_alert
+	%ExtButton.disabled = not any_burning or extinguish_problem != ""
+	%ExtButton.tooltip_text = "Потушить пожар за 3 с, без затрат." if extinguish_problem == "" else extinguish_problem
 	var busy: bool = not task_hero.is_empty() and task_hero["task"] != null
 	# Полоса работы всегда занимает место — панель не меняет высоту
 	%Progress.modulate.a = 1.0 if busy else 0.0

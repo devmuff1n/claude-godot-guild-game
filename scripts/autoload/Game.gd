@@ -998,8 +998,7 @@ func absorb_battle(sim: BattleSim) -> void:
 		hs["hp"] = u["hp"] if u["alive"] else max(1.0, round(u["max_hp"] * 0.15))
 		hs["mp"] = u["mp"]
 		hs["atb"] = u["atb"]
-	state["potions"]["potion_hp"] = int(st["potions"]["potion_hp"])
-	state["potions"]["potion_mp"] = int(st["potions"]["potion_mp"])
+	_sync_battle_potions(st["potions"])
 	if st["objects"].has("wagon") and e["wagon"] != null:
 		e["wagon"]["hp"] = st["objects"]["wagon"]["hp"]
 	if st["objects"].has("gate") and e["gate"] != null:
@@ -1039,6 +1038,10 @@ func absorb_battle(sim: BattleSim) -> void:
 		if int(c["heal_by"][k]) >= 60 and int(e["rel_battle"].get(k, 0)) < 3:
 			e["rel_battle"][k] = int(e["rel_battle"].get(k, 0)) + 1
 			change_rel("aiden", k, 1, 0, "%s благодарна(ен) за лечение в бою." % DB.hero_name(k))
+
+func _sync_battle_potions(remaining: Dictionary) -> void:
+	state["potions"]["potion_hp"] = int(remaining["potion_hp"])
+	state["potions"]["potion_mp"] = int(remaining["potion_mp"])
 
 ## Опыт начисляется сразу, уровень применяется по завершении похода.
 func _credit_battle_xp(e: Dictionary, counters: Dictionary) -> void:
@@ -1285,7 +1288,7 @@ func personal_obj_def(hid: String, oid: String) -> Dictionary:
 	return {}
 
 ## kind: "victory" / "defeat" / "abandon". Применяет итоги атомарно и сохраняет.
-## При поражении начисляет опыт последнего боя, который ещё не записан в поход.
+## При поражении применяет опыт и остаток зелий последнего боя.
 func finish_expedition(kind: String, final_battle: BattleSim = null) -> Dictionary:
 	var e := ex()
 	var cid: String = e["cid"]
@@ -1304,6 +1307,7 @@ func finish_expedition(kind: String, final_battle: BattleSim = null) -> Dictiona
 		lines.append("Дорожный заработок (%d мон.) не возвращается; покупки и расходы не отменяются." % int(e["road_earned"]))
 	elif kind == "defeat":
 		if final_battle != null:
+			_sync_battle_potions(final_battle.s["potions"])
 			_credit_battle_xp(e, final_battle.s["counters"])
 		var ret2: int = int(e["purse"])
 		state["treasury"] = int(state["treasury"]) + ret2
@@ -2062,6 +2066,10 @@ func finish_diplomacy() -> Dictionary:
 		total += int(prem["coins"])
 		lines.append("Премия «%s»: +%d мон." % [prem["name"], prem["coins"]])
 	elif out["id"] != "triumph":
+		var court_grant := int(out["coins"])
+		if court_grant > 0:
+			total += court_grant
+			lines.append("Выплата палаты: +%d мон." % court_grant)
 		lines.append("Премия «%s» упущена (миссия засчитана)." % prem["name"])
 	var spent := int(d["coins"])
 	if spent != 0:

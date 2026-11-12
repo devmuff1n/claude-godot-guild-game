@@ -51,6 +51,8 @@ func _ready() -> void:
 		_show_intro()
 	elif not Game.state["pending_choice"].is_empty():
 		show_pending_choice()
+	elif _ending_pending():
+		_show_ending()
 
 func show_tab(id: String, opts := {}) -> void:
 	if not Game.feature_open(id):
@@ -127,26 +129,29 @@ func show_result(res: Dictionary) -> void:
 	var d: ResultDialog = _open(RESULT.instantiate())
 	d.setup(res)
 	d.equipment_requested.connect(_show_reward_equipment)
-	d.closed.connect(func():
-		close_modal()
-		_after_result(res))
+	d.closed.connect(_after_result.bind(true))
 
 ## Награда на выбор, которую не успели взять (игру закрыли на шаге выбора)
 func show_pending_choice() -> void:
 	var d: ResultDialog = _open(RESULT.instantiate())
 	d.setup_choice()
 	d.equipment_requested.connect(_show_reward_equipment)
-	d.closed.connect(close_modal)
+	d.closed.connect(_after_result.bind(false))
 
 func _show_reward_equipment(hid: String, storage_index: int) -> void:
 	close_modal()
 	show_hero(hid, storage_index)
 
-func _after_result(res: Dictionary) -> void:
-	if res.get("chapter_end", false) and not Game.state.get("ending_seen", false):
+func _ending_pending() -> bool:
+	return Game.state["chapter_done"] and not Game.state["ending_seen"]
+
+func _after_result(return_to_town: bool) -> void:
+	if _ending_pending():
 		_show_ending()
 	else:
-		show_tab("town")
+		close_modal()
+		if return_to_town:
+			show_tab("town")
 
 func _show_ending() -> void:
 	var lines := [STORY_TEXT[STORY_TEXT.size() - 1]]
@@ -171,7 +176,7 @@ func _show_ending() -> void:
 				t = "Нэрис отсылает в приют Святой Ивы первое жалованье от короны. " + ("Нэрис целует тебя у всех на виду: «Пусть крестятся»." if ro >= 18 else ("Нэрис впервые смеётся при деревенских — и никто не крестится." if f >= 25 else "Нэрис кивает и молча забирает своё жалованье."))
 		lines.append(t)
 	var d: StoryDialog = _open(STORY.instantiate())
-	d.setup("КОНЕЦ ПРОЛОГА", "«Проклятый лес»", lines, "Спасибо за игру! Поручения можно повторять, а арена открыта для экспериментов.", "В деревню", DB.HERO_IDS)
+	d.setup("КОНЕЦ ПРОЛОГА", "«Проклятый лес»", lines, "Спасибо за игру! Поручения можно повторять.", "В деревню", DB.HERO_IDS)
 	d.closed.connect(func():
 		Game.state["ending_seen"] = true
 		Game.save()

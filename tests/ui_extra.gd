@@ -118,6 +118,18 @@ func _ready() -> void:
 		push_error("Не удалось начать оборону хутора")
 		get_tree().quit(1)
 		return
+	# Два заряда и неполные ресурсы позволяют выпить оба зелья обычной боевой командой.
+	var aiden: Dictionary = defense.hero_unit("aiden")
+	aiden["atb"] = 2.0
+	aiden["hp"] *= 0.5
+	aiden["mp"] *= 0.5
+	var expected_hp := int(Game.state["potions"]["potion_hp"]) - 1
+	var expected_mp := int(Game.state["potions"]["potion_mp"]) - 1
+	if defense.use_potion(aiden["uid"], "potion_hp", aiden["uid"]) != "" \
+			or defense.use_potion(aiden["uid"], "potion_mp", aiden["uid"]) != "":
+		push_error("Не удалось выпить зелья в обороне хутора")
+		get_tree().quit(1)
+		return
 	# Засчитываем одного врага через симуляцию и затем проигрываем волну.
 	defense._apply_damage(defense.alive_of("enemy")[0], 9999, "phys", null, {})
 	for u in defense.alive_of("hero"):
@@ -135,6 +147,12 @@ func _ready() -> void:
 	await wait(3)
 	press("Продолжить")
 	await wait(3)
+	var restored: BattleSim = main.current.sim
+	if restored == null or restored.s["phase"] != "lost" or int(restored.s["counters"]["xp"]) != earned_xp \
+			or int(restored.s["potions"]["potion_hp"]) != expected_hp or int(restored.s["potions"]["potion_mp"]) != expected_mp:
+		push_error("Загруженное поражение потеряло опыт или расход зелий")
+		get_tree().quit(1)
+		return
 	if not press("Вернуться в деревню"):
 		push_error("После загрузки не появился экран поражения")
 		get_tree().quit(1)
@@ -149,11 +167,18 @@ func _ready() -> void:
 	await wait(3)
 	press("Продолжить")
 	await wait(3)
+	var stock: Dictionary = Game.state["potions"]
+	if int(stock["potion_hp"]) != expected_hp or int(stock["potion_mp"]) != expected_mp:
+		push_error("После поражения осталось зелий ОЗ/МП %d/%d, ожидалось %d/%d" % [
+			stock["potion_hp"], stock["potion_mp"], expected_hp, expected_mp])
+		get_tree().quit(1)
+		return
 	for id in DB.HERO_IDS:
 		if int(Game.hero(id)["xp"]) != earned_xp:
 			push_error("Опыт за проигранный бой не сохранён: %s, ожидалось %d, получено %d" % [id, earned_xp, Game.hero(id)["xp"]])
 			get_tree().quit(1)
 			return
-	p("defeat result: %s, +%d xp saved for every hero, treasury=%d" % [result["kind"], earned_xp, Game.state["treasury"]])
+	p("defeat result: %s, +%d xp saved for every hero, potions=%d/%d, treasury=%d" % [
+		result["kind"], earned_xp, expected_hp, expected_mp, Game.state["treasury"]])
 	p("loaded screen: " + main.current.get_script().resource_path)
 	get_tree().quit()

@@ -1445,6 +1445,18 @@ expand_margin_top = 3.0
 expand_margin_right = 3.0
 expand_margin_bottom = 3.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fire_alert"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.54, 0.24, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [sub_resource type="StyleBoxTexture" id="StyleBox_speech"]
 content_margin_left = 16.0
 content_margin_top = 10.0
@@ -1602,6 +1614,8 @@ PanelCardTarget/base_type = &"PanelContainer"
 PanelCardTarget/styles/panel = SubResource("StyleBoxFlat_card_target")
 PanelCardTargetHover/base_type = &"PanelContainer"
 PanelCardTargetHover/styles/panel = SubResource("StyleBoxFlat_card_target_hover")
+PanelFireAlert/base_type = &"Panel"
+PanelFireAlert/styles/panel = SubResource("StyleBoxFlat_fire_alert")
 PanelInset/base_type = &"PanelContainer"
 PanelInset/styles/panel = SubResource("StyleBoxFlat_080")
 PanelInsetLocked/base_type = &"PanelContainer"
