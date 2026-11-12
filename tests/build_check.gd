@@ -59,7 +59,7 @@ func _ready() -> void:
 	ok(Game.salvage_storage(10) == "" and Game.state["storage"][10] == null and Game.reagent_count("ash") == ash0 + int(y["ash"]), "разборка кольца: %s" % Game.reagents_text(y))
 	# Добыча реагентов в бою
 	var sim := BattleSim.new()
-	sim.s = {"counters": {"reagents": {}}}
+	sim.setup({})
 	sim.drop_rng.seed = 1
 	for i in 40:
 		sim._drop_reagents({"tags": ["beast"]})
@@ -67,6 +67,25 @@ func _ready() -> void:
 	sim._drop_reagents({"tags": ["beast", "minion"]})
 	var got: Dictionary = sim.s["counters"]["reagents"]
 	ok(int(got.get("hide", 0)) > 10 and int(got.get("scrap", 0)) == 3 and int(got.get("ash", 0)) == 2, "с врагов: %s" % Game.reagents_text(got))
+
+	var snapshot: Dictionary = str_to_var(var_to_str(sim.save_state()))
+	var resumed := BattleSim.new()
+	resumed.load_state(snapshot)
+	ok(resumed.drop_rng.state == sim.drop_rng.state, "снимок восстанавливает позицию генератора реагентов")
+	var same_drops := true
+	for i in 20:
+		sim._drop_reagents({"tags": ["beast"]})
+		resumed._drop_reagents({"tags": ["beast"]})
+		same_drops = same_drops and resumed.s["counters"]["reagents"] == sim.s["counters"]["reagents"]
+	ok(same_drops, "после загрузки реагенты выпадают в той же последовательности")
+
+	snapshot.erase("drop_rng_state")
+	resumed.load_state(snapshot)
+	var legacy_rng := RandomNumberGenerator.new()
+	legacy_rng.seed = int(snapshot["rng_seed"]) ^ 0x5eed
+	ok(resumed.drop_rng.state == legacy_rng.state and resumed.s["counters"]["reagents"] == snapshot["counters"]["reagents"],
+		"старый снимок сохраняет накопленные реагенты и запускает генератор от исходного seed")
+
 	Game.refresh_shop()
 	ok(Game.state["shop"]["stock"].size() == DB.SHOP_STOCK + 2, "кузница: в лавке на 2 вещи больше")
 	ok(Game.recruit_candidates().is_empty(), "новых героев пока нет")
