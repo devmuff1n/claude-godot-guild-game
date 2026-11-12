@@ -6,6 +6,7 @@ extends Control
 ## Пустые шаги пропускаются. «Далее» во время анимации сначала досматривает её.
 
 signal closed
+signal equipment_requested(hero_id: String, storage_index: int)
 
 const LEDGER_ROW := preload("res://scenes/ui/LedgerRow.tscn")
 const LOOT_CARD := preload("res://scenes/ui/LootCard.tscn")
@@ -30,6 +31,8 @@ var pages: Array[String] = []
 var page := -1
 var picked := -1
 var _tween: Tween
+var _reward_hero := ""
+var _reward_storage_index := -1
 
 @onready var _page_nodes := {"heroes": %PageHeroes, "loot": %PageLoot, "choice": %PageChoice, "summary": %PageSummary}
 @onready var _step_labels := {"heroes": %Steps.get_node("StepHeroes"), "loot": %Steps.get_node("StepLoot"),
@@ -37,9 +40,12 @@ var _tween: Tween
 
 func _ready() -> void:
 	%ContinueButton.pressed.connect(_on_continue)
+	%EquipmentButton.pressed.connect(func(): equipment_requested.emit(_reward_hero, _reward_storage_index))
 
 func setup(r: Dictionary) -> ResultDialog:
 	res = r
+	_reward_hero = ""
+	_reward_storage_index = -1
 	var kind: String = res.get("kind", "victory")
 	%Kind.text = KIND_CAPTION.get(kind, "")
 	%Kind.add_theme_color_override("font_color", UIK.GOLD if kind in ["victory", "choice"] else UIK.RED)
@@ -66,7 +72,8 @@ func setup(r: Dictionary) -> ResultDialog:
 
 ## Только выбор награды (если игру закрыли до выбора — при входе в деревню)
 func setup_choice() -> ResultDialog:
-	return setup({"kind": "choice", "name": "Награда на выбор", "choice": true})
+	return setup({"kind": "choice", "name": "Награда на выбор", "choice": true,
+		"cid": Game.state["last_result"].get("cid", "")})
 
 func _goto(i: int) -> void:
 	page = i
@@ -95,14 +102,21 @@ func _goto(i: int) -> void:
 	var pn: Control = _page_nodes[id]
 	pn.modulate.a = 0.0
 	create_tween().tween_property(pn, "modulate:a", 1.0, 0.25)
-	_update_button()
+	_update_buttons()
 
-func _update_button() -> void:
+func _update_buttons() -> void:
 	var last := page >= pages.size() - 1
 	%ContinueButton.text = "Готово" if last else "Далее"
 	var need_pick: bool = pages[page] == "choice" and picked < 0
 	%ContinueButton.disabled = need_pick
 	%ContinueButton.tooltip_text = "Сначала выберите одну вещь" if need_pick else ""
+	var can_open_equipment := last and _reward_hero != ""
+	var equipment: Button = %EquipmentButton
+	equipment.modulate.a = 1.0 if can_open_equipment else 0.0
+	equipment.disabled = not can_open_equipment
+	equipment.mouse_filter = Control.MOUSE_FILTER_STOP if can_open_equipment else Control.MOUSE_FILTER_IGNORE
+	equipment.focus_mode = Control.FOCUS_ALL if can_open_equipment else Control.FOCUS_NONE
+	equipment.tooltip_text = DB.hero_name(_reward_hero) if can_open_equipment else ""
 
 func _on_continue() -> void:
 	if _tween != null and _tween.is_running():
@@ -253,10 +267,15 @@ func _pick(idx: int) -> void:
 		return
 	picked = idx
 	var cards := %ChoiceCards.get_children()
+	var reward: Dictionary = Game.state["pending_choice"][idx]
+	if res.get("cid", "") == "c1":
+		_reward_hero = (cards[idx] as RewardCard).recommended_hero
 	for i in cards.size():
 		(cards[i] as RewardCard).mark(i == idx)
 	Game.choose_pending(idx)
-	_update_button()
+	if _reward_hero != "":
+		_reward_storage_index = Game.storage().find(reward)
+	_update_buttons()
 
 # ================================================================ 4. Итоги
 func _fill_summary() -> void:

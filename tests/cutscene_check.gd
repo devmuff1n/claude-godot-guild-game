@@ -3,6 +3,8 @@ extends Node
 ## Проверяет: отряд останавливается посреди пути, сцена продолжается после «загрузки» посреди разговора
 ## и посреди боя, волк-проекция не оставляет тела, после сцены отряд идёт дальше, повторно сцена не играет.
 ## GUILD_SHOT_DIR=папка — скриншоты каждой реплики и боя (нужно окно, не --headless).
+const UI_SMOKE := preload("res://tests/ui_smoke.gd")
+
 var main
 var shots := ""
 var n_shot := 0
@@ -68,6 +70,7 @@ func _ready() -> void:
 	main.goto("expedition")
 	await wait(0.5)
 	check(es().sim != null, "бой восстановлен после загрузки")
+	check(UI_SMOKE.play_first_command(es()), "учебная команда доступна после загрузки")
 	es().paused = false
 	es().speed = 3.0
 	t = 0.0

@@ -68,9 +68,9 @@ func show_tab(id: String, opts := {}) -> void:
 		v.set(k, opts[k])
 	content.add_child(v)
 
-## Открыть вкладку отряда на нужном герое
-func show_hero(hid: String) -> void:
-	show_tab("party", {"hero_id": hid})
+## Открыть вкладку отряда на нужном герое и при необходимости выбрать вещь.
+func show_hero(hid: String, storage_index: int = -1) -> void:
+	show_tab("party", {"hero_id": hid, "sel_storage": storage_index})
 
 func start_expedition_screen() -> void:
 	main.goto("expedition")
@@ -126,6 +126,7 @@ func _show_intro() -> void:
 func show_result(res: Dictionary) -> void:
 	var d: ResultDialog = _open(RESULT.instantiate())
 	d.setup(res)
+	d.equipment_requested.connect(_show_reward_equipment)
 	d.closed.connect(func():
 		close_modal()
 		_after_result(res))
@@ -134,7 +135,12 @@ func show_result(res: Dictionary) -> void:
 func show_pending_choice() -> void:
 	var d: ResultDialog = _open(RESULT.instantiate())
 	d.setup_choice()
+	d.equipment_requested.connect(_show_reward_equipment)
 	d.closed.connect(close_modal)
+
+func _show_reward_equipment(hid: String, storage_index: int) -> void:
+	close_modal()
+	show_hero(hid, storage_index)
 
 func _after_result(res: Dictionary) -> void:
 	if res.get("chapter_end", false) and not Game.state.get("ending_seen", false):

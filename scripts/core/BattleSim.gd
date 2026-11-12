@@ -1673,7 +1673,7 @@ func _resolve_ability(u: Dictionary, ab: String, target_uid: int, at_x := NAN) -
 		"taunt":
 			var n := 0
 			for e in alive_of("enemy"):
-				if dist(u, e) <= 320.0:
+				if dist(u, e) <= float(a["area"]):
 					add_effect(e, {"id": "taunt", "t": 6.0, "src": u["uid"]})
 					n += 1
 			add_effect(u, {"id": "taunting", "t": 6.0})
@@ -1684,7 +1684,10 @@ func _resolve_ability(u: Dictionary, ab: String, target_uid: int, at_x := NAN) -
 						_direct_hit(u, e, 0.7, "phys", {"no_dodge": true})
 				events.append({"type": "shake"})
 			if perk(u, "bulwark"):
-				add_effect(u, {"id": "barrier", "t": 6.0, "val": u["max_hp"] * 0.15, "orig": u["max_hp"] * 0.15, "src": u["uid"]})
+				var cap: float = u["max_hp"] * 0.15
+				var barrier = get_effect(u, "barrier")
+				if barrier == null or float(barrier["val"]) < cap:
+					add_effect(u, {"id": "barrier", "t": 6.0, "val": cap, "orig": cap, "src": u["uid"]})
 			s["counters"]["taunts"] += 1
 			_float(u, "Провокация (%d)" % n, Color(1, 0.8, 0.3))
 		"bash":

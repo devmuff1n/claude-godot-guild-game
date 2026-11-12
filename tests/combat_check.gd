@@ -151,5 +151,39 @@ func _ready() -> void:
 	check(restored.drop_rng.state == sim.drop_rng.state and restored.drop_rng.randi() == sim.drop_rng.randi(),
 		"загрузка продолжает последовательность генератора реагентов")
 
+	# 7. Провокация перехватывает угрозу заднему ряду и сохраняет более прочный щит.
+	sim = _sim([["wolf", "wolf"]])
+	en = sim.alive_of("enemy")
+	var marek: Dictionary = sim.hero_unit("marek")
+	var aiden: Dictionary = sim.hero_unit("aiden")
+	en[0]["x"] = float(sim.hero_unit("elira")["x"]) - 100.0
+	en[1]["x"] = float(marek["x"]) + 530.0
+	marek["perks"][1] = "bulwark"
+	marek["atb"] = 2.0
+	aiden["atb"] = 1.0
+	check(sim.use_ability(aiden["uid"], "ward", marek["uid"]) == "", "Эйден накладывает Щит света на Марека")
+	var ward: Dictionary = sim.get_effect(marek, "barrier")
+	check(sim.use_ability(marek["uid"], "taunt", -1) == "" and sim.has_effect(en[0], "taunt") and not sim.has_effect(en[1], "taunt"),
+		"провокация достаёт до нападающего на задний ряд")
+	check(sim.get_effect(marek, "barrier") == ward and ward["src"] == aiden["uid"], "Несокрушимость сохраняет более прочный Щит света")
+	ward["val"] = 1.0
+	marek["cds"].erase("taunt")
+	check(sim.use_ability(marek["uid"], "taunt", -1) == "" and sim.get_effect(marek, "barrier")["src"] == marek["uid"],
+		"Несокрушимость заменяет почти исчерпанный барьер")
+
+	# 8. Двойная метка работает с момента открытия перка на Base 4.
+	Game.hero("elira")["level"] = 4
+	sim = _sim([["bandit", "bandit", "bandit"]])
+	en = sim.alive_of("enemy")
+	for i in en.size():
+		en[i]["x"] = [1000.0, 1080.0, 1400.0][i]
+	el = sim.hero_unit("elira")
+	el["perks"][2] = "twinmark"
+	el["atb"] = 1.0
+	check(Game.ability_unlocked("elira", "mark") and sim.use_ability(el["uid"], "mark", en[0]["uid"]) == "",
+		"Метка охотника доступна Элире на четвёртом уровне")
+	check(sim.has_effect(en[0], "vuln") and sim.has_effect(en[1], "vuln") and not sim.has_effect(en[2], "vuln"),
+		"Двойная метка распространяется на ближайшего к цели врага")
+
 	print("FAILS=", fails)
 	get_tree().quit(1 if fails > 0 else 0)

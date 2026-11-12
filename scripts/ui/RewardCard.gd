@@ -4,6 +4,8 @@ extends PanelContainer
 
 signal chosen
 
+var recommended_hero := ""
+
 func _ready() -> void:
 	%ChooseButton.pressed.connect(func(): chosen.emit())
 
@@ -35,9 +37,10 @@ func _context_bb(it: Dictionary) -> String:
 		if g["slot"] != "" and float(g["gain"]) > float(best["gain"]):
 			best = g
 			best_h = h
+	recommended_hero = best_h
+	(%Slot as ItemSlot).tip_hero = best_h
 	if best_h == "":
 		return ""
-	(%Slot as ItemSlot).tip_hero = best_h
 	var old = Game.hero(best_h)["equip"].get(best["slot"])
 	var head := "\n\n[color=#%s]%s[/color] · %s" % [UIK.GOLD_HI.to_html(false), DB.hero_name(best_h), ("вместо «%s»" % Items.display_name(old)) if old != null else "пустой слот"]
 	var rows: Array = Items.compare_rows(it, old) if old != null else []

@@ -59,3 +59,6 @@ func set_speed(s: float) -> void:
 func set_paused(p: bool) -> void:
 	%PauseIcon.kind = "play" if p else "pause"
 	UIK.mark(%PauseButton, p)
+
+func set_pause_enabled(enabled: bool) -> void:
+	%PauseButton.disabled = not enabled

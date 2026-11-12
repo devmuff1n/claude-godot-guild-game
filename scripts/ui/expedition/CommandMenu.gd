@@ -12,6 +12,7 @@ const ROW := preload("res://scenes/expedition/CommandRow.tscn")
 
 var hero := ""
 var items_mode := false
+var guide_ability := ""
 var _rows := {}   # ключ → Button
 
 func _ready() -> void:
@@ -19,9 +20,11 @@ func _ready() -> void:
 	%ModeButton.pressed.connect(func():
 		items_mode = not items_mode
 		_build())
+	visibility_changed.connect(_focus_guide)
 
-func open_for(sim: BattleSim, hid: String) -> void:
+func open_for(sim: BattleSim, hid: String, guided_ability := "") -> void:
 	hero = hid
+	guide_ability = guided_ability
 	_sim = sim
 	_build()
 
@@ -47,7 +50,17 @@ func _build() -> void:
 			var a2: String = ab
 			_add_row(ab, func(): ability_chosen.emit(a2))
 		%ModeButton.text = "Зелья ▸"
+	%ModeButton.disabled = guide_ability != ""
 	refresh()
+	_focus_guide()
+
+func _focus_guide() -> void:
+	if not visible or guide_ability == "":
+		return
+	var row: Button = _rows[guide_ability]
+	UIK.mark(row, true)
+	row.focus_mode = Control.FOCUS_ALL
+	row.grab_focus()
 
 func _add_row(key: String, cb: Callable) -> void:
 	var b: Button = ROW.instantiate()
@@ -72,7 +85,7 @@ func refresh() -> void:
 			cost_l.text = ""
 			cd_l.text = ""
 			UIK.mark(b, f != null)
-			b.disabled = not u["alive"]
+			b.disabled = not u["alive"] or guide_ability != ""
 			b.tooltip_text = "Выбрать врага: герой идёт к нему и бьёт только его.
 Повторный выбор той же цели — снять приказ."
 			continue
@@ -98,7 +111,7 @@ func refresh() -> void:
 		cost_l.text = "%d ATB · %d МП" % [_sim.ability_cost(u, k), a["mp"]]
 		cd_l.text = ("%dс" % int(ceil(cd))) if cd > 0.0 else ""
 		var prob2 := _sim.ability_problem(u["uid"], k)
-		b.disabled = prob2 != ""
+		b.disabled = prob2 != "" or (guide_ability != "" and k != guide_ability)
 		var ct := _sim.ability_cast_time(u, k)
 		var tip: String = a["desc"]
 		if ct > 0.0:

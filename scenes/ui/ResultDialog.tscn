@@ -299,7 +299,18 @@ theme_override_constants/separation = 2
 
 [node name="Footer" type="HBoxContainer" parent="Center/Panel/Box"]
 layout_mode = 2
+theme_override_constants/separation = 12
 alignment = 1
+
+[node name="EquipmentButton" type="Button" parent="Center/Panel/Box/Footer"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 2
+disabled = true
+text = "К экипировке"
 
 [node name="ContinueButton" type="Button" parent="Center/Panel/Box/Footer"]
 unique_name_in_owner = true
@@ -308,3 +319,8 @@ layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"ButtonPrimary"
 text = "Далее"
+
+[node name="FooterSpacer" type="Control" parent="Center/Panel/Box/Footer"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+mouse_filter = 2

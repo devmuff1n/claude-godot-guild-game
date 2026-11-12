@@ -1,6 +1,8 @@
 extends Node
 ## Скриншоты одной кат-сцены: GUILD_UITEST=cutshots CUT=c7_druid GUILD_SHOT_DIR=папка godot --path .
 ## Открывает поход её поручения, ставит отряд на её место и снимает каждую реплику (бой сцены пропускается).
+const UI_SMOKE := preload("res://tests/ui_smoke.gd")
+
 var main
 
 func _ready() -> void:
@@ -39,6 +41,7 @@ func _ready() -> void:
 			for u in es.sim.s["units"]:
 				if u["side"] == "enemy":
 					u["hp"] = 1.0
+			UI_SMOKE.play_first_command(es)
 			es.speed = 3.0
 		if cut.active and cut.waiting == "click" and cut.since_show > 0.6:
 			await RenderingServer.frame_post_draw

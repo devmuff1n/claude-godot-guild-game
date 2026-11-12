@@ -91,7 +91,7 @@ func run_contract(cid: String) -> void:
 				press("В бой")
 			"battle":
 				es.speed = 25.0
-				if es.sim != null:
+				if es.sim != null and not play_first_command(es):
 					bot(es.sim)
 				if es.sim != null and es.sim.s["phase"] == "prep":
 					press("Следующая волна")
@@ -188,6 +188,17 @@ func camp_flow(es) -> void:
 	press("Закрыть", cp)
 	await wait(1)
 	press("Спать до рассвета", cp)
+
+## Выполнить учебную команду через те же сигналы карточки, кнопки и цели, что и игрок.
+static func play_first_command(es) -> bool:
+	var card: HeroCard = es.cards["elira"]
+	if not card.command_hint:
+		return false
+	card.pressed.emit("elira")
+	var command: Button = es.cmd_menu._rows["aimed"]
+	command.pressed.emit()
+	es.view.unit_clicked.emit(es.view.guide_target_uid, MOUSE_BUTTON_LEFT)
+	return true
 
 func bot(sim: BattleSim) -> void:
 	for e in sim.alive_of("enemy"):

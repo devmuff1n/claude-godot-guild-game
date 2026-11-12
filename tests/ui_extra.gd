@@ -107,26 +107,53 @@ func _ready() -> void:
 	await wait(1)
 	press("Выступить")
 	await wait(3)
-	for i in 600:
-		var e := Game.ex()
-		if e.is_empty():
-			break
-		if e["phase"] == "prebattle":
-			press("В бой")
-		if e["phase"] == "battle" and main.current.sim != null:
-			for u in main.current.sim.alive_of("hero"):
-				main.current.sim._apply_damage(u, 9999, "phys", null, {})
+	for i in 1500:
+		if not Game.story().is_empty():
+			press("Пропустить")
+		if main.current.sim != null and press("Следующая волна"):
 			break
 		await wait(1)
-	await wait(5)
-	press("Вернуться в деревню")
+	var defense: BattleSim = main.current.sim
+	if defense == null or defense.alive_of("enemy").is_empty():
+		push_error("Не удалось начать оборону хутора")
+		get_tree().quit(1)
+		return
+	# Засчитываем одного врага через симуляцию и затем проигрываем волну.
+	defense._apply_damage(defense.alive_of("enemy")[0], 9999, "phys", null, {})
+	for u in defense.alive_of("hero"):
+		defense._apply_damage(u, 9999, "phys", null, {})
 	await wait(3)
-	p("defeat result: " + str(Game.state["last_result"].get("kind", "?")) + " exp=" + str(Game.state["expedition"]))
-	press("Продолжить")
-	await wait(2)
+	var earned_xp := int(defense.s["counters"]["xp"])
+	var returned_treasury := int(Game.state["treasury"]) + int(Game.ex()["purse"])
+	if earned_xp <= 0 or defense.s["phase"] != "lost":
+		push_error("Оборона не завершилась поражением с заработанным опытом")
+		get_tree().quit(1)
+		return
+	# Загружаем бой из сохранения, сделанного на экране поражения.
+	main.current.on_quit()
 	main.goto("title")
 	await wait(3)
 	press("Продолжить")
 	await wait(3)
+	if not press("Вернуться в деревню"):
+		push_error("После загрузки не появился экран поражения")
+		get_tree().quit(1)
+		return
+	await wait(3)
+	var result: Dictionary = Game.state["last_result"]
+	if result["kind"] != "defeat" or not Game.ex().is_empty() or Game.state["treasury"] != returned_treasury:
+		push_error("Поражение изменило награды или не завершило поход")
+		get_tree().quit(1)
+		return
+	main.goto("title")
+	await wait(3)
+	press("Продолжить")
+	await wait(3)
+	for id in DB.HERO_IDS:
+		if int(Game.hero(id)["xp"]) != earned_xp:
+			push_error("Опыт за проигранный бой не сохранён: %s, ожидалось %d, получено %d" % [id, earned_xp, Game.hero(id)["xp"]])
+			get_tree().quit(1)
+			return
+	p("defeat result: %s, +%d xp saved for every hero, treasury=%d" % [result["kind"], earned_xp, Game.state["treasury"]])
 	p("loaded screen: " + main.current.get_script().resource_path)
 	get_tree().quit()

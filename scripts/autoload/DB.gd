@@ -87,8 +87,8 @@ var HEROES := {
 # target: enemy / ally / self / area / allies
 var ABILITIES := {
 	# Марек
-	"taunt": {"hero": "marek", "name": "Провокация", "cost": 1, "mp": 30, "cast": 0.0, "cd": 10.0, "lvl": 1, "target": "self",
-		"desc": "Враги в радиусе 320 атакуют Марека 6 с. Броня +25% на время провокации."},
+	"taunt": {"hero": "marek", "name": "Провокация", "cost": 1, "mp": 30, "cast": 0.0, "cd": 10.0, "lvl": 1, "target": "self", "area": 420,
+		"desc": "Враги в радиусе 420 атакуют Марека 6 с. Броня +25% на время провокации."},
 	"bash": {"hero": "marek", "name": "Сбивающий удар", "cost": 1, "mp": 25, "cast": 0.0, "cd": 8.0, "lvl": 1, "target": "enemy", "melee": true,
 		"desc": "Удар щитом: 80% урона оружия, прерывает подготовку и оглушает на 1,5 с."},
 	"wall": {"hero": "marek", "name": "Стена щитов", "cost": 2, "mp": 40, "cast": 0.0, "cd": 22.0, "lvl": 3, "target": "self",
@@ -102,7 +102,7 @@ var ABILITIES := {
 		"desc": "90% урона, прерывает подготовку, замедляет на 40% на 5 с."},
 	"volley": {"hero": "elira", "name": "Град стрел", "cost": 2, "mp": 50, "cast": 1.5, "cd": 14.0, "lvl": 3, "target": "ground", "area": 200,
 		"desc": "Подготовка 1,5 с. 100% урона всем врагам в выбранной области радиусом 200."},
-	"mark": {"hero": "elira", "name": "Метка охотника", "cost": 1, "mp": 20, "cast": 0.0, "cd": 12.0, "lvl": 5, "target": "enemy",
+	"mark": {"hero": "elira", "name": "Метка охотника", "cost": 1, "mp": 20, "cast": 0.0, "cd": 12.0, "lvl": 4, "target": "enemy",
 		"desc": "Цель получает на 25% больше урона 8 с."},
 	# Нэрис
 	"bolt": {"hero": "neris", "name": "Стрела тьмы", "cost": 1, "mp": 35, "cast": 1.2, "cd": 0.0, "lvl": 1, "target": "enemy", "school": "shadow",
@@ -140,7 +140,7 @@ var HERO_ABILITIES := {
 }
 
 # ---------------------------------------------------------------- Перки (Job Level)
-# Ритм главы: этап I — после c1, этап II — после c3, этап III — после c5 (умения приходят после c2, c4 и c6).
+# Ритм главы: этап I — после c1, этап II — после c3, этап III — после c5.
 const PERK_STAGES := {1: {"base": 2, "job": 2, "story": 1}, 2: {"base": 4, "job": 3, "story": 3}, 3: {"base": 6, "job": 4, "story": 5}}
 const STAGE_NAMES := {1: "I", 2: "II", 3: "III"}
 var PERKS := {
@@ -524,9 +524,9 @@ var CONTRACTS := {
 		"waves": [
 			[["bandit", "bandit", "archer"]],
 			[["shade_wolf", "shade_wolf", "wolf"]],
-			[["bandit", "archer", "arsonist"], ["raider", "raider"]],
-			[["shade_boar", "shade_wolf"], ["bandit", "bandit", "archer"]],
-			{"groups": [["brute", "bandit", "archer"], ["shade_wolf", "arsonist"]], "hp_pct": 90},
+			[["bandit"], ["arsonist"]],
+			[["shade_boar"], ["bandit"]],
+			{"groups": [["brute", "bandit"], ["arsonist"]], "hp_pct": 90, "dmg_pct": 85},
 		],
 		"intro": "Звери не трогают бандитов. Значит, это не просто лес сошёл с ума.",
 		"outro": "Хутор отбит. Уходя, бандиты кричали, что лес сам выгонит «тёмных» — и тех, кто их прячет."},
@@ -554,9 +554,9 @@ var CONTRACTS := {
 		"waves": [
 			[[["bandit", 4], ["bandit", 4], ["archer", 4]]],
 			[[["raider", 4], ["raider", 4], ["bandit", 4]]],
-			{"groups": [[["brute", 4], ["raider", 4], ["raider", 4]], [["archer", 4], ["bandit", 4]]], "champion": {"type": "archer", "affix": "swift", "name": "Сова"}},
-			{"groups": [[["brute", 4], ["bandit", 4], ["archer", 4]], [["bandit", 4], ["bandit", 4]]], "hp_pct": 90},
-			{"groups": [[["bandit", 4], ["arsonist", 4], ["bandit", 4]], [["archer", 4]]], "hp_pct": 80, "champion": {"type": "brute", "affix": "stone", "name": "Ольгерд Бычья Шея"}},
+			{"groups": [[["raider", 4]], [["bandit", 4]]], "dmg_pct": 90, "champion": {"type": "archer", "affix": "swift", "name": "Сова"}},
+			{"groups": [[["brute", 4], ["bandit", 4]], [["archer", 4]]], "hp_pct": 90, "dmg_pct": 85},
+			{"groups": [[["bandit", 4]], [["arsonist", 4]]], "hp_pct": 80, "dmg_pct": 85, "champion": {"type": "brute", "affix": "stone", "name": "Ольгерд Бычья Шея"}},
 		],
 		"intro": "Солнце садится, в лесу загораются факелы. Их много. Тимофей с Асей — в погребе, мы — у ворот.",
 		"outro": "К ночи штурм отбит. Раненый бандит рассказал, где их посёлок и кому они там молятся."},
@@ -584,10 +584,11 @@ var CONTRACTS := {
 		"jxp": 180, "general": ["no_ko", "helpful"],
 		"twists": [["Вожак", "Ганс Рыжий крутит Вихрь клинков и зовёт духов-волков. Отводите героев или сбивайте подготовку."]],
 		"route": [
-			{"type": "battle", "name": "Частокол", "groups": [["bandit", "archer", "arsonist"], ["bandit", "bandit", "shade_wolf"]], "ambush": ["shade_wolf", "shade_wolf"]},
+			{"type": "battle", "name": "Частокол", "groups": [["bandit", "archer", "arsonist"], ["bandit", "shade_wolf"]], "ambush": ["shade_wolf", "shade_wolf"]},
 			{"type": "event", "name": "Перебежчик", "event": "turncoat"},
 			{"type": "event", "name": "Рогатый идол", "event": "idol"},
-			{"type": "battle", "name": "Помост вожака", "groups": [["bandit", "archer", "arsonist"], ["shade_alpha", "shade_wolf"], ["captain", "bandit"]], "boss": true},
+			{"type": "battle", "name": "Помост вожака", "groups": [["bandit", "archer"], ["shade_wolf", "shade_wolf"], ["captain"]],
+				"hp_pct": 90, "dmg_pct": 85, "boss": true},
 		],
 		"intro": "Здесь кончается лес и начинается пепел.",
 		"outro": "Ганс Рыжий мёртв. Но над пепелищем мы видели того, кто держит лес в кулаке, — друида Морвена. И он обещал вернуться."},

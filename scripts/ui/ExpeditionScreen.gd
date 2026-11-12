@@ -19,6 +19,8 @@ const LEVELS := {
 const WALK_SPEED := 150.0
 const SEGMENT_PX := 676.0
 const REGROUP_SPEED := 90.0
+const FIRST_COMMAND_HERO := "elira"
+const FIRST_COMMAND_ABILITY := "aimed"
 
 var main
 var params: Dictionary = {}
@@ -30,6 +32,7 @@ var speed := 1.0
 var paused := false
 var menu_hero := ""
 var targeting: Dictionary = {}  # {hero, ab} или {hero, potion}
+var _guide_wolf_uid := -1
 var autosave_t := 0.0
 var walk_dur := SEGMENT_PX / WALK_SPEED  # ≈4,5 с
 var finished := false
@@ -170,9 +173,10 @@ func _resume() -> void:
 				sim.load_state(e["battle"])
 				view.sim = sim
 				_after_sim_ready()
-				paused = true
-				top_bar.set_paused(true)
-				_show_banner("Пауза", 2.0)
+				if _guide_wolf_uid < 0:
+					paused = true
+					top_bar.set_paused(true)
+					_show_banner("Пауза", 2.0)
 			else:
 				_start_battle_from_ctx()
 		"event":
@@ -327,6 +331,22 @@ func _after_sim_ready() -> void:
 	obj_panel.visible = sim.s["objects"].size() > 0
 	_setup_obj_panel()
 	_refresh_goals_live()
+	# Первый приказ разыгрывается на остановленном бое, включая загрузку до выстрела.
+	if arena or sim.s["phase"] != "fight" or float(sim.s["t"]) > 0.0:
+		return
+	var ctx: Dictionary = Game.ex()["battle_ctx"]
+	if ctx.get("source") != "story" or Game.story().get("id") != "c1_red_eyes" or ctx.get("first_command_done", false):
+		return
+	var elira: Dictionary = sim.hero_unit(FIRST_COMMAND_HERO)
+	elira["atb"] = maxf(float(elira["atb"]), float(sim.ability_cost(elira, FIRST_COMMAND_ABILITY)))
+	if sim.ability_problem(elira["uid"], FIRST_COMMAND_ABILITY) != "":
+		return
+	for wolf: Dictionary in sim.alive_of("enemy"):
+		if wolf["key"] == "red_wolf":
+			_guide_wolf_uid = int(wolf["uid"])
+			cards[FIRST_COMMAND_HERO].set_command_hint(true)
+			top_bar.set_pause_enabled(false)
+			break
 
 func _process(delta: float) -> void:
 	_update_cine(delta)
@@ -368,7 +388,7 @@ func _process(delta: float) -> void:
 		_update_cards_walk()
 		return
 	var mult := speed
-	if paused or not targeting.is_empty() or overlay.get_child_count() > 0:
+	if paused or _guide_wolf_uid >= 0 or not targeting.is_empty() or overlay.get_child_count() > 0:
 		mult = 0.0
 	elif cmd_menu.visible:
 		mult *= 0.25
@@ -510,7 +530,7 @@ func _finish(kind: String) -> void:
 	if finished:
 		return
 	finished = true
-	main.goto("village", {"result": Game.finish_expedition(kind)})
+	main.goto("village", {"result": Game.finish_expedition(kind, sim)})
 
 func _arena_end(won: bool) -> void:
 	var leave := "Вернуться к балансу" if arena_cfg.has("balance_test") else "Покинуть арену"
@@ -540,6 +560,8 @@ func _set_speed(s: float) -> void:
 	top_bar.set_speed(s)
 
 func _toggle_pause() -> void:
+	if _guide_wolf_uid >= 0:
+		return
 	paused = not paused
 	top_bar.set_paused(paused)
 	if paused:
@@ -556,11 +578,13 @@ func _input(ev: InputEvent) -> void:
 	if k == KEY_TAB:
 		view.cycle_target(-1 if ev.shift_pressed else 1)
 		get_viewport().set_input_as_handled()
-	elif (k == KEY_ENTER or k == KEY_KP_ENTER) and not ev.echo and view.hover_uid >= 0:
-		var t = sim.unit(view.hover_uid)
-		if t != null and view.can_target(t):
-			_apply_target(t)
-		get_viewport().set_input_as_handled()
+	elif (k == KEY_ENTER or k == KEY_KP_ENTER) and not ev.echo:
+		var uid := view.guide_target_uid if view.guide_target_uid >= 0 else view.hover_uid
+		if uid >= 0:
+			var t = sim.unit(uid)
+			if t != null and view.can_target(t):
+				_apply_target(t)
+			get_viewport().set_input_as_handled()
 
 func _unhandled_input(ev: InputEvent) -> void:
 	if not (ev is InputEventKey) or not ev.pressed or ev.echo or finished:
@@ -636,10 +660,15 @@ func _sync_card_targets() -> void:
 func _open_menu(hid: String) -> void:
 	if sim == null or sim.s["phase"] in ["won", "lost"]:
 		return
+	var guiding := _guide_wolf_uid >= 0
+	if guiding and hid != FIRST_COMMAND_HERO:
+		return
 	_cancel_target()
 	menu_hero = hid
+	if guiding:
+		cards[FIRST_COMMAND_HERO].set_command_hint(false)
 	cmd_menu.items_mode = false
-	cmd_menu.open_for(sim, hid)
+	cmd_menu.open_for(sim, hid, FIRST_COMMAND_ABILITY if guiding else "")
 	cmd_menu.visible = true
 	cmd_menu.modulate.a = 0.0
 	await get_tree().process_frame
@@ -657,7 +686,10 @@ func _place_menu() -> void:
 
 func _close_menu() -> void:
 	cmd_menu.visible = false
+	cmd_menu.guide_ability = ""
 	menu_hero = ""
+	if _guide_wolf_uid >= 0:
+		cards[FIRST_COMMAND_HERO].set_command_hint(true)
 
 func _choose_ability(ab: String) -> void:
 	var u = sim.hero_unit(menu_hero)
@@ -679,6 +711,7 @@ func _choose_ability(ab: String) -> void:
 		view.target_ab = ab
 	else:
 		view.target_mode = "enemy" if a["target"] == "enemy" else "ally"
+	view.guide_target_uid = _guide_wolf_uid
 	_sync_card_targets()
 	cmd_menu.visible = false
 	_set_status("%s: %s" % ["Область" if a["target"] == "ground" else "Цель", a["name"]])
@@ -714,6 +747,11 @@ func _apply_target(t: Dictionary) -> void:
 	if res != "":
 		_show_banner(res, 1.6)
 		return
+	if _guide_wolf_uid >= 0:
+		Game.ex()["battle_ctx"]["first_command_done"] = true
+		_guide_wolf_uid = -1
+		top_bar.set_pause_enabled(true)
+		_save_battle()
 	_cancel_target()
 	_close_menu()
 
@@ -738,6 +776,7 @@ func _cancel_target() -> void:
 		if menu_hero != "":
 			cmd_menu.visible = true
 	view.target_mode = ""
+	view.guide_target_uid = -1
 	view.hover_card_uid = -1
 	_sync_card_targets()
 

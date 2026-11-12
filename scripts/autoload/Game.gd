@@ -1010,7 +1010,7 @@ func absorb_battle(sim: BattleSim) -> void:
 	e["materials"] = int(st["materials"])
 	var c: Dictionary = st["counters"]
 	var ec: Dictionary = e["counters"]
-	for k in ["potions", "healing", "wards", "taunts", "interrupts", "curses", "spell_dmg", "xp", "xp_cut", "coins", "champions"]:
+	for k in ["potions", "healing", "wards", "taunts", "interrupts", "curses", "spell_dmg", "coins", "champions"]:
 		ec[k] = int(ec.get(k, 0)) + int(c.get(k, 0))
 	for k in c["ko"].keys():
 		ec["ko"][k] = true
@@ -1029,10 +1029,7 @@ func absorb_battle(sim: BattleSim) -> void:
 		for f in ["dmg", "heal", "absorbed", "int"]:
 			dst[f] = int(dst.get(f, 0)) + int(round(float(c["by_hero"][k].get(f, 0))))
 		ec["by_hero"][k] = dst
-	# Опыт начисляется сразу, уровень — после попытки
-	for id in DB.HERO_IDS:
-		hero(id)["xp"] = int(hero(id)["xp"]) + int(c["xp"])
-	e["xp_gain"] = int(e.get("xp_gain", 0)) + int(c["xp"])
+	_credit_battle_xp(e, c)
 	e["purse"] = int(e["purse"]) + int(c["coins"])
 	e["road_earned"] = int(e["road_earned"]) + int(c["coins"])
 	if st.get("boss", false):
@@ -1042,6 +1039,16 @@ func absorb_battle(sim: BattleSim) -> void:
 		if int(c["heal_by"][k]) >= 60 and int(e["rel_battle"].get(k, 0)) < 3:
 			e["rel_battle"][k] = int(e["rel_battle"].get(k, 0)) + 1
 			change_rel("aiden", k, 1, 0, "%s благодарна(ен) за лечение в бою." % DB.hero_name(k))
+
+## Опыт начисляется сразу, уровень применяется по завершении похода.
+func _credit_battle_xp(e: Dictionary, counters: Dictionary) -> void:
+	var xp := int(counters["xp"])
+	var ec: Dictionary = e["counters"]
+	for id in DB.HERO_IDS:
+		hero(id)["xp"] = int(hero(id)["xp"]) + xp
+	e["xp_gain"] = int(e.get("xp_gain", 0)) + xp
+	ec["xp"] = int(ec.get("xp", 0)) + xp
+	ec["xp_cut"] = int(ec.get("xp_cut", 0)) + int(counters.get("xp_cut", 0))
 
 func walk_regen(dt: float) -> void:
 	var e := ex()
@@ -1278,7 +1285,8 @@ func personal_obj_def(hid: String, oid: String) -> Dictionary:
 	return {}
 
 ## kind: "victory" / "defeat" / "abandon". Применяет итоги атомарно и сохраняет.
-func finish_expedition(kind: String) -> Dictionary:
+## При поражении начисляет опыт последнего боя, который ещё не записан в поход.
+func finish_expedition(kind: String, final_battle: BattleSim = null) -> Dictionary:
 	var e := ex()
 	var cid: String = e["cid"]
 	var c: Dictionary = DB.CONTRACTS[cid]
@@ -1295,6 +1303,8 @@ func finish_expedition(kind: String) -> Dictionary:
 		lines.append("Поход прерван. Опыт попытки отменён.")
 		lines.append("Дорожный заработок (%d мон.) не возвращается; покупки и расходы не отменяются." % int(e["road_earned"]))
 	elif kind == "defeat":
+		if final_battle != null:
+			_credit_battle_xp(e, final_battle.s["counters"])
 		var ret2: int = int(e["purse"])
 		state["treasury"] = int(state["treasury"]) + ret2
 		res["purse_return"] = ret2

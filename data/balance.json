@@ -106,22 +106,22 @@
         {
           "wave": 3, "name": "Волна 3", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["bandit", 3], ["archer", 3], ["arsonist", 3]],
-            [["raider", 3], ["raider", 3]]
+            [["bandit", 3]],
+            [["arsonist", 3]]
           ]
         },
         {
           "wave": 4, "name": "Волна 4", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
-            [["shade_boar", 3], ["shade_wolf", 3]],
-            [["bandit", 3], ["bandit", 3], ["archer", 3]]
+            [["shade_boar", 3]],
+            [["bandit", 3]]
           ]
         },
         {
-          "wave": 5, "name": "Волна 5", "hp_pct": 90, "dmg_pct": 100,
+          "wave": 5, "name": "Волна 5", "hp_pct": 90, "dmg_pct": 85,
           "groups": [
-            [["brute", 3], ["bandit", 3], ["archer", 3]],
-            [["shade_wolf", 3], ["arsonist", 3]]
+            [["brute", 3], ["bandit", 3]],
+            [["arsonist", 3]]
           ]
         }
       ]
@@ -172,24 +172,24 @@
           ]
         },
         {
-          "wave": 3, "name": "Волна 3", "hp_pct": 100, "dmg_pct": 100,
+          "wave": 3, "name": "Волна 3", "hp_pct": 100, "dmg_pct": 90,
           "groups": [
-            [["brute", 4], ["raider", 4], ["raider", 4]],
-            [["archer", 4], ["bandit", 4]]
+            [["raider", 4]],
+            [["bandit", 4]]
           ]
         },
         {
-          "wave": 4, "name": "Волна 4", "hp_pct": 90, "dmg_pct": 100,
+          "wave": 4, "name": "Волна 4", "hp_pct": 90, "dmg_pct": 85,
           "groups": [
-            [["brute", 4], ["bandit", 4], ["archer", 4]],
-            [["bandit", 4], ["bandit", 4]]
-          ]
-        },
-        {
-          "wave": 5, "name": "Волна 5", "hp_pct": 80, "dmg_pct": 100,
-          "groups": [
-            [["bandit", 4], ["arsonist", 4], ["bandit", 4]],
+            [["brute", 4], ["bandit", 4]],
             [["archer", 4]]
+          ]
+        },
+        {
+          "wave": 5, "name": "Волна 5", "hp_pct": 80, "dmg_pct": 85,
+          "groups": [
+            [["bandit", 4]],
+            [["arsonist", 4]]
           ]
         }
       ]
@@ -230,16 +230,16 @@
           "node": 0, "name": "Частокол", "hp_pct": 100, "dmg_pct": 100,
           "groups": [
             [["bandit", 7], ["archer", 7], ["arsonist", 7]],
-            [["bandit", 7], ["bandit", 7], ["shade_wolf", 7]]
+            [["bandit", 7], ["shade_wolf", 7]]
           ],
           "ambush": [["shade_wolf", 7], ["shade_wolf", 7]]
         },
         {
-          "node": 3, "name": "Помост вожака", "hp_pct": 100, "dmg_pct": 100,
+          "node": 3, "name": "Помост вожака", "hp_pct": 90, "dmg_pct": 85,
           "groups": [
-            [["bandit", 7], ["archer", 7], ["arsonist", 7]],
-            [["shade_alpha", 7], ["shade_wolf", 7]],
-            [["captain", 7], ["bandit", 7]]
+            [["bandit", 7], ["archer", 7]],
+            [["shade_wolf", 7], ["shade_wolf", 7]],
+            [["captain", 7]]
           ],
           "ambush": []
         }

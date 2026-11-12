@@ -26,6 +26,7 @@ var selected_hero := ""
 var target_mode := ""        # "", "enemy", "ally", "ground"
 var target_radius := 0.0     # радиус области в режиме "ground"
 var target_ab := ""          # умение, для которого выбирается область (цвет превью)
+var guide_target_uid := -1   # цель учебного приказа подсвечена даже без наведения
 var hover_uid := -1
 var hover_pos := Vector2(-1000, -1000)
 var hover_card_uid := -1     # герой, над чьей карточкой внизу сейчас курсор (выбор союзника)
@@ -615,7 +616,7 @@ func _draw_units() -> void:
 				if u["side"] == "enemy" and hover_pos.x > -500.0 and abs(u["x"] - hover_pos.x) <= target_radius + BattleSim.BODY * 0.5:
 					draw_arc(pos + Vector2(0, -2), 40, 0, TAU, 32, Color(area_color(target_ab), 0.95), 3)
 			elif target_mode != "" and can_target(u):
-				var hot: bool = u["uid"] == hover_uid or u["uid"] == hover_card_uid
+				var hot: bool = u["uid"] == hover_uid or u["uid"] == hover_card_uid or u["uid"] == guide_target_uid
 				var tc := Color(1, 0.42, 0.32) if target_mode == "enemy" else Color(0.45, 1, 0.55)
 				if hot:
 					_ell(pos + Vector2(0, 2), 50, 14, Color(tc, 0.28))

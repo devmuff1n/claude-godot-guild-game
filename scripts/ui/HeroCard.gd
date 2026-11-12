@@ -10,6 +10,7 @@ signal hover_changed(hero_id: String, on: bool)
 var active := false
 var alive := true
 var target_hint := false   # идёт выбор союзника: карточку можно нажать, чтобы применить на этого героя
+var command_hint := false
 var hovered := false
 
 func _ready() -> void:
@@ -31,9 +32,13 @@ func set_target_hint(on: bool) -> void:
 	target_hint = on
 	queue_redraw()
 
+func set_command_hint(on: bool) -> void:
+	command_hint = on
+	queue_redraw()
+
 func _draw() -> void:
-	if target_hint:
-		var sb := get_theme_stylebox("panel", &"PanelCardTargetHover" if hovered else &"PanelCardTarget")
+	if command_hint or target_hint:
+		var sb := get_theme_stylebox("panel", &"PanelCardTargetHover" if command_hint or hovered else &"PanelCardTarget")
 		draw_style_box(sb, Rect2(Vector2.ZERO, size))
 
 func set_num(n: int) -> void:
