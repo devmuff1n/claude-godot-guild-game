@@ -16,6 +16,8 @@ const OBJ_NAMES := {"wagon": "Повозка", "gate": "Ворота", "chest": 
 var s: Dictionary = {}
 var events: Array = []
 var rng := RandomNumberGenerator.new()
+## Отдельный генератор для реагентов, чтобы добыча не меняла ход боя
+var drop_rng := RandomNumberGenerator.new()
 
 # ================================================================ Настройка
 ## cfg: heroes [{id, d (derive), hp, mp, atb, perks, level}], formation [id front→back], groups, ambush, level,
@@ -37,6 +39,7 @@ func setup(cfg: Dictionary) -> void:
 		"hp_mult": float(cfg.get("hp_pct", 100)) / 100.0, "dmg_mult": float(cfg.get("dmg_pct", 100)) / 100.0,
 	}
 	s["rng_seed"] = rng.seed
+	drop_rng.seed = rng.seed ^ 0x5eed
 	for hc in cfg.get("heroes", []):
 		_add_hero(hc)
 	if cfg.get("wagon") != null:
@@ -68,6 +71,7 @@ func setup(cfg: Dictionary) -> void:
 
 func save_state() -> Dictionary:
 	s["rng_state"] = rng.state
+	s["drop_rng_state"] = drop_rng.state
 	return s.duplicate(true)
 
 func load_state(st: Dictionary) -> void:
@@ -76,6 +80,8 @@ func load_state(st: Dictionary) -> void:
 		s["used"] = {}
 	rng.seed = int(s.get("rng_seed", 0))
 	rng.state = int(s.get("rng_state", 0))
+	drop_rng.seed = rng.seed ^ 0x5eed
+	drop_rng.state = int(s.get("drop_rng_state", drop_rng.state))
 	# Бой, сохранённый до ступеней врагов: достраиваем приёмы по типу и уровню
 	for u in s["units"]:
 		if u["side"] != "enemy" or u.has("pas"):
@@ -1896,12 +1902,17 @@ func task_problem(uid: int, kind: String, obj: String) -> String:
 	if u["task"] != null:
 		return "Уже занят делом."
 	if kind == "repair":
-		if obj == "wagon" and s["kits"] <= 0:
-			return "Нет ремонтных комплектов."
-		if obj == "gate" and s["materials"] <= 0:
-			return "Нет материалов."
 		if obj == "chest":
 			return "Сундук не чинят — только тушат."
+		var stock := "kits" if obj == "wagon" else "materials"
+		var available: int = s[stock]
+		# Назначенный ремонт резервирует расходник до завершения или отмены работы.
+		for h in alive_of("hero"):
+			var task = h["task"]
+			if task != null and task["type"] == "repair" and task["obj"] == obj:
+				available -= 1
+		if available <= 0:
+			return "Нет свободных ремонтных комплектов." if obj == "wagon" else "Нет свободных материалов."
 		if o["hp"] >= o["max"]:
 			return "Прочность полная."
 	elif kind == "extinguish":
@@ -1933,10 +1944,12 @@ func cancel_task(uid: int) -> void:
 func _finish_task(u: Dictionary, tk: Dictionary) -> void:
 	var o: Dictionary = s["objects"][tk["obj"]]
 	if tk["type"] == "repair":
-		if tk["obj"] == "wagon":
-			s["kits"] -= 1
-		else:
-			s["materials"] -= 1
+		var stock := "kits" if tk["obj"] == "wagon" else "materials"
+		# В старом снимке боя один расходник мог быть назначен двум героям.
+		if s[stock] <= 0:
+			u["task"] = null
+			return
+		s[stock] -= 1
 		o["hp"] = min(o["max"], o["hp"] + o["max"] * 0.2)
 		_float_obj(tk["obj"], "+20%", Color(0.5, 1.0, 0.5))
 		_log("%s: ремонт завершён." % u["name"])

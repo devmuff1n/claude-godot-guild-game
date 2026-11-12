@@ -158,9 +158,15 @@ mouse_filter = 1
 theme_type_variation = &"GoldLabel"
 text = "Награда — выберите одну вещь"
 
-[node name="PendingCards" type="HBoxContainer" parent="Columns/Right/RewardPanel/Box"]
+[node name="RewardScroll" type="ScrollContainer" parent="Columns/Right/RewardPanel/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="PendingCards" type="HBoxContainer" parent="Columns/Right/RewardPanel/Box/RewardScroll"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
 [node name="SuppliesPanel" type="PanelContainer" parent="Columns/Right"]
