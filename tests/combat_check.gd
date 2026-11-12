@@ -110,5 +110,46 @@ func _ready() -> void:
 		check(sim.set_hero_focus(el["uid"], far["uid"]) == "" and sim.hero_focus(el) == null, "повторный выбор снимает цель")
 	else:
 		check(sim.hero_focus(el) == null, "после смерти цели приказ снят")
+
+	# 5. Ремонт ворот и повозки: резерв сохраняется вместе с работой и освобождается при отмене.
+	for obj in ["gate", "wagon"]:
+		var stock := "kits" if obj == "wagon" else "materials"
+		var cfg := Game.battle_config([["wolf"]], [], false, false)
+		cfg[obj] = {"hp": 200.0, "max": 800.0}
+		cfg[stock] = 1
+		sim = BattleSim.new()
+		sim.setup(cfg)
+		sim.alive_of("enemy")[0]["speed"] = 0.0
+		var marek_uid := int(sim.hero_unit("marek")["uid"])
+		var aiden_uid := int(sim.hero_unit("aiden")["uid"])
+		var name: String = BattleSim.OBJ_NAMES[obj]
+		check(sim.start_task(marek_uid, "repair", obj) == "", "%s: первый герой начинает ремонт" % name)
+		var snapshot: Dictionary = str_to_var(var_to_str(sim.save_state()))
+		check(sim.start_task(aiden_uid, "repair", obj) != "", "%s: один расходник нельзя назначить дважды" % name)
+		sim.load_state(snapshot)
+		check(sim.start_task(aiden_uid, "repair", obj) != "", "%s: после загрузки расходник всё ещё зарезервирован" % name)
+		sim.cancel_task(marek_uid)
+		check(sim.s[stock] == 1 and sim.start_task(aiden_uid, "repair", obj) == "", "%s: отмена освобождает расходник" % name)
+		for i in 320:
+			sim.step(0.05)
+		check(sim.s[stock] == 0 and sim.s["objects"][obj]["hp"] == 360.0, "%s: один ремонт расходует одну единицу и возвращает 20%%" % name)
+
+		# Старый снимок мог содержать две работы на один оставшийся расходник.
+		sim.load_state(snapshot)
+		sim.hero_unit("aiden")["task"] = sim.hero_unit("marek")["task"].duplicate()
+		sim.load_state(sim.save_state())
+		for i in 320:
+			sim.step(0.05)
+		check(sim.s[stock] == 0 and sim.s["objects"][obj]["hp"] == 360.0 and sim.hero_unit("aiden")["task"] == null and sim.hero_unit("marek")["task"] == null,
+			"%s: из старого снимка завершается только оплаченный ремонт" % name)
+
+	# 6. Генератор добычи продолжает последовательность после сериализации боя.
+	sim = _sim([["wolf"]])
+	sim.drop_rng.randf()
+	var restored := BattleSim.new()
+	restored.load_state(str_to_var(var_to_str(sim.save_state())))
+	check(restored.drop_rng.state == sim.drop_rng.state and restored.drop_rng.randi() == sim.drop_rng.randi(),
+		"загрузка продолжает последовательность генератора реагентов")
+
 	print("FAILS=", fails)
 	get_tree().quit(1 if fails > 0 else 0)

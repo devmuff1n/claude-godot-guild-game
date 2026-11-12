@@ -93,7 +93,7 @@ func check_window(title: String, get_root: Callable, variants: Array) -> void:
 func _r(r: Rect2) -> String:
 	return "(%d,%d %dx%d)" % [r.position.x, r.position.y, r.size.x, r.size.y]
 
-## Состояние с разнообразным содержимым: разные уровни, очки, выгорание, вещи в кладовой.
+## Состояние с разнообразным содержимым: разные уровни и вещи в кладовой.
 func _setup_state() -> void:
 	Game.slot = -1
 	Game.state = Game._fresh_state()
@@ -104,12 +104,10 @@ func _setup_state() -> void:
 	Game.state["story_stage"] = k
 	Game.state["treasury"] = 1234
 	var lv := {"aiden": 6, "marek": 9, "elira": 4, "neris": 7}
-	var bo := {"aiden": 0, "marek": 7, "elira": 4, "neris": 10}
 	for id in DB.HERO_IDS:
 		var h := Game.hero(id)
 		h["level"] = lv.get(id, 5)
 		h["job"] = 3
-		h["burnout"] = bo.get(id, 0)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 7
 	var bases: Array = DB.BASES.keys()
@@ -149,7 +147,7 @@ func _ready() -> void:
 	vs = main.current
 	stage = "начало игры"
 	await _village()
-	# Середина главы: разные уровни, очки атрибутов, выгорание, вещи
+	# Середина главы: разные уровни и вещи
 	_setup_state()
 	main.goto("village")
 	await wait(5)
@@ -176,7 +174,7 @@ func _tab_root() -> Control:
 	return vs.content.get_child(vs.content.get_child_count() - 1)
 
 func _village() -> void:
-	# Отряд: каждый герой × вкладки справа × выбранная вещь в кладовой × очки атрибутов
+	# Отряд: каждый герой, вкладки справа и выбранные вещи в кладовой
 	var party := []
 	for gear in [false, true]:
 		for id in DB.HERO_IDS:
@@ -217,29 +215,20 @@ func _village() -> void:
 					n += 1
 			pv.sel_storage = k
 			pv.refresh()])
-	party.append(["очки вложены", func():
-		var pv = await _tab("party")
-		for k in ["sta", "str", "agi", "int"]:
-			for t in 5:
-				Game.add_stat_point(pv.hero_id, k)
-		pv.refresh()])
-	# Крайний случай: огромные числа (уровень 60, все очки вложены) не должны расширять панель
+	# Крайний случай: большие числа на тестовом уровне 60 не должны расширять панель
 	for id in DB.HERO_IDS:
 		var hid: String = id
 		party.append(["%s: большие числа" % hid, func():
 			var pv = await _tab("party")
 			var h := Game.hero(hid)
 			var keep_lv: int = h["level"]
-			var keep_alloc: Dictionary = h.get("alloc", {}).duplicate()
 			h["level"] = 60
-			h["alloc"] = {"sta": 120, "str": 60, "agi": 30, "int": 26}
 			pv.hero_id = hid
 			pv.sel_storage = -1
 			pv.side_tab = "skills"
 			pv.refresh()
 			await wait(3)
-			h["level"] = keep_lv
-			h["alloc"] = keep_alloc])
+			h["level"] = keep_lv])
 	await check_window("Отряд: герои", _tab_root, party)
 	# Отряд: журнал
 	var journal := []
@@ -435,7 +424,6 @@ func _expedition_dialogs() -> void:
 	host.set_anchors_preset(Control.PRESET_FULL_RECT)
 	host.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	main.add_child(host)
-	host.size = get_viewport().get_visible_rect().size
 	Game.state["treasury"] = 999
 	Game.start_expedition("c3", {"purse": 80, "general": "", "personal": {}})
 	Game.state["backpack"] = {"wine": 2, "tea": 1, "berries": 3}
